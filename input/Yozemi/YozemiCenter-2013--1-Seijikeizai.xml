@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE exam PUBLIC "-//TOROBO//TOROBO ANNOTATION 1.0//EN" "torobo.dtd">
+<?xml-stylesheet type="text/css" href="../torobo.css"?>
+<exam source="Yoyogi Seminar Center Prep Test" year="2013" subject="Seijikeizai">
+Yozemicenter-2013--1-Seijikeizai<br/>
+<title>2013年度　代々木ゼミナール第1回全国センター模試　政治経済</title>
+<br/>
+<info>（解答番号 1 ～ 36 ）</info>
+<br/>
+<question id="Q1" minimal="no">
+    <label>【１】</label>
+    <instruction>
+        次のある家族（祖母・母・娘）の<ref target="D1">会話文</ref>を読み，下の問い（問１～10）に答えよ。
+    </instruction>
+    <info>（配点　28）</info>
+    <br/>
+    <data id="D1" type="text">
+        娘：私ももうすぐ20歳になるから<uText id="U1"><label>ⓐ</label>選挙権</uText>を持つことになるわ。
+        <br/>
+        母：そうね。
+        <br/>
+        娘：<uText id="U2"><label>ⓑ</label>主権者である国民の一人として，自らの意思を政治に反映させる</uText>ことができるのよ。今度，選挙があるとしたら，<uText id="U3"><label>ⓒ</label>衆議院と参議院のどちらかしら</uText>。もしかしたら，知事とか市長とか地方議会の議員の選挙が先にあるかもしれないな。
+        <br/>
+        母：選挙に行くとして，あなたは支持する政党があるの？
+        <br/>
+        娘：ちょっと前は支持する政党があったけれど，最近の政治の様子を見ているとごちゃごちゃしていて，どの政党も支持できない感じになってるの。
+        <br/>
+        母：支持していた政党って何党なの？
+        <br/>
+        娘：それは言えないわよ。個人の思想・信条にかかわることだし。
+        <br/>
+        母：<uText id="U4"><label>ⓓ</label>言ったっていいじゃないの</uText>，家族なんだし。
+        <br/>
+        娘：そういう考え方はおかしいわよ。そういったことを無理やり聞き出そうとすると<uText id="U5"><label>ⓔ</label>人権問題</uText>になってしまうわよ。
+        <br/>
+        祖母：あらまあ，大げさな話。私が若かったころは，おじいさんが決めた候補者に私も同じように投票してきたわ。夫の言うことにそのまま従ってきたし，自分で候補者を選んだ記憶はないわねえ。
+        <br/>
+        娘：そういうのがダメなのよ。形だけ民主主義の政治制度を採っていても，中身が全然，民主主義の理念や思想と合致していない。そこが，市民革命で自ら民主主義を勝ち取っていった欧米諸国との違いよね。
+        <br/>
+        祖母：<uText id="U6"><label>ⓕ</label>市民革命って，フランス革命みたいなのかい？</uText>
+        <br/>
+        娘：そうよ。それまでの絶対主義を打倒して民主主義にもとづく社会を作りだしたのが市民革命で，その時代に<uText id="U7"><label>ⓖ</label>「法の支配」</uText>とか<uText id="U8"><label>ⓗ</label>権力分立</uText>といった民主政治の基本原理が確立したとされているわ。
+        <br/>
+        母：さすが法学部の学生さんね。大学の勉強もしっかりして頂戴ね。
+        <br/>
+        娘：大学といえば，<uText id="U9"><label>ⓘ</label>イギリス</uText>から来た留学生が選挙権は18歳からと言っていたし，<uText id="U10"><label>ⓙ</label>アメリカ</uText>からの留学生も同じことを言っていたわ。 20 歳以上という日本の選挙権年齢は，世界的には遅れているのではないかしら。
+    </data>
+    <br/>
+    <question id="Q2" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A1">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U1">ⓐ</ref>に関連して，選挙についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A1">
+            1
+        </ansColumn>
+        <br/>
+        <choices anscol="A1">
+            <choice ansnum="1">
+                <cNum>①</cNum>日本では，選挙権は国民の権利であるとともに義務でもあり，その不行使は許されない。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>選挙によって形成された多数派の主張は常に正しいと言える。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>選挙制度が登場した最初の頃は制限選挙が一般的であった。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>日本では，選挙権年齢の変更には憲法改正が必要である。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q3" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A2">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U2">ⓑ</ref>に関連して，国民主権についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A2">
+            2
+        </ansColumn>
+        <br/>
+        <choices anscol="A2">
+            <choice ansnum="1">
+                <cNum>①</cNum>国民主権といったときの「主権」とは国政の最終的決定権を意味する。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>主権を有する日本国民とは日本に居住する者を意味する。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>主権の概念を初めて明らかにしたのはドイツの思想家マックス・ウェーバーである。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>主権国家といったときの「主権」の意味は国民主権の場合と同じである。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q4" minimal="yes" answer_style="multipleChoice" answer_type="(sentence-sentence)*4" knowledge_type="KS,IC_T" anscol="A3">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U3">ⓒ</ref>に関連して，衆議院議員，参議院議員の比例代表の選挙においては，どちらも議席配分方法としてドント式が採用されている。ドント式とは，各政党の得票数を整数で割っていき，その商の大きい順に議席を配分していく方法である。仮に，総議席数を9議席として，比例代表選挙の結果が下の<ref target="D2">表</ref>のようなものであったとした場合に，ドント式による各政党の獲得議席数として正しいものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A3">
+            3
+        </ansColumn>
+        <br/>
+        <data id="D2" type="table">
+            <tbl>
+                <row>
+                    <cell>政党名</cell><cell>A党</cell><cell>B党</cell><cell>C党</cell><cell>D党</cell>
+                </row>
+                <row>
+                    <cell>得票数</cell><cell>1000票</cell><cell>650票</cell><cell>300票</cell><cell>100票</cell>
+                </row>
+            </tbl>
+        </data>
+        <br/>
+        <choices anscol="A3">
+            <choice ansnum="1">
+                <cNum>①</cNum>A党－4議席　　B党－2議席　　C党－2議席　　D党－1議席
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>A党－4議席　　B党－3議席　　C党－2議席　　D党－0議席
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>A党－4議席　　B党－3議席　　C党－1議席　　D党－1議席
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>A党－5議席　　B党－2議席　　C党－2議席　　D党－0議席
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum>A党－5議席　　B党－3議席　　C党－1議席　　D党－0議席
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum>A党－6議席　　B党－3議席　　C党－0議席　　D党－0議席
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q5" minimal="yes" answer_style="multipleChoice" answer_type="term_other" knowledge_type="KS" anscol="A4">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U4">ⓓ</ref>のような考え方は民主的な選挙の原則に反すると考えられるが，その原則として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A4">
+            4
+        </ansColumn>
+        <br/>
+        <choices anscol="A4">
+            <choice ansnum="1">
+                <cNum>①</cNum>直接選挙の原則
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>普通選挙の原則
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>平等選挙の原則
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>秘密選挙の原則
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q6" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A5">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U5">ⓔ</ref>に関連して，人権についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A5">
+            5
+        </ansColumn>
+        <br/>
+        <choices anscol="A5">
+            <choice ansnum="1">
+                <cNum>①</cNum>イギリスのマグナ・カルタは，自然権としての人権を保障した史上初の文書である。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>キリスト教が支配的であった西欧諸国では「信教の自由」は重視されなかった。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>「国家からの自由」を求める権利が欧米の市民革命期に確立した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>「人間らしい生活をする権利」は第二次大戦後になって初めて登場した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q7" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-symbol)*3" knowledge_type="KS" anscol="A6">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U6">ⓕ</ref>に関連して，市民革命期の重要文書<ref target="L1">A</ref>～<ref target="L3">C</ref>とそれらの文書の抜粋<ref target="L4">ア</ref>～<ref target="L6">ウ</ref>との組合せとして最も適当なものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A6">
+            6
+        </ansColumn>
+        <br/>
+        <data id="D3" type="text">
+            <lText id="L1">
+                <label>A</label>フランス革命の際のフランス人権宣言
+            </lText>
+            <br/>
+            <lText id="L2">
+                <label>B</label>イギリスの名誉革命の際の権利章典
+            </lText>
+            <br/>
+            <lText id="L3">
+                <label>C</label>アメリカ独立革命の際のアメリカ独立宣言
+            </lText>
+            <br/>
+            <br/>
+            <lText id="L4">
+                <label>ア</label>われわれは，自明の真理として，すべての人は平等に造られ，造物主によって，一定の奪いがたい天賦の権利を付与され，その中に生命，自由および幸福の追求の含まれることを信じる。
+            </lText>
+            <br/>
+            <lText id="L5">
+                <label>イ</label>国王に請願することは臣民の権利であり，このような請願をしたことを理由とする収監または訴追は，違法である。
+            </lText>
+            <br/>
+            <lText id="L6">
+                <label>ウ</label>権利の保障が確保されず，権力の分立が規定されないすべての社会は，憲法をもつものでない。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A6">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L1">A</ref>－<ref target="L4">ア</ref><ref target="L2">B</ref>－<ref target="L5">イ</ref><ref target="L3">C</ref>－<ref target="L6">ウ</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L1">A</ref>－<ref target="L4">ア</ref><ref target="L2">B</ref>－<ref target="L6">ウ</ref><ref target="L3">C</ref>－<ref target="L5">イ</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L1">A</ref>－<ref target="L5">イ</ref><ref target="L2">B</ref>－<ref target="L4">ア</ref><ref target="L3">C</ref>－<ref target="L6">ウ</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L1">A</ref>－<ref target="L5">イ</ref><ref target="L2">B</ref>－<ref target="L6">ウ</ref><ref target="L3">C</ref>－<ref target="L4">ア</ref>
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="L1">A</ref>－<ref target="L6">ウ</ref><ref target="L2">B</ref>－<ref target="L4">ア</ref><ref target="L3">C</ref>－<ref target="L5">イ</ref>
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="L1">A</ref>－<ref target="L6">ウ</ref><ref target="L2">B</ref>－<ref target="L5">イ</ref><ref target="L3">C</ref>－<ref target="L4">ア</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q8" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A7">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U7">ⓖ</ref>に関連して，「法の支配」についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A7">
+            7
+        </ansColumn>
+        <br/>
+        <choices anscol="A7">
+            <choice ansnum="1">
+                <cNum>①</cNum>「法の支配」の考え方はイギリスで生まれ，アメリカにも引き継がれた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>「法の支配」の考え方は，法の形式的順守を強く要求するものである。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>「悪法も法なり」という内容は「法の支配」の考え方から導かれるものである。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>「法の支配」の考え方は形式的法治主義と同一のものである。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q9" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A8">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U8">ⓗ</ref>に関連して，権力分立についての記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A8">
+            8
+        </ansColumn>
+        <br/>
+        <choices anscol="A8">
+            <choice ansnum="1">
+                <cNum>①</cNum>イギリスのロックは，その著書『市民政府二論』の中で権力分立論を展開した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>フランスのモンテスキューは，その著書『法の精神』において今日的な三権分立論を主張した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>地方自治の制度や議会の両院制も権力分立の一形態である。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>社会主義国家では，国民の平等を確保するために権力分立が徹底されている。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q10" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A9">
+        <label>問９</label>
+        <instruction>
+            下線部<ref target="U9">ⓘ</ref>に関連して，イギリスの政治制度についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A9">
+            9
+        </ansColumn>
+        <br/>
+        <choices anscol="A9">
+            <choice ansnum="1">
+                <cNum>①</cNum>首相公選制により，国民の意思が直接的に行政に反映されるようになっている。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>二院制の議会は，両院とも公選によって議員が選出される。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>下院の選挙においては比例代表制が採用されている。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>元首である国王の現在のあり方は「君臨すれども統治せず」と表現される。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q11" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A10">
+        <label>問10</label>
+        <instruction>
+            下線部<ref target="U10">ⓙ</ref>に関連して，アメリカの政治制度についての記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A10">
+            10
+        </ansColumn>
+        <br/>
+        <choices anscol="A10">
+            <choice ansnum="1">
+                <cNum>①</cNum>大統領は連邦議会によって不信任されることはない。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>大統領は，連邦議会に法律案を提出する権限を有していない。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>連邦議会の下院については任期途中の解散の制度が存在する。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>大統領選挙において，一般投票の得票数が全国合計で最多となった候補者が当選しないこともあり得る。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+<question id="Q12" minimal="no">
+    <label>【２】</label>
+    <instruction>
+        次の<ref target="D4">文章</ref>を読み，下の問い（問１～10）に答えよ。
+    </instruction>
+    <info>（配点　28）</info>
+    <br/>
+    <data id="D4" type="text">
+        <uText id="U11"><label>ⓐ</label>1947年5月3日に日本国憲法が施行されて</uText>から66年が経過した。制定当時と比べて国内事情は大きく変化し，また国際情勢の面でも大きく様変わりしている。そのことも踏まえて日本国憲法の改正の必要を主張する意見が一方にあり，また，その一方には民主憲法であり，平和憲法といわれる現行憲法の改正に強く反対する意見も存在する。
+        <br/>
+        <uText id="U12"><label>ⓑ</label>戦前の明治憲法（大日本帝国憲法）は，天皇主権を原理とし，権利については「臣民の権利」として規定し，陸海軍を天皇が統帥するという内容をもった欽定憲法であった</uText>。その内容が民主主義の理念からかけ離れているということで，戦後，GHQ（連合国軍総司令部）が日本国政府に対して憲法改正を指示し，紆余曲折を経て現行の日本国憲法が成立した。
+        <br/>
+        日本国憲法の三大原理は「国民主権」，「平和主義」，「基本的人権の尊重」の三つであり，一般的には，この三大原理は明治憲法の有していた原理・原則の否定の上に立てられたものとされている。
+        <br/>
+        現行憲法では，天皇は「象徴」であって，その地位は主権者である国民の総意に基づくとされる。<uText id="U13"><label>ⓒ</label>皇位の継承</uText>については世襲によることが規定されている。
+        <br/>
+        平和主義の具体的な規定は<uText id="U14"><label>ⓓ</label>第9条</uText>であるが，この条文はとくに憲法改正論の中心となっている。<uText id="U15"><label>ⓔ</label>自衛権の明記とそのための軍備の保持</uText>，<uText id="U16"><label>ⓕ</label>集団的自衛権</uText>の容認などが具体的な論点となっており，軍備保持の明記を必要とする意見と，そのような改正は平和主義の精神に反すると主張する意見との対立が見られる。
+        <br/>
+        <uText id="U17"><label>ⓖ</label>基本的人権は主に第3章に規定され</uText>，<uText id="U18"><label>ⓗ</label>明治憲法には規定のなかったタイプの権利</uText>も保障されている。しかし，憲法制定後の70年近くの間に，情報化の進展などによって社会は大きく変化した。そのことを踏まえて，いわゆる<uText id="U19"><label>ⓘ</label>「新しい人権」</uText>を憲法に追加すべきであるという主張が見られる。
+        <br/>
+        憲法改正には国会の両院での審議・議決に加えて，<uText id="U20"><label>ⓙ</label>国民投票</uText>による承認が必要とされる。国民の意思が憲法改正の是非を最終的に決めるのである。
+    </data>
+    <br/>
+    <question id="Q13" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A11">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U11">ⓐ</ref>に関連して，日本国憲法の成立に関わる記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A11">
+            11
+        </ansColumn>
+        <br/>
+        <choices anscol="A11">
+            <choice ansnum="1">
+                <cNum>①</cNum>日本国憲法は，国会の衆議院と参議院における審議・議決を経て成立した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>日本国憲法は，形式的には，明治憲法の改正という手続きを採って成立した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>日本国憲法の成立にあたっては国民の投票における過半数の賛成があった。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>日本国憲法と同時に施行された法律として公職選挙法がある。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q14" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A12">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U12">ⓑ</ref>に関連して，明治憲法についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A12">
+            12
+        </ansColumn>
+        <br/>
+        <choices anscol="A12">
+            <choice ansnum="1">
+                <cNum>①</cNum>明治憲法における天皇の地位は，西欧の絶対主義時代の国王と同一であった。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>天皇は「統治権の総攬者」であって「国の元首」とされていた。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>内閣は一体となって，天皇の行政を協賛する機関とされていた。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>「臣民の権利」は天賦人権とされていたが，法律による制限が可能であった。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q15" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A13">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U13">ⓒ</ref>に関連する記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A13">
+            13
+        </ansColumn>
+        <br/>
+        <choices anscol="A13">
+            <choice ansnum="1">
+                <cNum>①</cNum>継承順位については皇室典範に規定されている。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>現在の皇室典範は一般の法律であり，国会の議決によって改正できる。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>現在は，男系の男子のみに皇位継承の資格がある。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>女性の天皇を可能とするためには憲法を改正する必要がある。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q16" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-symbol)*3" knowledge_type="KS" anscol="A14">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U14">ⓓ</ref>に関連して憲法第9条に関わる裁判<ref target="L7">A</ref>～<ref target="L9">C</ref>とそれらについての説明<ref target="L10">ア</ref>～<ref target="L12">ウ</ref>との組合せとして最も適当なものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A14">
+            14
+        </ansColumn>
+        <br/>
+        <data id="D5" type="text">
+            <lText id="L7">
+                <label>A</label>長沼訴訟
+            </lText>
+            <br/>
+            <lText id="L8">
+                <label>B</label>砂川事件
+            </lText>
+            <br/>
+            <lText id="L9">
+                <label>C</label>恵庭事件
+            </lText>
+            <br/>
+            <br/>
+            <lText id="L10">
+                <label>ア</label>最高裁判所は統治行為論を用いて，日米安全保障条約についての憲法判断を回避した。
+            </lText>
+            <br/>
+            <lText id="L11">
+                <label>イ</label>自衛隊の存在について，第一審の地方裁判所において憲法違反との判断が示された。
+            </lText>
+            <br/>
+            <lText id="L12">
+                <label>ウ</label>地方裁判所判決では自衛隊についての憲法判断は行われず，「肩すかし判決」といわれた。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A14">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L7">A</ref>－<ref target="L10">ア</ref><ref target="L8">B</ref>－<ref target="L11">イ</ref><ref target="L9">C</ref>－<ref target="L12">ウ</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L7">A</ref>－<ref target="L10">ア</ref><ref target="L8">B</ref>－<ref target="L12">ウ</ref><ref target="L9">C</ref>－<ref target="L11">イ</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L7">A</ref>－<ref target="L11">イ</ref><ref target="L8">B</ref>－<ref target="L10">ア</ref><ref target="L9">C</ref>－<ref target="L12">ウ</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L7">A</ref>－<ref target="L11">イ</ref><ref target="L8">B</ref>－<ref target="L12">ウ</ref><ref target="L9">C</ref>－<ref target="L10">ア</ref>
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="L7">A</ref>－<ref target="L12">ウ</ref><ref target="L8">B</ref>－<ref target="L10">ア</ref><ref target="L9">C</ref>－<ref target="L11">イ</ref>
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="L7">A</ref>－<ref target="L12">ウ</ref><ref target="L8">B</ref>－<ref target="L11">イ</ref><ref target="L9">C</ref>－<ref target="L10">ア</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q17" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A15">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U15">ⓔ</ref>に関連して，自衛隊に関わる記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A15">
+            15
+        </ansColumn>
+        <br/>
+        <choices anscol="A15">
+            <choice ansnum="1">
+                <cNum>①</cNum>それまでの保安隊を改組する形で1954年に自衛隊が発足した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>政府見解では「自衛のための必要最小限度の戦力」を有することは認められるとしている。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>自衛隊は専守防衛を旨とするので，これまで海外に派遣されたことはない。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>自衛隊の最高指揮監督権は防衛大臣が有している。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q18" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A16">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U16">ⓕ</ref>に関連して，集団的自衛権についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A16">
+            16
+        </ansColumn>
+        <br/>
+        <choices anscol="A16">
+            <choice ansnum="1">
+                <cNum>①</cNum>国際連合は集団的自衛権の考え方に基づく国際機関である。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>国際法では集団的自衛権の行使は否定されている。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>国際連合憲章は限定的に集団的自衛権の行使を認めている。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>日米安全保障条約では，アメリカの集団的自衛権の行使も否定されている。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q19" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A17">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U17">ⓖ</ref>に関連して，憲法第3章で規定されている人権についての記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A17">
+            17
+        </ansColumn>
+        <br/>
+        <choices anscol="A17">
+            <choice ansnum="1">
+                <cNum>①</cNum>「信教の自由」が問題となった裁判として愛媛玉串料訴訟がある。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>「表現の自由」を保障するために「検閲の禁止」が定められている。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>「教育を受ける権利」に基づき義務教育の制度が存在する。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>財産権は 「公共の福祉」によって制約されることはない。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q20" minimal="yes" answer_style="multipleChoice" answer_type="term_other" knowledge_type="KS" anscol="A18">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U18">ⓗ</ref>に関連して，「明治憲法には規定のなかった権利」には該当しないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A18">
+            18
+        </ansColumn>
+        <br/>
+        <choices anscol="A18">
+            <choice ansnum="1">
+                <cNum>①</cNum>居住・移転の自由
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>労働者の団結権
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>学問の自由
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>生存権
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q21" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-symbol)*3" knowledge_type="KS" anscol="A19">
+        <label>問９</label>
+        <instruction>
+            下線部<ref target="U19">ⓘ</ref>に関連して，「新しい人権」<ref target="L13">A</ref>～<ref target="L15">C</ref>とそれらについての記述<ref target="L16">ア</ref>～<ref target="L18">ウ</ref>との組合せとして最も適当なものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A19">
+            19
+        </ansColumn>
+        <br/>
+        <data id="D6" type="text">
+            <lText id="L13">
+                <label>A</label>知る権利
+            </lText>
+            <br/>
+            <lText id="L14">
+                <label>B</label>環境権
+            </lText>
+            <br/>
+            <lText id="L15">
+                <label>C</label>プライバシーの権利
+            </lText>
+            <br/>
+            <br/>
+            <lText id="L16">
+                <label>ア</label>個人情報保護法や個人情報保護条例によってこの権利の保護が図られている。
+            </lText>
+            <br/>
+            <lText id="L17">
+                <label>イ</label>公害問題などの激化とともに主張されるようになった権利である。
+            </lText>
+            <br/>
+            <lText id="L18">
+                <label>ウ</label>情報公開制度は，この権利を具体化するための制度と評価されている。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A19">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L13">A</ref>－<ref target="L16">ア</ref><ref target="L14">B</ref>－<ref target="L17">イ</ref><ref target="L15">C</ref>－<ref target="L18">ウ</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L13">A</ref>－<ref target="L16">ア</ref><ref target="L14">B</ref>－<ref target="L18">ウ</ref><ref target="L15">C</ref>－<ref target="L17">イ</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L13">A</ref>－<ref target="L17">イ</ref><ref target="L14">B</ref>－<ref target="L16">ア</ref><ref target="L15">C</ref>－<ref target="L18">ウ</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L13">A</ref>－<ref target="L17">イ</ref><ref target="L14">B</ref>－<ref target="L18">ウ</ref><ref target="L15">C</ref>－<ref target="L16">ア</ref>
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="L13">A</ref>－<ref target="L18">ウ</ref><ref target="L14">B</ref>－<ref target="L16">ア</ref><ref target="L15">C</ref>－<ref target="L17">イ</ref>
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="L13">A</ref>－<ref target="L18">ウ</ref><ref target="L14">B</ref>－<ref target="L17">イ</ref><ref target="L15">C</ref>－<ref target="L16">ア</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q22" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A20">
+        <label>問10</label>
+        <instruction>
+            下線部<ref target="U20">ⓙ</ref>に関連して，国民投票のような直接民主制的制度についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A20">
+            20
+        </ansColumn>
+        <br/>
+        <choices anscol="A20">
+            <choice ansnum="1">
+                <cNum>①</cNum>世界で行われている直接民主制的制度としては，国民投票（住民投票）以外にも，国民発案（住民発案）や国民解職（住民解職）などがある。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>日本国憲法に規定されている直接民主制的制度は憲法改正の国民投票のみである。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>地方公共団体における住民の直接請求権は直接民主制的制度ではない。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>地方公共団体において住民が長や議員を直接選挙することは，直接民主制的制度といえる。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+<question id="Q23" minimal="no">
+    <label>【３】</label>
+    <instruction>
+        次の<ref target="D7">文章</ref>を読み，下の問い（問１～８）に答えよ。
+    </instruction>
+    <info>（配点　22）</info>
+    <br/>
+    <data id="D7" type="text">
+        ここ数年，わが国では，近隣諸国との間の領土をめぐる外交的な対立がクローズアップされている。領土問題は国家主権と密接にかかわる問題であり，ナショナリズム的な国民感情も絡んで，係争当事国政府においてはその処理に慎重な対応が必要とされる。
+        <br/>
+        領土をめぐる対立は日本と近隣諸国の間だけではなく，世界の各地域にたくさん存在する。そして，<uText id="U21"><label>ⓐ</label>そのことを原因とする武力衝突が，第二次世界大戦後においても数多く発生している</uText>。そもそも過去に起こった戦争の多くが領土的主張をその原因とするものであった。現在，<uText id="U22"><label>ⓑ</label>国際連合</uText>に加盟しているのは193か国であるが，それらの国のうち，過去に領土的紛争を経験したことのない国は多くはないであろう。
+        <br/>
+        領土（領域）は国家を形成する三要素の一つとされるが，このような三要素で形成される近代国家が登場し，<uText id="U23"><label>ⓒ</label>それらの国家によって構成される国際社会</uText>が出現したのは17世紀の半ば以降のことである。 それ以来，戦争を防止し<uText id="U24"><label>ⓓ</label>平和を維持する</uText>ためのさまざまな方策が試みられてきた。第一次世界大戦後につくられた国際連盟や今日の国際連合はそのような試みの一つである。また，現在では国際司法裁判所という紛争解決のための国際的な司法的機関が存在する。しかし，この国際司法裁判所は，<uText id="U25"><label>ⓔ</label>国内の裁判所とは異なって強制的管轄権を有していない</uText>点で，その役割には大きな制約が付されている。
+        <br/>
+        現代の国際社会においては，<uText id="U26"><label>ⓕ</label>経済の面で国境を越えた活動</uText>が幅広く展開されている。かつての<uText id="U27"><label>ⓖ</label>東西冷戦の時代</uText>には，東西の国家間の経済的交流はきわめて限定的であった。それに対し，「グローバル化」が急速に進展する現在では，外交的対立によって一時的に経済交流が影響を受けることがあっても，長期的には<uText id="U28"><label>ⓗ</label>国家間の経済的関係</uText>はより深まっていくであろう。そして，経済的な「グローバル化」の進展が，政治的な外交対立を薄めていくこともあり得ると考えられる。
+    </data>
+    <br/>
+    <question id="Q24" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A21">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U21">ⓐ</ref>に関連して，第二次世界大戦後に領土をめぐる武力衝突が発生した国の組合せとして適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A21">
+            21
+        </ansColumn>
+        <br/>
+        <choices anscol="A21">
+            <choice ansnum="1">
+                <cNum>①</cNum>インドとパキスタン
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>中国とインド
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>チェコとスロバキア
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>中国と旧ソ連
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q25" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A22">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U22">ⓑ</ref>に関連して，国際連合についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A22">
+            22
+        </ansColumn>
+        <br/>
+        <choices anscol="A22">
+            <choice ansnum="1">
+                <cNum>①</cNum>総会における投票権は，各国の人口によってその比重が異なっている。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>安全保障理事会では，5つの常任理事国に拒否権が与えられている。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>安全保障理事会の指揮監督する国連軍が常設されている。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>事務総長は，安全保障理事会の常任理事国出身者から選出される。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q26" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A23">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U23">ⓒ</ref>に関連する記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A23">
+            23
+        </ansColumn>
+        <br/>
+        <choices anscol="A23">
+            <choice ansnum="1">
+                <cNum>①</cNum>国際社会には，国内法と同一の拘束力を有する国際法が存在している。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>国際法には，成文の国際慣習法と不文の条約とがある。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>国家の三要素とは，「領域」と「国民」，「主権」である。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>各国政府によって組織される国際機関は「NGO」と総称される。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q27" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A24">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U24">ⓓ</ref>に関連して，核軍縮についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A24">
+            24
+        </ansColumn>
+        <br/>
+        <choices anscol="A24">
+            <choice ansnum="1">
+                <cNum>①</cNum>日本を含めた東北アジア一帯の非核化をめざす条約が存在する。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>核兵器保有国が非保有国に核兵器を渡さないことを定める条約が発効している。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>アメリカとロシア（旧ソ連）との間の二国間の核軍縮条約は存在しない。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>地下核実験も含めたあらゆる核実験を禁止する条約が発効している。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q28" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A25">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U25">ⓔ</ref>の内容の説明として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A25">
+            25
+        </ansColumn>
+        <br/>
+        <choices anscol="A25">
+            <choice ansnum="1">
+                <cNum>①</cNum>紛争当事国の双方の同意がなければ裁判は開始されない。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>国際連合の安全保障理事会の同意がなければ裁判が開始されない。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>国際司法裁判所の裁判官の3分の2以上の合意がなければ裁判が開始されない。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>紛争当事国の周辺諸国からの異議があれば裁判が開始されない。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q29" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A26">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U26">ⓕ</ref>に関連して，国際経済についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A26">
+            26
+        </ansColumn>
+        <br/>
+        <choices anscol="A26">
+            <choice ansnum="1">
+                <cNum>①</cNum>第二次世界大戦後は，貿易の活発化を促進するために変動為替相場制が，当初から継続して採用されてきた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>自由貿易を推進する国際機関として，現在ではWTO（世界貿易機関）が存在する。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>欧州統合を目指すEU（欧州連合）では，全加盟国において単一通貨が使用されている。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>OPEC（石油輸出国機構）などの資源カルテルは積極的に鉱業製品の価格引き下げを推進してきた。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q30" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A27">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U27">ⓖ</ref>に関連して，東西冷戦についての記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A27">
+            27
+        </ansColumn>
+        <br/>
+        <choices anscol="A27">
+            <choice ansnum="1">
+                <cNum>①</cNum>旧ソ連と東欧諸国を中心とした社会主義諸国が東側陣営を形成していた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>アメリカと旧ソ連との直接的な軍事衝突は発生しなかった。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>東西冷戦の影響で，ヨーロッパには東西に分裂した国家が存在した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ヨーロッパで対峙していた両陣営の軍事同盟は，現在ではどちらも解体されている。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q31" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A28">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U28">ⓗ</ref>に関連する記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A28">
+            28
+        </ansColumn>
+        <br/>
+        <choices anscol="A28">
+            <choice ansnum="1">
+                <cNum>①</cNum>日本からの輸出の増大は，外国為替レートの円高要因である。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>外国為替相場が円高になると，日本からの輸出は増大する。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>外国からの輸入額が輸出額を上回ると，貿易収支は黒字となる。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>日本企業の海外直接投資は，資本収支の黒字要因である。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+<question id="Q32" minimal="no">
+    <label>【４】</label>
+    <instruction>
+        次の<ref target="D8">文章</ref>を読み，下の問い（問１～８）に答えよ。
+    </instruction>
+    <info>（配点　22）</info>
+    <br/>
+    <data id="D8" type="text">
+        一つの国家があって，その国家がどのような社会を作っていくかというときに，古典的には対照的な二つの考え方が存在した。一つは，国民の自由な活動の保障を国家の最重要課題とする考え方である。経済学的には，アダム・スミスなどに代表される自由放任主義として表現されるもので，国家はなるだけ経済活動に介入せず，<uText id="U29"><label>ⓐ</label>市場の働き</uText>に任せておくべきであり，<uText id="U30"><label>ⓑ</label>国家の活動は，国防・治安維持などの最低限のものに限られるべき</uText>だとする。もう一つの考え方は，国民すべてに同じ程度の生活を保障することを国家の最大の目的とする考え方であり，この考え方では<uText id="U31"><label>ⓒ</label>国民の間の経済的格差</uText>はその是正が強く要求される。それを徹底させたのが<uText id="U32"><label>ⓓ</label>社会主義</uText>思想である。前者が個人の生活についてはその個人が責任をもつという自助努力を原理とするのに対して，後者の考え方では個々人の生活に対して社会が責任をもつべきだとされることになる。
+        <br/>
+        19世紀のイギリスなどの資本主義国家は前者の考え方にもとづく国家の典型であったが，20世紀になると，後者の考え方に立脚する社会主義国家も登場した。もちろん，21世紀の現代国家においては，上述のような極端な考え方にもとづく国家は少なく，両者の考え方を混ぜ合わせたような政治や経済の制度が各国において採用されている。
+        <br/>
+        しかしながら，この両者の考え方のどちらに重心を置くかによって，現代においても国家観の対立は存在する。いわゆる「小さな政府」と「大きな政府」という考え方の対立である。この対立は，大きくは<uText id="U33"><label>ⓔ</label>国家財政</uText>の規模やその使い道についての意見の違いとなるし，より具体的には<uText id="U34"><label>ⓕ</label>社会保障制度</uText>や<uText id="U35"><label>ⓖ</label>租税制度</uText>などについての政策的な相違点となる。<uText id="U36"><label>ⓗ</label>経済的活動</uText>に対する規制についても主張が異なる。
+        <br/>
+        一部の権威主義的な国家を除いて，現代では多くの国において民主主義が政治の原理として採用されている。それゆえ，理屈の上では，その国が二つの考え方のどちらに重心を置いた制度を採用するかの最終的な決定は国民に委ねられている。
+    </data>
+    <br/>
+    <question id="Q33" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS,IC_G" anscol="A29">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U29">ⓐ</ref>に関連して，次の<ref target="D9">グラフ</ref>において，供給曲線が右下方にシフトする要因として最も適当なものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A29">
+            29
+        </ansColumn>
+        <br/>
+        <data id="D9" type="image">
+            <img src="YozemiCenter-2013--1-Seijikeizai-001.png" corresponding_obj="X1_1 X1_2"/>
+<adata id="X1_1" type="text" field="object">需要曲線と供給曲線のグラフ。x軸は数量、y軸は価格。</adata>
+<adata id="X1_2" type="text" field="event">供給曲線がx軸の正の向き、y軸の負の向きに平行移動する。</adata>
+
+
+        </data>
+        <br/>
+        <choices anscol="A29">
+            <choice ansnum="1">
+                <cNum>①</cNum>この商品に対する消費者の嗜好が増大した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>この商品に新たに間接税が課せられるようになった。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>この商品の原材料の価格が上昇した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>この商品の生産に関して新技術が導入された。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q34" minimal="yes" answer_style="multipleChoice" answer_type="term_other" knowledge_type="KS" anscol="A30">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U30">ⓑ</ref>に関連して，このような国家のあり方を意味する表現として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A30">
+            30
+        </ansColumn>
+        <br/>
+        <choices anscol="A30">
+            <choice ansnum="1">
+                <cNum>①</cNum>夜警国家
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>積極国家
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>行政国家
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>福祉国家
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q35" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A31">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U31">ⓒ</ref>に関連して，国民の間の経済的格差についての記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A31">
+            31
+        </ansColumn>
+        <br/>
+        <choices anscol="A31">
+            <choice ansnum="1">
+                <cNum>①</cNum>経済的格差には，所得格差と資産格差とがある。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>生活保護の制度は国民の間の経済的格差を是正するためのものである。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>社会的・経済的な規制の緩和は，経済的格差を縮小する政策として有効である。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>所得格差の縮小のために，所得税には累進課税制度が採用されている。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q36" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A32">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U32">ⓓ</ref>に関連して，社会主義の考え方についての記述として適当でないものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A32">
+            32
+        </ansColumn>
+        <br/>
+        <choices anscol="A32">
+            <choice ansnum="1">
+                <cNum>①</cNum>ドイツのマルクスは資本主義経済を批判し，社会主義社会を展望した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>マルクスの盟友エンゲルスは，オーエンやサン・シモンらの考え方を空想的社会主義と呼んだ。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>社会主義経済では，原則として生産手段の私有は認められない。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>社会主義経済の原則を徹底したことにより中国は急速な経済成長を実現した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q37" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A33">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U33">ⓔ</ref>に関連して，財政についての記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A33">
+            33
+        </ansColumn>
+        <br/>
+        <choices anscol="A33">
+            <choice ansnum="1">
+                <cNum>①</cNum>好況の時には，一般に減税による景気抑制策が行われることが多い。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>不況の時には，一般に財政支出削減による景気刺激策が行われることが多い。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>2010年度以降の日本の一般会計予算における国債依存度は40％を超えている。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>2012年の日本の一般会計歳出に占める公共事業関係費の割合は社会保障関係費を上回る。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q38" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-term_other)*3" knowledge_type="KS,IC_G" anscol="A34">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U34">ⓕ</ref>に関連して，社会保障給付費の部門別推移を表した次の<ref target="D10">グラフ</ref>の<ref comment="画像内">A</ref>～<ref comment="画像内">C</ref>に該当するものの組合せとして最も適当なものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A34">
+            34
+        </ansColumn>
+        <br/>
+        <data id="D10" type="image">
+            <img src="YozemiCenter-2013--1-Seijikeizai-002.png" corresponding_obj="X2"/><adata id="X2" type="table">
+<tbl>
+		<row>
+			<cell/>
+			<cell>1970年</cell>
+			<cell>1975年</cell>
+			<cell>1980年</cell>
+			<cell>1985年</cell>
+			<cell>1990年</cell>
+			<cell>1995年</cell>
+			<cell>2000年</cell>
+			<cell>2003年</cell>
+		</row>
+		<row>
+			<cell>A</cell>
+			<cell>1.5兆円</cell>
+			<cell>4兆円</cell>
+			<cell>11兆円</cell>
+			<cell>17兆円</cell>
+			<cell>24兆円</cell>
+			<cell>34兆円</cell>
+			<cell>41兆円</cell>
+			<cell>44.8兆円(53.1%)</cell>
+		</row>
+		<row>
+			<cell>B</cell>
+			<cell>2兆円</cell>
+			<cell>6兆円</cell>
+			<cell>11兆円</cell>
+			<cell>14兆円</cell>
+			<cell>18兆円</cell>
+			<cell>24兆円</cell>
+			<cell>25兆円</cell>
+			<cell>26.6兆円(31.6%)</cell>
+		</row>
+		<row>
+			<cell>C</cell>
+			<cell>1兆円</cell>
+			<cell>2兆円</cell>
+			<cell>4兆円</cell>
+			<cell>5兆円</cell>
+			<cell>5.5兆円</cell>
+			<cell>7兆円</cell>
+			<cell>11兆円</cell>
+			<cell>12.9兆円(15.3%)</cell>
+		</row>
+</tbl>
+</adata>
+
+
+            <br/>
+            <caption>（『社会保障統計年報』2005 ほか）</caption>
+        </data>
+        <br/>
+        <choices anscol="A34">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref comment="画像内">A</ref>－「年金」<ref comment="画像内">B</ref>－「医療」<ref comment="画像内">C</ref>－「福祉・その他」
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref comment="画像内">A</ref>－「年金」<ref comment="画像内">B</ref>－「福祉・その他」<ref comment="画像内">C</ref>－「医療」
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref comment="画像内">A</ref>－「医療」<ref comment="画像内">B</ref>－「年金」<ref comment="画像内">C</ref>－「福祉・その他」
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref comment="画像内">A</ref>－「医療」<ref comment="画像内">B</ref>－「福祉・その他」<ref comment="画像内">C</ref>－「年金」
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref comment="画像内">A</ref>－「福祉・その他」<ref comment="画像内">B</ref>－「医療」<ref comment="画像内">C</ref>－「年金」
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref comment="画像内">A</ref>－「福祉・その他」<ref comment="画像内">B</ref>－「年金」<ref comment="画像内">C</ref>－「医療」
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q39" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-term_other)*3" knowledge_type="KS,IC_T" anscol="A35">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U35">ⓖ</ref>に関連して，わが国における租税の分類を表した次の<ref target="D11">図表</ref>の<ref target="B1">A</ref>～<ref target="B2">C</ref>に入る税目の組合せとして最も適当なものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A35">
+            35
+        </ansColumn>
+        <br/>
+        <data id="D11" type="table">
+            <tbl>
+                <row>
+                    <cell></cell><cell>国税</cell><cell>地方税</cell>
+                </row>
+                <row>
+                    <cell rowspan="3">直接税</cell><cell>所得税</cell><cell>住民税</cell>
+                </row>
+                <row>
+                    <cell><blank id="B1"><label>A</label></blank></cell><cell><blank id="B2"><label>C</label></blank></cell>
+                </row>
+                <row>
+                    <cell>相続税</cell><cell>事業税</cell>
+                </row>
+                <row>
+                    <cell rowspan="3">間接税</cell><cell>消費税</cell><cell>地方消費税</cell>
+                </row>
+                <row>
+                    <cell><blank id="B3"><label>B</label></blank></cell><cell>地方たばこ税</cell>
+                </row>
+                <row>
+                    <cell>たばこ税</cell><cell></cell>
+                </row>
+            </tbl>
+        </data>
+        <br/>
+        <choices anscol="A35">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="B1">A</ref>－酒税<ref target="B3">B</ref>－法人税<ref target="B2">C</ref>－固定資産税
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="B1">A</ref>－酒税<ref target="B3">B</ref>－固定資産税<ref target="B2">C</ref>－法人税
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="B1">A</ref>－固定資産税<ref target="B3">B</ref>－酒税<ref target="B2">C</ref>－法人税
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="B1">A</ref>－固定資産税<ref target="B3">B</ref>－法人税<ref target="B2">C</ref>－酒税
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="B1">A</ref>－法人税<ref target="B3">B</ref>－酒税<ref target="B2">C</ref>－固定資産税
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="B1">A</ref>－法人税<ref target="B3">B</ref>－固定資産税<ref target="B2">C</ref>－酒税
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q40" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A36">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U36">ⓗ</ref>に関連する記述として最も適当なものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A36">
+            36
+        </ansColumn>
+        <br/>
+        <choices anscol="A36">
+            <choice ansnum="1">
+                <cNum>①</cNum>政府は家計から財やサービスを購入して，その対価である代金を支払う。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>企業は家計から労働力を購入して，その対価である賃金を支払う。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>景気の変動は，企業の設備投資や在庫投資の活動とは無関係に発生する。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ある国の経済的ストックを見る指標としてGDP（国内総生産）がある。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+
+</exam>

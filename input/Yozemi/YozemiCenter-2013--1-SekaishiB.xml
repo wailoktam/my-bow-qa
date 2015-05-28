@@ -1,0 +1,1175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE exam PUBLIC "-//TOROBO//TOROBO ANNOTATION 1.0//EN" "torobo.dtd">
+<?xml-stylesheet type="text/css" href="../torobo.css"?>
+<exam source="Yoyogi Seminar Center Prep Test" year="2013" subject="SekaishiB">
+YozemiCenter-2013--1-SekaishiB<br/>
+<title>2013年度　代々木ゼミナール第1回全国センター模試　世界史B</title>
+<br/>
+<info>（解答番号 1 ～ 36 ）</info>
+<br/>
+<question id="Q1" minimal="no">
+    <label>【１】</label>
+    <instruction>
+        オリエントは古代文明発祥の地である。本来，ラテン語の「オリエント」という語は「日の昇るところ」の意味で，具体的には，東西は小アジアからイラン高原東境，南北はペルシア湾からカフカス山脈にいたる地域およびエジプトをさしている。古代のオリエント史について述べた次の文章<ref target="D1">Ａ</ref>～<ref target="D7">Ｃ</ref>を読み，下の問い（問１～９）に答えよ。
+    </instruction>
+    <info>（配点　25）</info>
+    <br/>
+    <data id="D1" type="text">
+        <label>Ａ</label>シュメール人は，前3000年頃から，<uText id="U1"><label>①</label>ウル</uText>，ウルクなどの都市国家を形成し，メソポタミア文明の基礎を築いた。しかし，これらの都市国家は互いに抗争を続けて衰退し，かわってセム語系のアッカド人が台頭した。アッカド人はシュメール人の都市国家をつぎつぎに征服し，この地域初の統一国家を建設した。アッカド人が山岳民族の侵入で滅亡すると，一時シュメール人の王朝が復興したが，この王朝もまた<uText id="U2"><label>②</label>イラン高原</uText>より侵入したエラム人によって滅ぼされた。その後，<uText id="U3"><label>③</label>バビロン第1王朝（古バビロニア王国）</uText>が建国され，メソポタミア全域を統一した。
+    </data>
+    <br/>
+    <question id="Q2" minimal="yes" answer_style="multipleChoice" answer_type="term_other" knowledge_type="KS,IC_P" anscol="A1">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U1">①</ref>に関連して，次の写真は都市国家ウルの遺跡に現存する建造物であり，アッカド人滅亡後に復興したシュメール人王朝の建国者によって建造されたといわれている。この建造物の名称として正しいものを，下の ①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A1">
+            1
+        </ansColumn>
+        <br/>
+        <data id="D2" type="image">
+            <img src="YozemiCenter-2013--1-SekaishiB-001.png" corresponding_obj="X1"/>
+<adata id="X1" type="text" field="object">古代遺跡。台形で、縦にいくつか溝が入っている。坂か階段らしきものが付いている。</adata>
+
+        </data>
+        <br/>
+        <choices anscol="A1">
+            <choice ansnum="1">
+                <cNum>①</cNum>カタコンベ
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>コロッセウム
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>ジッグラト
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>パルテノン
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q3" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A2">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U2">②</ref>に関連して，前3世紀から後7世紀にかけてのイランの歴史について述べた文として正しいものを，次の ①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A2">
+            2
+        </ansColumn>
+        <br/>
+        <choices anscol="A2">
+            <choice ansnum="1">
+                <cNum>①</cNum>セレウコス朝の支配下からイラン系遊牧民が自立し，パルティアを建国した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>ペルセポリスは，パルティアおよびササン朝の首都となった。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>ササン朝のシャープール1世は，ローマ帝国のネロ帝を捕虜にした。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ササン朝のホスロー1世は，突厥と同盟を結んでフン族を滅ぼした。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q4" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-TF)*2" knowledge_type="KS" anscol="A3">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U3">③</ref>について述べた次の文<ref target="L1">a</ref>と<ref target="L2">b</ref>の正誤の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A3">
+            3
+        </ansColumn>
+        <br/>
+        <data id="D3" type="text">
+            <lText id="L1">
+                <label>a</label>バビロン第1王朝を建国したのは，セム語系アムル人（アモリ人）であった。
+            </lText>
+            <br/>
+            <lText id="L2">
+                <label>b</label>ハンムラビ法典では，身分の違いによって刑罰に差が設けられた。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A3">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L1">a</ref>―正<ref target="L2">b</ref>―正
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L1">a</ref>―正<ref target="L2">b</ref>―誤
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L1">a</ref>―誤<ref target="L2">b</ref>―正
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L1">a</ref>―誤<ref target="L2">b</ref>―誤
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D4" type="text">
+        <label>Ｂ</label><uText id="U4"><label>④</label>エジプト</uText>では，はやくから40あまりの部族的独立集落（ノモス）が形成されていたが，ナイル川の治水・灌漑に共同作業を必要としたため，やがてそれらが一つにまとまり，前3000年頃に統一国家が成立した。このとき以来，前525年に<uText id="U5"><label>⑤</label>アケメネス朝</uText>に征服されるまで，26の王朝が交替した。エジプトの王はファラオ（大きな家の意）とよばれ，全国土を所有して専制的な権力をふるった。古王国の時代にはすでに<uText id="U6"><label>⑥</label>文字</uText>も発明されており，霊魂の不滅と死後の世界を信じる古代エジプト人は「死者の書」を残した。
+    </data>
+    <br/>
+    <question id="Q5" minimal="yes" answer_style="multipleChoice" answer_type="o(symbol-symbol-symbol)" knowledge_type="KS" anscol="A4">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U4">④</ref>に関連して，古代エジプトについて述べた次の文<ref target="L3">a</ref>～<ref target="L5">c</ref>が，年代の古いものから順に正しく配列されているものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A4">
+            4
+        </ansColumn>
+        <br/>
+        <data id="D5" type="text">
+            <lText id="L3">
+                <label>a</label>クフ・カフラー・メンカウラー王のピラミッドが建設された。
+            </lText>
+            <br/>
+            <lText id="L4">
+                <label>b</label>アメンホテプ4世（イクナートン）が，唯一神アトンの信仰を強制した。
+            </lText>
+            <br/>
+            <lText id="L5">
+                <label>c</label>アジア系遊牧民ヒクソスが侵入し，一時エジプトを支配した。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A4">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L3">a</ref>→<ref target="L4">b</ref>→<ref target="L5">c</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L3">a</ref>→<ref target="L5">c</ref>→<ref target="L4">b</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L4">b</ref>→<ref target="L3">a</ref>→<ref target="L5">c</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L4">b</ref>→<ref target="L5">c</ref>→<ref target="L3">a</ref>
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="L5">c</ref>→<ref target="L3">a</ref>→<ref target="L4">b</ref>
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="L5">c</ref>→<ref target="L4">b</ref>→<ref target="L3">a</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q6" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A5">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U5">⑤</ref>に関連して，アケメネス朝について述べた文として誤っているものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A5">
+            5
+        </ansColumn>
+        <br/>
+        <choices anscol="A5">
+            <choice ansnum="1">
+                <cNum>①</cNum>アケメネス朝では，善悪二元論に基づくゾロアスター教が信仰された。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>ダレイオス（ダリウス）1世は，「王の道」を建設し，駅伝制を整備した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>アケメネス朝は，強制移住や重税によって異民族を苛酷に支配した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>アケメネス朝の艦隊は，サラミスの海戦でアテネ艦隊に敗れた。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q7" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-TF)*2" knowledge_type="KS" anscol="A6">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U6">⑥</ref>に関連して，古代文字の解読について述べた次の文<ref target="L6">a</ref>と<ref target="L7">b</ref>の正誤の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A6">
+            6
+        </ansColumn>
+        <br/>
+        <data id="D6" type="text">
+            <lText id="L6">
+                <label>a</label>フランスのシャンポリオンは，楔形文字の解読に成功した。
+            </lText>
+            <br/>
+            <lText id="L7">
+                <label>b</label>ドイツのシュリーマンは，神聖文字（ヒエログリフ）の解読に成功した。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A6">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L6">a</ref>―正<ref target="L7">b</ref>―正
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L6">a</ref>―正<ref target="L7">b</ref>―誤
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L6">a</ref>―誤<ref target="L7">b</ref>―正
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L6">a</ref>―誤<ref target="L7">b</ref>―誤
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D7" type="text">
+        <label>Ｃ</label>地中海東岸のシリア・パレスチナ地方は，古くからヒッタイト王国とエジプト王国の争奪の地であった。しかし，前12世紀，「海の民」とよばれる民族が襲来して<uText id="U7"><label>⑦</label>ヒッタイト王国</uText>を滅ぼし，エジプトの勢力もこの地から後退した。その後，<blank id="B1"><label>ア</label></blank>・<blank id="B2"><label>イ</label></blank>・<uText id="U8"><label>⑧</label>へブライ人</uText>のセム語系3民族が，この地を舞台に活発な活動を開始した。このうち，<ref target="B1">ア</ref>はシリアの海岸部にシドン，ティルスなどの都市国家を形成し，航海・貿易・植民に活躍した。また，<ref target="B2">イ</ref>はダマスクスを中心に内陸の中継貿易で活躍した。
+    </data>
+    <br/>
+    <question id="Q8" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A7">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U7">⑦</ref>について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A7">
+            7
+        </ansColumn>
+        <br/>
+        <choices anscol="A7">
+            <choice ansnum="1">
+                <cNum>①</cNum>エトルリア人を追放して建国した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>史上初めて鉄製武器を本格的に使用した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>太陽のピラミッドを建造した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>世界最古の鋳造貨幣を使用した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q9" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-term_other)*2" knowledge_type="KS" anscol="A8">
+        <label>問８</label>
+        <instruction>
+            文章中の空欄<ref target="B1">ア</ref>と<ref target="B2">イ</ref>に入れる語の組合せとして正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A8">
+            8
+        </ansColumn>
+        <br/>
+        <choices anscol="A8">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="B1">ア</ref>―カッシート人<ref target="B2">イ</ref>―アラム人
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="B1">ア</ref>―カッシート人<ref target="B2">イ</ref>―アラブ人
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="B1">ア</ref>―フェニキア人<ref target="B2">イ</ref>―アラム人
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="B1">ア</ref>―フェニキア人<ref target="B2">イ</ref>―アラブ人
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q10" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A9">
+        <label>問９</label>
+        <instruction>
+            下線部<ref target="U8">⑧</ref>に関連して，ヘブライ人とその民族宗教であるユダヤ教について述べた文として波線部の正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A9">
+            9
+        </ansColumn>
+        <br/>
+        <choices anscol="A9">
+            <choice ansnum="1">
+                <cNum>①</cNum>ヘブライ人は，<uText id="U9">ダヴィデ</uText>に率いられてエジプトを脱出した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>イスラエル王国は，<uText id="U10">新バビロニア</uText>に滅ぼされた。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>ユダヤ教の唯一神は<uText id="U11">メシア</uText>とよばれる。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ユダヤ教の教典は，<uText id="U12">『旧約聖書』</uText>である。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+<question id="Q11" minimal="no">
+    <label>【２】</label>
+    <instruction>
+        インドは古い歴史をもち，人類史に大きく貢献した文化を生んだ地域である。また，東南アジアの諸地域は，インド・中国双方の文化的影響を受けながら，海上交通の接点として独自の文明を築いた。インド・東南アジアの古代史について述べた次の文章<ref target="D8">Ａ</ref>～<ref target="D11">Ｃ</ref>を読み，下の問い（問１～９）に答えよ。
+    </instruction>
+    <info>（配点　25）</info>
+    <br/>
+    <data id="D8" type="text">
+        <label>Ａ</label><uText id="U13"><label>①</label>インダス文明</uText>が衰退した後，インド＝ヨーロッパ語族のアーリヤ人がインダス川流域のパンジャーブ地方に進出した。前1000年頃，アーリヤ人はガンジス川上流域へ移動して定着農耕の生活を始め，バラモン教やヴァルナ（種姓）制度を生み出した。バラモンたちは自己の権威を維持するため複雑な祭式規定を発達させたが，前5世紀，クシャトリヤ・ヴァイシャ層の支持を背景に，バラモン教の祭式至上主義に批判的な<uText id="U14"><label>②</label>新思想・新宗教</uText>が出現した。前4世紀末，アレクサンドロス大王軍侵入後の混乱のなかから，インド初の統一国家<uText id="U15"><label>③</label>マウリヤ朝</uText>が成立した。
+    </data>
+    <br/>
+    <question id="Q12" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A10">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U13">①</ref>について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A10">
+            10
+        </ansColumn>
+        <br/>
+        <choices anscol="A10">
+            <choice ansnum="1">
+                <cNum>①</cNum>都市では住宅・浴場などが整然と配置され，排水溝も整備されていた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>文字は全く使用されず，縄の結び方で意味・数量を示した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>アゴラとよばれる公共広場が，政治・経済活動の中心であった。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>モエンジョ＝ダーロの遺跡は，現在のインド共和国の領内にある。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q13" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-TF)*2" knowledge_type="KS" anscol="A11">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U14">②</ref>に関連して，当時現れた新思想・新宗教について述べた次の文<ref target="L8">a</ref>と<ref target="L9">b</ref>の正誤の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A11">
+            11
+        </ansColumn>
+        <br/>
+        <data id="D9" type="text">
+            <lText id="L8">
+                <label>a</label>ガウタマ＝シッダールタが，仏教を創始した。
+            </lText>
+            <br/>
+            <lText id="L9">
+                <label>b</label>ヴァルダマーナが，ヒンドゥー教理論を確立した。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A11">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L8">a</ref>―正<ref target="L9">b</ref>―正
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L8">a</ref>―正<ref target="L9">b</ref>―誤
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L8">a</ref>―誤<ref target="L9">b</ref>―正
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L8">a</ref>―誤<ref target="L9">b</ref>―誤
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q14" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A12">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U15">③</ref>に関連して，マウリヤ朝のアショーカ王について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A12">
+            12
+        </ansColumn>
+        <br/>
+        <choices anscol="A12">
+            <choice ansnum="1">
+                <cNum>①</cNum>『マヌ法典』を刻んだ石柱碑・磨崖碑を各地に建てた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>仏典結集の事業に対し援助を行った。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>仏教伝道のため，王子を中国に派遣した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>アジャンター石窟寺院を建立した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D10" type="text">
+        <label>Ｂ</label>前1世紀，デカン高原にドラヴィダ人による<blank id="B3"><label>ア</label></blank>が興り，ローマ帝国との間で行った<blank id="B4"><label>イ</label></blank>などで繁栄した。北インドでは，1世紀に大月氏の支配下にあったイラン系クシャーナ族が自立し，西トルキスタンから西北インドにかけて<uText id="U16"><label>④</label>クシャーナ朝</uText>を建てた。クシャーナ朝は，2世紀半ばのカニシカ王のときが全盛で，その版図はガンジス川中流域におよんだ。その後，クシャーナ朝はササン朝に圧迫されて衰退し，3世紀に滅亡した。4世紀にはいると<uText id="U17"><label>⑤</label>グプタ朝</uText>が北インドを統一し，インド古典文化の黄金時代を現出した。
+    </data>
+    <br/>
+    <question id="Q15" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-term_location)(symbol-term_other)" knowledge_type="KS" anscol="A13">
+        <label>問４</label>
+        <instruction>
+            文章中の空欄<ref target="B3">ア</ref>と<ref target="B4">イ</ref>に入れる語の組合せとして正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A13">
+            13
+        </ansColumn>
+        <br/>
+        <choices anscol="A13">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="B3">ア</ref>―ヴァルダナ朝<ref target="B4">イ</ref>―季節風貿易
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="B3">ア</ref>―ヴァルダナ朝<ref target="B4">イ</ref>―隊商交易
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="B3">ア</ref>―サータヴァーハナ朝<ref target="B4">イ</ref>―季節風貿易
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="B3">ア</ref>―サータヴァーハナ朝<ref target="B4">イ</ref>―隊商交易
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q16" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A14">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U16">④</ref>について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A14">
+            14
+        </ansColumn>
+        <br/>
+        <choices anscol="A14">
+            <choice ansnum="1">
+                <cNum>①</cNum>都をパータリプトラ（現在のパトナ）においた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>この時代に，唐僧玄奘がインドを訪れた。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>仏教教学の中心として，ナーランダー僧院が建立された。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ガンダーラ地方を中心に，ギリシア風仏教美術が発達した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q17" minimal="yes" answer_style="multipleChoice" answer_type="term_other" knowledge_type="KS" anscol="A15">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U17">⑤</ref>に関連して，チャンドラグプタ2世の宮廷で活躍したカーリダーサが著した戯曲で，サンスクリット文学の最高傑作といわれる作品として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A15">
+            15
+        </ansColumn>
+        <br/>
+        <choices anscol="A15">
+            <choice ansnum="1">
+                <cNum>①</cNum>『ラーマーヤナ』
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>『ウパニシャッド』
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>『シャクンタラー』
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>『マハーバーラタ』
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D11" type="text">
+        <label>Ｃ</label>古代の東南アジアは，中国とインドの文化が交錯する地域であった。中国文化はベトナムに大きな影響を与え，インド文化はそれ以外の地域に広がった。メコン川下流域には，1～2世紀から7世紀中頃まで<uText id="U18"><label>⑥</label>クメール人ないしはマレー人が建てた港市国家</uText>が存在し，三国の呉がこの国家に遣使してベトナム東南部の国家を牽制しようとした記録が残されている。この港市国家は，6世紀以降メコン川流域に発展したクメール人の真臘に滅ぼされた。7世紀にはスマトラ島に<uText id="U19"><label>⑦</label>シュリーヴィジャヤ</uText>が繁栄していたが，8世紀半ば，ジャワ島中部に石造の仏教遺跡を残した<uText id="U20"><label>⑧</label>シャイレンドラ朝</uText>が現れた。
+    </data>
+    <br/>
+    <question id="Q18" minimal="yes" answer_style="multipleChoice" answer_type="term_location" knowledge_type="KS" anscol="A16">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U18">⑥</ref>に関連して，外港の遺跡であるオケオでも知られるこの港市国家の，中国での呼び名として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A16">
+            16
+        </ansColumn>
+        <br/>
+        <choices anscol="A16">
+            <choice ansnum="1">
+                <cNum>①</cNum>安息
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>林邑
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>柔然
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>扶南
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q19" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-TF)*2" knowledge_type="KS" anscol="A17">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U19">⑦</ref>について述べた次の文<ref target="L10">a</ref>と<ref target="L11">b</ref>の正誤の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A17">
+            17
+        </ansColumn>
+        <br/>
+        <data id="D12" type="text">
+            <lText id="L10">
+                <label>a</label>すべての人々の救済を目指す上座部仏教が広まっていた。
+            </lText>
+            <br/>
+            <lText id="L11">
+                <label>b</label>唐僧義浄がインドからの帰国途上にこの国を訪れた。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A17">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L10">a</ref>―正<ref target="L11">b</ref>―正
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L10">a</ref>―正<ref target="L11">b</ref>―誤
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L10">a</ref>―誤<ref target="L11">b</ref>―正
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L10">a</ref>―誤<ref target="L11">b</ref>―誤
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q20" minimal="yes" answer_style="multipleChoice" answer_type="image_photo" knowledge_type="KS,IC_P" anscol="A18">
+        <label>問９</label>
+        <instruction>
+            下線部<ref target="U20">⑧</ref>に関連して，シャイレンドラ朝によって建立された遺跡として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A18">
+            18
+        </ansColumn>
+        <br/>
+        <choices anscol="A18">
+            <choice ansnum="1">
+                <cNum>①</cNum><img src="YozemiCenter-2013--1-SekaishiB-002.png" corresponding_obj="X2_1 X2_2"/>
+<adata id="X2_1" type="text" field="object">正面に大きな仏像、右側に小さな像。</adata>
+<adata id="X2_2" type="text" field="GoogleImages">雲崗石窟（原文：云 冈 石窟）</adata>
+
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><img src="YozemiCenter-2013--1-SekaishiB-003.png" corresponding_obj="X3_1 X3_2 X3_3"/>
+<adata id="X3_1" type="text" field="object">遺跡</adata>
+<adata id="X3_2" type="text" field="GoogleImages">インドネシアのボロブドゥール遺跡（原文：borobudur indonesia）</adata>
+<adata id="X3_3" type="text" field=" TinEye">ボロブドゥール遺跡、上空から撮影、UNESCO世界遺産、ジャワ、インドネシア、アジア（原文：Aerial view over Borobudur, UNESCO World Heritage Site, Java, Indonesia, Asia）</adata>
+
+
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><img src="YozemiCenter-2013--1-SekaishiB-004.png" corresponding_obj="X4_1 X4_2"/>
+<adata id="X4_1" type="text" field="object">遺跡</adata>
+<adata id="X4_2" type="text" field=" TinEye">サーンチーの仏舎利塔、前2世紀、インド、マドヤ・パラデシュ（原文：Stupa of sanchi 2nd cent BCIndia, Madhya Pradesh ）</adata>
+
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><img src="YozemiCenter-2013--1-SekaishiB-005.png" corresponding_obj="X5_1 X5_2"/>
+<adata id="X5_1" type="text" field="object">古代遺跡。中央に出入り口がある。</adata>
+<adata id="X5_2" type="text" field="GoogleImages">ミケーネの獅子門（原文：lion gate at micenae）</adata>
+
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+<question id="Q21" minimal="no">
+    <label>【３】</label>
+    <instruction>
+        東アジアの各地は，多様な風土・民族・社会をもちながらも，中国を中心として，漢字や儒教・仏教などの共通する文化によって結ばれた独自の文化圏を形成してきた。唐代中期までの中国史について述べた次の文章<ref target="D13">Ａ</ref>～<ref target="D16">Ｃ</ref>を読み，下の問い（問１～９）に答えよ。
+    </instruction>
+    <info>（配点　25）</info>
+    <br/>
+    <data id="D13" type="text">
+        <label>Ａ</label>春秋時代末期の中国では，<uText id="U21"><label>①</label>農業生産力が飛躍的に高まり， それにともなって社会のあらゆる面が大きく変化した</uText>。さらに，こうした社会の変化に適合した新しい思想も要求され，<uText id="U22"><label>②</label>諸子百家</uText>とよばれる多くの思想家が現れた。孔子を祖とする儒家の思想は，中国の歴代王朝ばかりでなく，東アジアにおける専制支配の中心的イデオロギーとなった。また，<uText id="U23"><label>③</label>秦の始皇帝</uText>は法家の理論を利用して中国の統一を果たした。しかし，秦はあまりにも厳格に法を運用したため民衆の間に不満が蓄積され，統一後わずか15年で滅亡することになった。
+    </data>
+    <br/>
+    <question id="Q22" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A19">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U21">①</ref>に関連して，春秋・戦国時代の技術・社会の変化について述べた文として誤っているものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A19">
+            19
+        </ansColumn>
+        <br/>
+        <choices anscol="A19">
+            <choice ansnum="1">
+                <cNum>①</cNum>鉄製農具の使用が普及した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>牛に犂をひかせて土地を耕す方法が普及した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>九品中正（九品官人法）で官吏を選ぶようになった。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>刀銭・布銭などの青銅貨幣が使用されるようになった。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q23" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A20">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U22">②</ref>について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A20">
+            20
+        </ansColumn>
+        <br/>
+        <choices anscol="A20">
+            <choice ansnum="1">
+                <cNum>①</cNum>墨家は，儒家を批判して兼愛・非攻を説いた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>道家は，諸侯に合従策・連衡策などの外交術を説いた。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>縦横家は，天体の運行によっておこる現象と人間生活との関係を説いた。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>陰陽家は，自然の原理に従って生きる「無為自然」を説いた。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q24" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A21">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U23">③</ref>に関連して，秦の始皇帝の政策について述べた文として正しいものを，次　の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A21">
+            21
+        </ansColumn>
+        <br/>
+        <choices anscol="A21">
+            <choice ansnum="1">
+                <cNum>①</cNum>衛氏朝鮮を滅ぼし，楽浪以下4郡を設置した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>郡県制を採用し，中央集権化を図った。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>塩・鉄・酒の専売を実施した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>匈奴挟撃のため，張騫を大月氏に派遣した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D14" type="text">
+        <label>Ｂ</label>220年に<uText id="U24"><label>④</label>後漢</uText>が滅亡したのち，中国は魏晋南北朝時代とよばれる分裂期に入った。一方，この時期には，<uText id="U25"><label>⑤</label>日本や朝鮮など中国の周辺諸地域で地域統合が進んだ</uText>。また，華北を五胡に奪われた漢民族は長江流域に移住し，その地を開発して黄河流域に匹敵する政治・経済・<uText id="U26"><label>⑥</label>文化</uText>の中心地を築き上げていった。つまり，中国史における魏晋南北朝時代とは，日本・朝鮮・チベット・北アジアなど中国周辺の諸民族あるいは江南など中国内部の諸地域が，それぞれ固有の役割を担いながら東アジアの歴史舞台に登場してきた時代だったのである。
+    </data>
+    <br/>
+    <question id="Q25" minimal="yes" answer_style="multipleChoice" answer_type="term_person" knowledge_type="KS" anscol="A22">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U24">④</ref>に関連して，『後漢書』西域伝には，「西暦166年，大秦王安敦の使いと称する者が，象牙など南海の産物をもって日南（ベトナム中部）に到着して入貢した」との記録が見られる。この大秦王安敦は誰であると推定されているか。 正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A22">
+            22
+        </ansColumn>
+        <br/>
+        <choices anscol="A22">
+            <choice ansnum="1">
+                <cNum>①</cNum>共和政ローマ末期に活躍したカエサルの部将アントニウス
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>ローマでプリンキパトゥス（元首政）を始めたアウグストゥス
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>五賢帝の一人アントニヌス＝ピウス帝
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>『自省録』の著者マルクス＝アウレリウス＝アントニヌス帝
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q26" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-TF)*2" knowledge_type="KS" anscol="A23">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U25">⑤</ref>に関連して，魏晋南北朝時代の日本と朝鮮について述べた次の文<ref target="L12">a</ref>と<ref target="L13">b</ref>の正誤の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A23">
+            23
+        </ansColumn>
+        <br/>
+        <data id="D15" type="text">
+            <lText id="L12">
+                <label>a</label>日本では，邪馬台国の女王卑弥呼が，魏に使者を派遣して朝貢した。
+            </lText>
+            <br/>
+            <lText id="L13">
+                <label>b</label>朝鮮半島では，馬韓が統一されて新羅が建国された。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A23">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L12">a</ref>―正<ref target="L13">b</ref>―正
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L12">a</ref>―正<ref target="L13">b</ref>―誤
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L12">a</ref>―誤<ref target="L13">b</ref>―正
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L12">a</ref>―誤<ref target="L13">b</ref>―誤
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q27" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A24">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U26">⑥</ref>に関連して，魏晋南北朝時代の文化について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A24">
+            24
+        </ansColumn>
+        <br/>
+        <choices anscol="A24">
+            <choice ansnum="1">
+                <cNum>①</cNum>司馬遷が，『史記』を完成させた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>白居易が，『長恨歌』を著した。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>昭明太子が，詩文集『文選』を編纂した。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>王羲之が，『女史箴図』を描いた。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D16" type="text">
+        <label>Ｃ</label>617年，隋の武将だった李淵は，次子李世民のすすめにしたがって挙兵し，<uText id="U27"><label>⑦</label>隋の都</uText>に向かって進撃を開始，数カ月で都を占領した。翌618年，煬帝暗殺の報に接するや，李淵はみずから擁立した皇帝を廃位して<uText id="U28"><label>⑧</label>唐王朝</uText>を建国した。李淵が退位すると，兄弟を殺害して皇太子となった李世民（太宗）が即位して，貞観の治とよばれる盛世を現出した。彼に続いて高宗が即位し，律令体制が整備された。しかし，玄宗のときには早くも律令体制に綻びが目立つようになり，<uText id="U29"><label>⑨</label>780年には大幅な制度の変革を余儀なくされた</uText>。
+    </data>
+    <br/>
+    <question id="Q28" minimal="yes" answer_style="multipleChoice" answer_type="term_location-symbol" knowledge_type="KS,IC_M" anscol="A25">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U27">⑦</ref>に関連して，隋の都の名と，その位置を示す次の<ref target="D17">地図</ref>中の<ref comment="画像内">a</ref>または<ref comment="画像内">b</ref>との組合せとして最も適当なものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A25">
+            25
+        </ansColumn>
+        <br/>
+        <data id="D17" type="image">
+            <img src="YozemiCenter-2013--1-SekaishiB-006.png" corresponding_obj="X6_1 X6_2"/>
+<adata id="X6_1" type="text" field="object">中国の地図</adata>
+<adata id="X6_2" type="text" field="pointer">a-西安,b-鄭州</adata>
+
+        </data>
+        <br/>
+        <choices anscol="A25">
+            <choice ansnum="1">
+                <cNum>①</cNum>大興城―<ref comment="画像内">a</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>大興城―<ref comment="画像内">b</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>洛陽―<ref comment="画像内">a</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>洛陽―<ref comment="画像内">b</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q29" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A26">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U28">⑧</ref>に関連して，唐とその周辺諸国について述べた文として誤っているものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A26">
+            26
+        </ansColumn>
+        <br/>
+        <choices anscol="A26">
+            <choice ansnum="1">
+                <cNum>①</cNum>新羅は唐と連合して高句麗を滅ぼし，朝鮮半島を統一した。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>大祚栄が建国した渤海では，唐の都城制を模倣して都がつくられた。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>日本は唐へ使者を送り，中国の文化や制度を取り入れた。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ソンツェン＝ガンポが建国した南詔では，チベット仏教が信仰された。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q30" minimal="yes" answer_style="multipleChoice" answer_type="term_other" knowledge_type="KS" anscol="A27">
+        <label>問９</label>
+        <instruction>
+            下線部<ref target="U29">⑨</ref>に関連して，このとき新たに採用された制度の名称として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A27">
+            27
+        </ansColumn>
+        <br/>
+        <choices anscol="A27">
+            <choice ansnum="1">
+                <cNum>①</cNum>均田制
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>占田・課田法
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>均輸法
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>両税法
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+<question id="Q31" minimal="no">
+    <label>【４】</label>
+    <instruction>
+        古典古代と総称されるギリシア・ローマ世界は，ヨーロッパ文明の精神的故郷である。しかし，ヨーロッパが単なる地理的な名称にとどまらず，ひとつの文明としてのまとまりをもつようになるのは中世においてであった。ヨーロッパの古代・中世について述べた次の文章<ref target="D18">Ａ</ref>～<ref target="D25">Ｃ</ref>を読み，下の問い（問１～９）に答えよ。
+    </instruction>
+    <info>（配点　25）</info>
+    <br/>
+    <data id="D18" type="text">
+        <label>Ａ</label>前8世紀頃のギリシアで形成されたポリス（都市国家）は，その後の<uText id="U30"><label>①</label>植民市</uText>建設によって，地中海・黒海沿岸に広がっていった。ポリスの市民には貴族と平民の区別があったが，<uText id="U31"><label>②</label>貴族の政治権力独占に対する平民の闘争を通じて，アテネなど多くのポリスが民主制への道を歩み始めた</uText>。アテネは前5世紀半ば，ペリクレスの下で古代民主政を完成させたが，<uText id="U32"><label>③</label>ペロポネソス戦争</uText>中にその政治は腐敗し，デマゴーゴス（扇動政治家）が民衆を扇動する衆愚政治に堕落していった。
+    </data>
+    <br/>
+    <question id="Q32" minimal="yes" answer_style="multipleChoice" answer_type="term_location-symbol" knowledge_type="KS,IC_M" anscol="A28">
+        <label>問１</label>
+        <instruction>
+            下線部<ref target="U30">①</ref>に関連して，次の<ref target="D19">地図</ref>中の<ref comment="画像内">a</ref>，<ref comment="画像内">b</ref>の都市はいずれも諸民族の植民活動の結果として生まれた都市である。このうち，ギリシア人が建設した植民市の名と，その位置を示す<ref comment="画像内">a</ref>または<ref comment="画像内">b</ref>との組合せとして最も適当なものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A28">
+            28
+        </ansColumn>
+        <br/>
+        <data id="D19" type="image">
+            <img src="YozemiCenter-2013--1-SekaishiB-007.png" corresponding_obj="X7_1 X7_2"/>
+<adata id="X7_1" type="text" field="object">地中海の地図</adata>
+<adata id="X7_2" type="text" field="pointer"> a-チュニス,b-ナポリ</adata>
+
+        </data>
+        <br/>
+        <choices anscol="A28">
+            <choice ansnum="1">
+                <cNum>①</cNum>カルタゴ―<ref comment="画像内">a</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>カルタゴ―<ref comment="画像内">b</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>ネアポリス―<ref comment="画像内">a</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ネアポリス―<ref comment="画像内">b</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q33" minimal="yes" answer_style="multipleChoice" answer_type="o(symbol-symbol-symbol)" knowledge_type="KS" anscol="A29">
+        <label>問２</label>
+        <instruction>
+            下線部<ref target="U31">②</ref>に関連して，アテネ民主制成立の過程について述べた次の文<ref target="L14">a</ref>～<ref target="L16">c</ref>が，年代の古いものから順に正しく配列されているものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A29">
+            29
+        </ansColumn>
+        <br/>
+        <data id="D20" type="text">
+            <lText id="L14">
+                <label>a</label>クレイステネスが，血縁的部族制を廃止し，陶片追放の制度を創設した。
+            </lText>
+            <br/>
+            <lText id="L15">
+                <label>b</label>ソロンが，負債の帳消し，債務奴隷の禁止，財産政治を内容とする改革を行った。
+            </lText>
+            <br/>
+            <lText id="L16">
+                <label>c</label>サラミスの海戦で無産市民が軍艦の漕ぎ手として活躍し，発言力を増大させた。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A29">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L14">a</ref>→<ref target="L15">b</ref>→<ref target="L16">c</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L14">a</ref>→<ref target="L16">c</ref>→<ref target="L15">b</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L15">b</ref>→<ref target="L14">a</ref>→<ref target="L16">c</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L15">b</ref>→<ref target="L16">c</ref>→<ref target="L14">a</ref>
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="L16">c</ref>→<ref target="L14">a</ref>→<ref target="L15">b</ref>
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="L16">c</ref>→<ref target="L15">b</ref>→<ref target="L14">a</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q34" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-term_other)*2" knowledge_type="KS" anscol="A30">
+        <label>問３</label>
+        <instruction>
+            下線部<ref target="U32">③</ref>に関連して，ペロポネソス戦争でアテネと戦ったスパルタについて述べた次の<ref target="D21">文章</ref>中の空欄<ref target="B5">ア</ref>と<ref target="B6">イ</ref>に入れる語の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A30">
+            30
+        </ansColumn>
+        <br/>
+        <data id="D21" type="text">
+            スパルタはペロポネソス半島南部のラコニア平原に位置し，<blank id="B5"><label>ア</label></blank>が先住民を征服して建設したポリスであった。征服された先住民を起源とする<blank id="B6"><label>イ</label></blank>とよばれる隷属農民の数は<ref target="B5">ア</ref>の完全市民の数倍と推測され，この隷属農民の反乱を抑圧するために，スパルタは徹底して軍国主義的な国制を確立した。
+        </data>
+        <br/>
+        <choices anscol="A30">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="B5">ア</ref>―ドーリア人<ref target="B6">イ</ref>―ヘイロータイ
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="B5">ア</ref>―ドーリア人<ref target="B6">イ</ref>―ペリオイコイ
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="B5">ア</ref>―イオニア人<ref target="B6">イ</ref>―ヘイロータイ
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="B5">ア</ref>―イオニア人<ref target="B6">イ</ref>―ペリオイコイ
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D22" type="text">
+        <label>Ｂ</label>ドイツの法学者イェーリングは，ローマが武力・法律・宗教によって3度世界を征服したと述べた。武力とは，ローマが<uText id="U33"><label>④</label>約5世紀間におよぶ征服戦争によって地中海周辺の全域を支配し， それを強力な軍事力によって長期間維持した</uText>ことを意味している。また，法とは，<uText id="U34"><label>⑤</label>ローマ法</uText>とローマ法学がローマ帝国滅亡後も生き残り，現代の法律にまでその影響をおよぼし続けていることを，さらに宗教とは，ローマ帝国の辺境に生まれた<uText id="U35"><label>⑥</label>キリスト教</uText>が現代でも世界各地で信仰され，世界最大の宗教の一つになったことを意味している。
+    </data>
+    <br/>
+    <question id="Q35" minimal="yes" answer_style="multipleChoice" answer_type="referenceSymbol" knowledge_type="KS,IC_T" anscol="A31">
+        <label>問４</label>
+        <instruction>
+            下線部<ref target="U33">④</ref>に関連して，次の<ref target="D23">年表</ref>に示した<ref target="B7">a</ref>～<ref target="B10">d</ref>の時期のうち，アクティウムの海戦の時期として正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A31">
+            31
+        </ansColumn>
+        <br/>
+        <data id="D23" type="table">
+            <tbl>
+                <row>
+                    <cell colspan="2"><blank id="B7"><label>a</label></blank></cell>
+                </row>
+                <row>
+                    <cell>前51年</cell><cell>カエサルによるガリア遠征終結</cell>
+                </row>
+                <row>
+                    <cell colspan="2"><blank id="B8"><label>b</label></blank></cell>
+                </row>
+                <row>
+                    <cell>前30年</cell><cell>プトレマイオス朝滅亡</cell>
+                </row>
+                <row>
+                    <cell colspan="2"><blank id="B9"><label>c</label></blank></cell>
+                </row>
+                <row>
+                    <cell>後106年</cell><cell>ダキア （ルーマニア） の属州化</cell>
+                </row>
+                <row>
+                    <cell colspan="2"><blank id="B10"><label>d</label></blank></cell>
+                </row>
+            </tbl>
+        </data>
+        <br/>
+        <choices anscol="A31">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="B7">a</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="B8">b</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="B9">c</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="B10">d</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q36" minimal="yes" answer_style="multipleChoice" answer_type="o(symbol-symbol-symbol)" knowledge_type="KS" anscol="A32">
+        <label>問５</label>
+        <instruction>
+            下線部<ref target="U34">⑤</ref>に関連して，次の<ref target="L17">a</ref>～<ref target="L19">c</ref>はいずれも共和政時代のローマで制定された法である。これらの法が年代の古いものから順に正しく配列されているものを，下の①～⑥のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A32">
+            32
+        </ansColumn>
+        <br/>
+        <data id="D24" type="text">
+            <lText id="L17">
+                <label>a</label>リキニウス・セクスティウス法
+            </lText>
+            <br/>
+            <lText id="L18">
+                <label>b</label>ホルテンシウス法
+            </lText>
+            <br/>
+            <lText id="L19">
+                <label>c</label>十二表法
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A32">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L17">a</ref>→<ref target="L18">b</ref>→<ref target="L19">c</ref>
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L17">a</ref>→<ref target="L19">c</ref>→<ref target="L18">b</ref>
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L18">b</ref>→<ref target="L17">a</ref>→<ref target="L19">c</ref>
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L18">b</ref>→<ref target="L19">c</ref>→<ref target="L17">a</ref>
+            </choice>
+            <choice ansnum="5">
+                <cNum>⑤</cNum><ref target="L19">c</ref>→<ref target="L17">a</ref>→<ref target="L18">b</ref>
+            </choice>
+            <choice ansnum="6">
+                <cNum>⑥</cNum><ref target="L19">c</ref>→<ref target="L18">b</ref>→<ref target="L17">a</ref>
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q37" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A33">
+        <label>問６</label>
+        <instruction>
+            下線部<ref target="U35">⑥</ref>に関連して，古代から中世にかけてのキリスト教について述べた文として誤っているものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A33">
+            33
+        </ansColumn>
+        <br/>
+        <choices anscol="A33">
+            <choice ansnum="1">
+                <cNum>①</cNum>テオドシウス帝は，ミラノ勅令でキリスト教をローマ帝国の国教に定めた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>ニケーア公会議では，アタナシウスの三位一体説が正統教義とされた。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>アウグスティヌスは，『神の国』を著し，最大の教父とよばれた。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ベネディクトゥスは，イタリアにモンテ＝カシノ修道院を創設した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <data id="D25" type="text">
+        <label>Ｃ</label>西ヨーロッパは，いつ，どのようにして古代から中世へと移行したのだろうか。ベルギーの歴史家ピレンヌは，<uText id="U36"><label>⑦</label>ゲルマン人</uText>の侵入や西ローマ帝国の滅亡は古代と中世の画期をなすものではなく， イスラーム勢力の地中海進出によって地中海世界の統一性が崩壊し，その結果，西ヨーロッパ世界が<uText id="U37"><label>⑧</label>ビザンティウム</uText>との諸関係を断たれて，農業に基礎をおく中世社会へと変化したと主張した。また，これに対応して西ヨーロッパ世界を再編したのが<uText id="U38"><label>⑨</label>フランク王国</uText>のカール大帝であると考え，「ムハンマドなくして，シャルルマーニュ（カール大帝）を考えることはできない」と結論づけた。
+    </data>
+    <br/>
+    <question id="Q38" minimal="yes" answer_style="multipleChoice" answer_type="term_location-term_location" knowledge_type="KS" anscol="A34">
+        <label>問７</label>
+        <instruction>
+            下線部<ref target="U36">⑦</ref>に関連して，ゲルマン諸部族が建国した国の名と，それらが建国された地域との組合せとして正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A34">
+            34
+        </ansColumn>
+        <br/>
+        <choices anscol="A34">
+            <choice ansnum="1">
+                <cNum>①</cNum>東ゴート王国 ― イベリア半島
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>ヴァンダル王国 ― アフリカ北岸
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>西ゴート王国 ― 大ブリテン島
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>ブルグンド王国 ― イタリア半島
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q39" minimal="yes" answer_style="multipleChoice" answer_type="sentence" knowledge_type="KS" anscol="A35">
+        <label>問８</label>
+        <instruction>
+            下線部<ref target="U37">⑧</ref>に関連して，ビザンティウム（コンスタンティノープル）はビザンツ帝国（東ローマ帝国）の都であった。ビザンツ帝国のユスティニアヌス帝について述べた文として正しいものを，次の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A35">
+            35
+        </ansColumn>
+        <br/>
+        <choices anscol="A35">
+            <choice ansnum="1">
+                <cNum>①</cNum>軍管区制（テマ制）を始めた。
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum>オドアケルの王国を滅ぼした。
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum>『ローマ法大全』を編纂させた。
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum>聖像禁止令を発布した。
+            </choice>
+        </choices>
+        <br/>
+    </question>
+    <question id="Q40" minimal="yes" answer_style="multipleChoice" answer_type="(symbol-TF)*2" knowledge_type="KS" anscol="A36">
+        <label>問９</label>
+        <instruction>
+            下線部<ref target="U38">⑨</ref>に関連して，フランク王国について述べた次の文<ref target="L20">a</ref>と<ref target="L21">b</ref>の正誤の組合せとして正しいものを，下の①～④のうちから一つ選べ。
+        </instruction>
+        <ansColumn id="A36">
+            36
+        </ansColumn>
+        <br/>
+        <data id="D26" type="text">
+            <lText id="L20">
+                <label>a</label>メロヴィング朝を創始したクローヴィスは，アリウス派に改宗して，フランク王国発展の基礎を固めた。
+            </lText>
+            <br/>
+            <lText id="L21">
+                <label>b</label>カロリング朝を創始したピピンは，トゥール・ポワティエ間の戦いでイスラーム勢力を撃退した。
+            </lText>
+        </data>
+        <br/>
+        <choices anscol="A36">
+            <choice ansnum="1">
+                <cNum>①</cNum><ref target="L20">a</ref>―正<ref target="L21">b</ref>―正
+            </choice>
+            <choice ansnum="2">
+                <cNum>②</cNum><ref target="L20">a</ref>―正<ref target="L21">b</ref>―誤
+            </choice>
+            <choice ansnum="3">
+                <cNum>③</cNum><ref target="L20">a</ref>―誤<ref target="L21">b</ref>―正
+            </choice>
+            <choice ansnum="4">
+                <cNum>④</cNum><ref target="L20">a</ref>―誤<ref target="L21">b</ref>―誤
+            </choice>
+        </choices>
+        <br/>
+    </question>
+</question>
+
+</exam>

@@ -42,56 +42,30 @@ object QuestionType extends Enumeration {
 }
 
 /**
- * List of statements extracted from questions
+ * Question extracted from Center Test
  */
-case class PreprocessedQuestion(id: String, // 回答欄ID
-                                questionType: QuestionType.Value, // 問題文のタイプ
-                                clues: Array[String], // 問題文中の重要語
-                                times: Array[String], // 問題文中の時間表現
-                                statements: Array[String] // 選択肢から抽出した文
-                                ) {
+case class Question(id: String, // 回答欄ID
+                    questionType: QuestionType.Value, // 問題文のタイプ
+                    clues: Array[String], // 問題文中の重要語
+                    times: Array[String], // 問題文中の時間表現
+                    choices: Array[String] // 選択肢から抽出した文
+                    ) {
   def toXML(): Node = {
     val cluesXML = clues map (c => <clue>{ c }</clue>)
     val timesXML = times map (t => <time>{ t }</time>)
-    val statementsXML = statements map (s => <statement>{ s }</statement>)
-    <preprocessedQuestion id={ id } questionType={ questionType.toString }>
+    val choicesXML = choices map (s => <choices>{ s }</choices>)
+    <question id={ id } questionType={ questionType.toString }>
       { cluesXML }
       { timesXML }
-      { statementsXML }
-    </preprocessedQuestion>
+      { choicesXML }
+    </question>
   }
 }
 
 /**
- * Questions represented as t/h pairs
- * @param questionType
+ * Extract questions and choices and clue expressions
  */
-case class QuestionAsTextPairs(id: String, // 回答欄ID
-                               questionType: QuestionType.Value, // 問題文のタイプ
-                               textPairs: Array[(String, String)] // premise/hypotheis のペア
-                               ) {
-  def toXML(): Node = {
-    val textPairsXML = textPairs map {
-      case (premise, hypothesis) =>
-        <pair>
-          <t>
-            { premise }
-          </t>
-          <h>
-            { hypothesis }
-          </h>
-        </pair>
-    }
-    <questionAsTextPairs id={ id } type={ questionType.toString }>
-      { textPairsXML }
-    </questionAsTextPairs>
-  }
-}
-
-/**
- * Preprocess questions and extract statements and clue expressions
- */
-object PreprocessQuestions {
+object ExtractQuestions {
 
   /**
    * 試験問題 XML から下線部テキストを抽出し、id -> テキスト の Map を作る
@@ -212,11 +186,35 @@ object PreprocessQuestions {
   }
 
   /**
+   * 必要なら time あるいは clue を足したり、不要な表現を消す
+   * @param statement
+   * @param times
+   * @param clues
+   * @return
+   */
+  private def addClues(statement: String, times: Array[String], clues: Array[String]): String = {
+    val hypo =
+      if (times.nonEmpty) {
+        // 時間表現は足す
+        times.mkString("", "，", "には，") + statement
+      } else if (statement.matches("""^.*(この.*?)(は|が|を|に（).*""")) {
+        // 「この〜」を clue で置き換える
+        statement.replaceFirst("""(この.{1,4}?)(は|が|を|に（)""", clues.mkString("，") + "$2")
+      } else if (statement.matches(""".*(は，|が，).*""") || statement.take(15).matches(""".*(は|が).*""")) {
+        // 主語があるときは clue を足さない
+        statement
+      } else {
+        clues.mkString("", "，", "は，") + statement
+      }
+    hypo.replaceAll("""[(（].*?[）)]""", "") // かっこは消す
+  }
+
+  /**
    * センター試験 XML から、含意関係認識で解くべき問題を抽出し、問題文から重要語や時間表現などを抽出する
    * @param examXML
    * @return
    */
-  def apply(examXML: Node): Array[PreprocessedQuestion] = {
+  def apply(examXML: Node): Array[Question] = {
     // extract target questions (i.e. question type != other)
     val totalQuestions = (examXML \\ "question").filter(e => (e \ "@minimal").text == "yes").toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
@@ -239,11 +237,11 @@ object PreprocessQuestions {
         // extract clues and statements
         val times = extractTime(instruction_text)
         val clues = extractClues(instruction_text)
-        val statements = extractStatements(questionType, question)
+        val statements = extractStatements(questionType, question) map { addClues(_, times, clues) }
         System.err.println("time: " + times.mkString(" ") + " clues: " + clues.mkString(" "))
         System.err.println("statements:")
         statements foreach System.err.println
-        PreprocessedQuestion(anscol, questionType, clues, times, statements)
+        Question(anscol, questionType, clues, times, statements)
     }
     preprocessedQuestions
   }
@@ -272,8 +270,8 @@ object CenterExam {
    * 知識源としてつかうデータ
    * TODO: specify textbook files in command line
    */
-  val TEXTBOOKS = Array("input/RITEVAL_JA_training/FV/rite2-ja-textbook.xml",
-    "input/RITEVAL_JA_training/FV/riteval-ja-textbook2.xml")
+  val TEXTBOOKS = Array("input/textbooks/rite2-ja-textbook.xml",
+    "input/textbooks/riteval-ja-textbook2.xml")
 
   // パラメータ
   // 教科書から検索してくるパラグラフの数
@@ -283,67 +281,28 @@ object CenterExam {
   //var wordSimilarityThreshold = 0.7
 
   // 正誤の組み合わせ判定問題で、正誤判定に用いる score のしきい値
-  var proofScoreThreshold = 0.6
-
-  /**
-   * statement に必要なら time あるいは clue を足したり、不要な表現を消して hypothesis を作る
-   * @param statement
-   * @param times
-   * @param clues
-   * @return
-   */
-  def prepareHypothesis(statement: String, times: Array[String], clues: Array[String]): String = {
-    val hypo =
-      if (times.nonEmpty) {
-        // 時間表現は足す
-        times.mkString("", "，", "には，") + statement
-      } else if (statement.matches("""^.*(この.*?)(は|が|を|に（).*""")) {
-        // 「この〜」を clue で置き換える
-        statement.replaceFirst("""(この.{1,4}?)(は|が|を|に（)""", clues.mkString("，") + "$2")
-      } else if (statement.matches(""".*(は，|が，).*""") || statement.take(15).matches(""".*(は|が).*""")) {
-        // 主語があるときは clue を足さない
-        statement
-      } else {
-        clues.mkString("", "，", "は，") + statement
-      }
-    hypo.replaceAll("""[(（].*?[）)]""", "") // かっこは消す
-  }
-
-  /**
-   * true/false の列を、数字（選択肢番号）に変換する
-   * TODO: RTEの true/false から選択肢へのマッピングをちゃんとやる（現在は「正-正、正-誤、誤-正、誤-誤」を仮定）
-   * @param t_or_f
-   * @param num
-   * @return
-   */
-  def mapTrueOrFalse(t_or_f: List[Boolean], num: Int = 0): Int = {
-    t_or_f match {
-      case Nil => num
-      case head :: tail =>
-        mapTrueOrFalse(tail, num * 2 + (if (head) 0 else 1))
-    }
-  }
+  var scoreThreshold = 0.6
 
   /**
    * メインプログラム
    * @param args
    */
   def main(args: Array[String]): Unit = {
-    if (args.length < 5) {
-      System.err.println("Usage: scala tifmo.main.ja.CenterExam MAX_SEARCH_RESULTS PROOF_THRESHOLD EXAM_XML OUTPUT_XML [ANSWER_XML]")
+    if (args.length < 4) {
+      System.err.println("Usage: scala qa.main.ja.CenterExam MAX_SEARCH_RESULTS PROOF_THRESHOLD EXAM_XML OUTPUT_XML [ANSWER_XML]")
       System.exit(1)
     }
 
     maxSearchResults = args(0).toInt
     //wordSimilarityThreshold = args(1).toDouble
-    proofScoreThreshold = args(1).toDouble
+    scoreThreshold = args(1).toDouble
     val exam_xml_name = args(2)
     val output_xml_name = args(3)
     val answer_xml_name = if (args.length == 5) args(4) else null
 
     System.err.println(s"Max search results: $maxSearchResults")
     //System.err.println(s"Word similarity threshold: $wordSimilarityThreshold")
-    System.err.println(s"Proof score threshold: $proofScoreThreshold")
+    System.err.println(s"Score threshold: $scoreThreshold")
     System.err.println(s"Exam file: $exam_xml_name")
     System.err.println(s"Output file: $output_xml_name")
     if (answer_xml_name != null)
@@ -371,87 +330,25 @@ object CenterExam {
     val (index, documents) = SearchDocument.makeIndexOnMemory(TEXTBOOKS)
     System.err.println("done")
     // instance for document search
-    val search = new SearchDocument(index, documents)
+    val search = new SearchDocument(index, documents, maxSearchResults)
 
-    // process questions
+    // extract questions
     System.err.println("-------------------------------------------------------------------------")
     System.err.println("Preprocessing target questions")
     val examXML = XMLLoaderIgnoringDTD.loadFile(exam_xml_name)
-    val preprocessedQuestions = PreprocessQuestions(examXML)
+    val questions = ExtractQuestions(examXML)
 
-    // search textbooks and create t/h pairs
+    // Run Solver and obtain final answers
     System.err.println("-------------------------------------------------------------------------")
-    System.err.println("Search textbooks for premises")
-    val questionsAsTextPairs =
-      preprocessedQuestions map { preprocessedQuestion =>
-        val pairs = preprocessedQuestion.statements map { statement =>
-          val searchResults = search(statement, maxSearchResults)
-          val searchResultsTexts = searchResults.sortBy(_.id.toInt).map(_.text)
-          val premise = searchResultsTexts.mkString("\n")
-          val hypothesis = prepareHypothesis(statement, preprocessedQuestion.times, preprocessedQuestion.clues)
-          System.err.println("===========================================================")
-          System.err.println(s"answerID: ${preprocessedQuestion.id}")
-          System.err.println(s"hypothesis: $hypothesis")
-          System.err.println(s"premise: $premise")
-          println(premise)
-          premise -> hypothesis
-        }
-        QuestionAsTextPairs(preprocessedQuestion.id, preprocessedQuestion.questionType, pairs)
-      }
-
-    // Run RTE and obtain final answers
-    System.err.println("-------------------------------------------------------------------------")
-    System.err.println("Run tifmo")
-    val solver = new Solver(parser)
-    var numErrors = 0
-    val finalAnswers = for (question <- questionsAsTextPairs) yield {
-      // run RTE and obtain proof score
-      val anscolID = question.id
-      val questionType = question.questionType
-      val textPairs = question.textPairs
+    System.err.println("Run QA solver")
+    val solver = new Solver(parser, search, scoreThreshold)
+    val finalAnswers = for (question <- questions) yield {
+      val finalAnswer = solver(question)
+      val goldAnswer = answerTable.getAnswer(question.id).getOrElse("unknown")
       System.err.println("===========================================================")
-      System.err.println(s"answerID: $anscolID type: $questionType")
-      val proofScores = for ((premise, hypothesis) <- textPairs) yield {
-        System.err.println("==========")
-        System.err.println(s"hypothesis: $hypothesis")
-        System.err.println(s"premise: $premise")
-        val score =
-          try {
-            solver.score(premise, hypothesis)
-          } catch {
-            // fail safe for errors in parsing and inference
-            case e: Throwable =>
-              e.printStackTrace(System.err)
-              numErrors += 1
-              0.0
-          }
-        score
-      }
-      System.err.println("==========")
-      System.err.println(s"proof scores: ${proofScores.toList}")
-
-      // output an answer based on the question type
-      val finalAnswer = questionType match {
-        case QuestionType.sentence_true =>
-          // 正しい文を選ぶ -> proof score が一番大きい選択肢を選ぶ
-          System.err.println("Select a choice with max proof score")
-          val max_score_id = proofScores.zipWithIndex.maxBy(_._1)._2
-          (max_score_id + 1).toString
-        case QuestionType.sentence_false =>
-          // 誤っている文を選ぶ -> proof score が一番小さい選択肢を選ぶ
-          System.err.println("Select a choice with min proof score")
-          val min_score_id = proofScores.zipWithIndex.minBy(_._1)._2
-          (min_score_id + 1).toString
-        case QuestionType.true_false =>
-          // 正誤の組み合わせを選ぶ -> threshold を境に 正・誤 を決める
-          val true_or_false = proofScores map (_ >= proofScoreThreshold)
-          System.err.println("Select a choice with appropriate true-false combinations")
-          val answer = mapTrueOrFalse(true_or_false.toList)
-          (answer + 1).toString
-      }
-      val answer = answerTable.getAnswer(anscolID).getOrElse("unknown")
-      System.err.println(s"system: $finalAnswer gold: $answer")
-      anscolID -> finalAnswer
+      System.err.println(s"answerID: ${question.id}")
+      System.err.println(s"system: $finalAnswer gold: $goldAnswer")
+      question.id -> finalAnswer
     }
 
     // output all the answers to the XML file
@@ -478,7 +375,7 @@ object CenterExam {
       System.err.println(s"Total questions: ${total_scores.length}")
       System.err.println(s"Correct answers: ${obtained_scores.filter(_ != 0).length}")
       System.err.println(s"Score: ${obtained_scores.sum}/${total_scores.sum}")
-      System.err.println(s"Errors: $numErrors")
+      //System.err.println(s"Errors: $numErrors")
     }
   }
 }

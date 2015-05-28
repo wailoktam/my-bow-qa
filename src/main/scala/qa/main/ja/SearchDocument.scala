@@ -49,7 +49,7 @@ class SimilarityWithConstantTF extends DefaultSimilarity {
  * @param index_dir インデックスを置くディレクトリ
  * @param document_map 文書集合
  */
-class SearchDocument(val index_dir: Directory, val document_map: Map[String, Elem]) {
+class SearchDocument(val index_dir: Directory, val document_map: Map[String, Elem], val maxSearchResults: Int = 5) {
   val analyzer = SearchDocument.makeAnalyzer()
   val parser = new QueryParser("text", analyzer)
   //val parser = new MultiFieldQueryParser(Array("title", "text"), analyzer)
@@ -64,7 +64,7 @@ class SearchDocument(val index_dir: Directory, val document_map: Map[String, Ele
    * @param k 検索結果の数
    * @return 検索結果
    */
-  def apply(input: String, k: Int = 1): Array[SearchResult] = {
+  def apply(input: String, k: Int = maxSearchResults): Array[SearchResult] = {
     val query = parser.parse(input)
     //println(query)
     val results = index_searcher.search(query, k)
@@ -131,7 +131,7 @@ object SearchDocument {
    * @param document_cdb_name
    * @return
    */
-/*
+  /*
   def makeIndexOnFile(target_file_names: Array[String], index_dir_name: String, document_cdb_name: String): Directory = {
     val index_dir = FSDirectory.open(new File(index_dir_name))
     val documents = makeIndexMain(target_file_names, index_dir)
