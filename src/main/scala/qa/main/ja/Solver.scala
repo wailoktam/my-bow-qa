@@ -64,54 +64,29 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
     return 0.0
   }
 
-  def apply(question: Question): String = {
+  def apply(question: (String, QuestionTypeQ1000.Value)): String = {
     // run Solver and obtain score
-    val anscolID = question.id
-    val questionType = question.questionType
-    val choices = question.choices
-    System.err.println("===========================================================")
-    System.err.println(s"answerID: $anscolID type: $questionType")
-    var numErrors = 0
-    val solverScores = for (choice <- choices) yield {
-      System.err.println("==========")
-      System.err.println(s"choice: $choice")
-      val score =
-        try {
-          confidenceScore(choice)
-        } catch {
-          // fail safe for errors in parsing and inference
-          case e: Throwable =>
-            e.printStackTrace(System.err)
-            numErrors += 1
-            0.0
-        }
-      score
-    }
-    System.err.println("==========")
-    System.err.println(s"scores: ${
-      solverScores.toList
-    }")
-
+ //   val anscolID = question.id
+    val questionType = question._2
+    //   val choices = question.choices
+ //   System.err.println("===========================================================")
+ //   System.err.println(s"answerID: $anscolID type: $questionType")
     // output an answer based on the question type
     val finalAnswer = questionType match {
-      case QuestionType.sentence_true =>
+      case QuestionTypeQ1000.what =>
         // 正しい文を選ぶ -> proof score が一番大きい選択肢を選ぶ
-        System.err.println("Select a choice with max proof score")
-        val max_score_id = solverScores.zipWithIndex.maxBy(_._1)._2
-        (max_score_id + 1).toString
-      case QuestionType.sentence_false =>
+        search("猫舌",10)
+
+      case QuestionTypeQ1000.when =>
         // 誤っている文を選ぶ -> proof score が一番小さい選択肢を選ぶ
-        System.err.println("Select a choice with min proof score")
-        val min_score_id = solverScores.zipWithIndex.minBy(_._1)._2
-        (min_score_id + 1).toString
-      case QuestionType.true_false =>
+        search("猫舌",10)
+      case QuestionTypeQ1000.where =>
         // 正誤の組み合わせを選ぶ -> threshold を境に 正・誤 を決める
-        val true_or_false = solverScores map (_ >= scoreThreshold)
-        System.err.println("Select a choice with appropriate true-false combinations")
-        val answer = mapTrueOrFalse(true_or_false.toList)
-        (answer + 1).toString
+        search(question._1,10)
+      case _ => search("猫舌",10)
     }
 
     finalAnswer
+    "something"
   }
 }

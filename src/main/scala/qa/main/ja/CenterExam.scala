@@ -41,6 +41,25 @@ object QuestionType extends Enumeration {
   = Value
 }
 
+object QuestionTypeQ1000 extends Enumeration {
+  val how_many, // choose a true statement
+  when, // choose a false statement
+  where, // choose a combination of true/false
+  what,
+  who,
+  what_kind_of,
+  other// other (not answered by this system)
+  = Value
+}
+
+/**
+ * Question extracted from q1000
+ * といえば、は、何という　what
+ *
+ */
+
+
+
 /**
  * Question extracted from Center Test
  */
@@ -109,7 +128,7 @@ object ExtractQuestions {
   def replaceUnderline(node: Node, underline_texts: Map[String, String]): String = {
     val elems =
       for (elem <- node.child) yield {
-        //println(elem)
+        println("elem"+elem)
         elem match {
           case ref @ <ref>
                        { _ }
@@ -117,9 +136,12 @@ object ExtractQuestions {
             // 下線部を参照している
             val id = (ref \ "@target").text
             val utext = underline_texts.getOrElse(id, "")
+            println("utext"+utext)
+            println("id"+id)
             utext
           case e =>
             e.text
+            println("e"+e.text)
         }
       }
     elems.mkString("").replace("下線部", "").trim
@@ -247,6 +269,58 @@ object ExtractQuestions {
   }
 }
 
+object ExtractQuestionsQ1000 {
+
+    def questionTypeQ1000(question: Node): QuestionTypeQ1000.Value = {
+    (question \\ "column_5").text match {
+      case ".*(いくつ|いくら|どれぐらい).*" => QuestionTypeQ1000.how_many
+      case ".*(いつ).*" => QuestionTypeQ1000.when
+      case ".*(どこ).*" => QuestionTypeQ1000.where
+      case ".*(いつ).*" => QuestionTypeQ1000.when
+      case ".*(どんな).*" => QuestionTypeQ1000.what_kind_of
+      case ".*(は).*" => QuestionTypeQ1000.what
+      case ".*(なに+).*" => QuestionTypeQ1000.what
+      case ".*(なに+ひらがな).*" => QuestionTypeQ1000.what
+      case ".*(なに+漢字).*" =>
+         if ((question \\ "column_6").text.matches(".*(数|体積|長さ|温度|頻度).*"))
+          QuestionTypeQ1000.how_many
+        else
+          QuestionTypeQ1000.what
+      case ".*(何年).*" =>
+        if ((question \\ "column_6").text.matches(".*(日付表現).*"))
+          QuestionTypeQ1000.when
+        else
+          QuestionTypeQ1000.how_many
+      case ".*(何人).*" => QuestionTypeQ1000.how_many
+      case ".*(誰).*" => QuestionTypeQ1000.who
+      case _                   => QuestionTypeQ1000.other
+    }
+  }
+  def safeMod5(stringIn: String): Boolean ={
+    var boolOut=true
+    try {
+      if (stringIn.toInt%5 == 0)
+        {boolOut=false}
+    }
+    catch {case e: NumberFormatException => boolOut=false}
+    boolOut
+  }
+   /**
+   * センター試験 XML から、含意関係認識で解くべき問題を抽出し、問題文から重要語や時間表現などを抽出する
+   * @param examXML
+   * @return
+   */
+  def apply(examXML: Node): Array[(String,QuestionTypeQ1000.Value)] = {
+    // extract target questions (i.e. question type != other)
+
+    val totalQuestions = (examXML \\ "ooo_row").filter(e => ((e \"column_4").text != "QUESTION") && (safeMod5((e \"column_2").text) == true)).toArray
+    System.err.println(s"Total questions: ${totalQuestions.length}")
+    val targetQuestions = totalQuestions map (q => (q \"column_4").text -> questionTypeQ1000(q)) filter (_._2 != QuestionTypeQ1000.other)
+     System.err.println(s"Target questions: ${targetQuestions.length}")
+    targetQuestions
+  }
+}
+
 /**
  * Answer questions of Center Exam
  * Focused on questions that can be answered by RTE
@@ -271,7 +345,7 @@ object CenterExam {
    * TODO: specify textbook files in command line
    */
   val TEXTBOOKS = Array("input/textbooks/rite2-ja-textbook.xml",
-    "input/textbooks/riteval-ja-textbook2.xml")
+    "input/textbooks/riteval-ja-textbook2.xml","input/wiki/wiki_00")
 
   // パラメータ
   // 教科書から検索してくるパラグラフの数
@@ -336,22 +410,18 @@ object CenterExam {
     System.err.println("-------------------------------------------------------------------------")
     System.err.println("Preprocessing target questions")
     val examXML = XMLLoaderIgnoringDTD.loadFile(exam_xml_name)
-    val questions = ExtractQuestions(examXML)
-
+    val questions = ExtractQuestionsQ1000(examXML)
     // Run Solver and obtain final answers
     System.err.println("-------------------------------------------------------------------------")
     System.err.println("Run QA solver")
     val solver = new Solver(parser, search, scoreThreshold)
     val finalAnswers = for (question <- questions) yield {
       val finalAnswer = solver(question)
-      val goldAnswer = answerTable.getAnswer(question.id).getOrElse("unknown")
-      System.err.println("===========================================================")
-      System.err.println(s"answerID: ${question.id}")
-      System.err.println(s"system: $finalAnswer gold: $goldAnswer")
-      question.id -> finalAnswer
+
     }
 
     // output all the answers to the XML file
+    /**
     val output_elems =
       for ((anscol, answer) <- finalAnswers) yield {
         <data>
@@ -360,8 +430,9 @@ object CenterExam {
         </data>
       }
     XML.save(output_xml_name, <answerTable>{ output_elems }</answerTable>)
-
+    */
     // compute scores if answer table is given
+    /**
     if (!answerTable.isEmpty) {
       val scores = // list of (score of a question, obtained score)
         for ((anscol, answer) <- finalAnswers) yield {
@@ -377,6 +448,11 @@ object CenterExam {
       System.err.println(s"Score: ${obtained_scores.sum}/${total_scores.sum}")
       //System.err.println(s"Errors: $numErrors")
     }
+      */
   }
 }
 
+//check usage
+//unzip
+//SearchDocument.makeIndexOnMemory
+//apply

@@ -171,6 +171,7 @@ object SearchDocument {
       (for (target_file_name <- target_file_names) yield {
         val target_xml = XML.loadFile(target_file_name)
         // each <p> as a document
+        /*
         (for (p <- target_xml \\ "p") yield {
           //if (p.text != normalize(p.text)) println(p.text + "\n\t->" + normalize(p.text))
           val text = normalize(p.text)
@@ -187,8 +188,9 @@ object SearchDocument {
           } else
             None
         }).flatten
+        */
         // each <page> as a document
-        /*
+
         for (page <- target_xml \\ "page") yield {
           val id = (page \ "id").text
           val title = (page \ "title").text
@@ -203,7 +205,7 @@ object SearchDocument {
           //println(xml_doc)
           id -> xml_doc
         }
-        */
+
       }).flatten.toArray
     writer.close()
     documents
@@ -216,8 +218,8 @@ object SearchDocument {
 object SearchTest {
   def main(args: Array[String]): Unit = {
     // create index
-    val target_files = Array("input/RITEVAL_JA_training/FV/rite2-ja-textbook.xml",
-      "input/RITEVAL_JA_training/FV/riteval-ja-textbook2.xml")
+    val target_files = Array("input/textbooks/rite2-ja-textbook.xml",
+      "input/textbooks/riteval-ja-textbook2.xml","input/wiki/wiki_00")
     //    val documents_dir = "src/main/resources/ja/Documents"
     //    val index_dir = documents_dir + "/index"
     //    val cdb_file = documents_dir + "/documents.cdb"
@@ -228,10 +230,10 @@ object SearchTest {
     println("done")
     // try search
     val search = new SearchDocument(index, documents)
-    //val results = search("アメリカ 黒船", 10)
-    val results = search("大久保利通を中心とする政権のもとでは，内閣総理大臣を首班として政治が運営されていた。", 10)
+    val results = search("猫舌", 10)
+//    val results = search("大久保利通を中心とする政権のもとでは，内閣総理大臣を首班として政治が運営されていた。", 10)
     for (result <- results) {
-      println("%s %s: %f".format(result.id, result.title, result.score))
+      println("%s %s: %f".format(result.id, result.text, result.score))
     }
   }
 }
