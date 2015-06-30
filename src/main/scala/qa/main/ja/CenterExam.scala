@@ -272,6 +272,7 @@ object ExtractQuestions {
 object ExtractQuestionsQ1000 {
 
     def questionTypeQ1000(question: Node): QuestionTypeQ1000.Value = {
+    System.err.println(s"Column5: ${(question \\ "column_5").text}")
     (question \\ "column_5").text match {
       case ".*(いくつ|いくら|どれぐらい).*" => QuestionTypeQ1000.how_many
       case ".*(いつ).*" => QuestionTypeQ1000.when
@@ -315,8 +316,9 @@ object ExtractQuestionsQ1000 {
 
     val totalQuestions = (examXML \\ "ooo_row").filter(e => ((e \"column_4").text != "QUESTION") && (safeMod5((e \"column_2").text) == true)).toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
-    val targetQuestions = totalQuestions map (q => (q \"column_4").text -> questionTypeQ1000(q)) filter (_._2 != QuestionTypeQ1000.other)
-     System.err.println(s"Target questions: ${targetQuestions.length}")
+    //val targetQuestions = totalQuestions map (q => (q \"column_4").text -> questionTypeQ1000(q)) filter (_._2 != QuestionTypeQ1000.other)
+    val targetQuestions = totalQuestions map (q => (q \"column_4").text -> questionTypeQ1000(q))
+    System.err.println(s"Target questions: ${targetQuestions.length}")
     targetQuestions
   }
 }

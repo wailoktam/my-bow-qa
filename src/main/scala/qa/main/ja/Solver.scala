@@ -75,6 +75,7 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
     val finalAnswer = questionType match {
       case QuestionTypeQ1000.what =>
         // 正しい文を選ぶ -> proof score が一番大きい選択肢を選ぶ
+        parser.parse(question._1)
         search("猫舌",10)
 
       case QuestionTypeQ1000.when =>
@@ -82,8 +83,11 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
         search("猫舌",10)
       case QuestionTypeQ1000.where =>
         // 正誤の組み合わせを選ぶ -> threshold を境に 正・誤 を決める
+
         search(question._1,10)
-      case _ => search("猫舌",10)
+      case _ => {parser.parse(question._1)
+
+        search("猫舌",10)}
     }
 
     finalAnswer
