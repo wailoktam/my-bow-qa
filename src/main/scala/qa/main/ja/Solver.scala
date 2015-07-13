@@ -64,24 +64,40 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
     return 0.0
   }
 
-  def apply(question: (String, QuestionTypeQ1000.Value)): String = {
+  def apply(question: (Clues, QuestionTypeQ1000.Value)): String = {
     // run Solver and obtain score
- //   val anscolID = question.id
+    val questionClue = question._1
     val questionType = question._2
     //   val choices = question.choices
  //   System.err.println("===========================================================")
- //   System.err.println(s"answerID: $anscolID type: $questionType")
+    System.err.println(s"text: $questionClue")
     // output an answer based on the question type
     val finalAnswer = questionType match {
-      case QuestionTypeQ1000.what =>
+      case QuestionTypeQ1000.where =>
+        questionClue  match {
+          case Clues(headPred,deps,text) => {
+            val headRegex="("+headPred+")".r
+            val depRegex="(.*)"+("+deps.mkString("|")+")".r
+
+
+          }
+
+        }
+
+        val result = search("世界で初めて原子爆弾が投下された都市は", 1)
         // 正しい文を選ぶ -> proof score が一番大きい選択肢を選ぶ
-        parser.parse(question._1)
+        val parses=parser.parse(questionText)
+        parses foreach println
         search("猫舌",10)
+
+        for (result <- results) {
+          println("%s %s: %f".format(result.id, result.text, result.score))
+        }
 
       case QuestionTypeQ1000.when =>
         // 誤っている文を選ぶ -> proof score が一番小さい選択肢を選ぶ
         search("猫舌",10)
-      case QuestionTypeQ1000.where =>
+      case QuestionTypeQ1000.what =>
         // 正誤の組み合わせを選ぶ -> threshold を境に 正・誤 を決める
 
         search(question._1,10)

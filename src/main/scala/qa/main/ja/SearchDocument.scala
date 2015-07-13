@@ -206,6 +206,7 @@ object SearchDocument {
           id -> xml_doc
         }
 
+
       }).flatten.toArray
     writer.close()
     documents
@@ -230,8 +231,8 @@ object SearchTest {
     println("done")
     // try search
     val search = new SearchDocument(index, documents)
-    val results = search("猫舌", 10)
-//    val results = search("大久保利通を中心とする政権のもとでは，内閣総理大臣を首班として政治が運営されていた。", 10)
+//    val results = search("猫舌", 10)
+    val results = search("世界で初めて原子爆弾が投下された都市は", 10)
     for (result <- results) {
       println("%s %s: %f".format(result.id, result.text, result.score))
     }

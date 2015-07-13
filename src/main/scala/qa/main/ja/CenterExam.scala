@@ -3,6 +3,7 @@
 
 package qa.main.ja
 
+import scala.collection.mutable
 import scala.xml.factory.XMLLoader
 import scala.xml._
 
@@ -63,6 +64,11 @@ object QuestionTypeQ1000 extends Enumeration {
 /**
  * Question extracted from Center Test
  */
+case class Clues(headPred:String,
+                 deps: Array[String],
+                 text: String
+                  )
+
 case class Question(id: String, // 回答欄ID
                     questionType: QuestionType.Value, // 問題文のタイプ
                     clues: Array[String], // 問題文中の重要語
@@ -161,6 +167,9 @@ object ExtractQuestions {
       }
     clues.toArray
   }
+
+
+
 
   /**
    * 問題文から時間表現を抽出する
@@ -272,38 +281,87 @@ object ExtractQuestions {
 object ExtractQuestionsQ1000 {
 
     def questionTypeQ1000(question: Node): QuestionTypeQ1000.Value = {
-    System.err.println(s"Column5: ${(question \\ "column_5").text}")
-    (question \\ "column_5").text match {
-      case ".*(いくつ|いくら|どれぐらい).*" => QuestionTypeQ1000.how_many
-      case ".*(いつ).*" => QuestionTypeQ1000.when
-      case ".*(どこ).*" => QuestionTypeQ1000.where
-      case ".*(いつ).*" => QuestionTypeQ1000.when
-      case ".*(どんな).*" => QuestionTypeQ1000.what_kind_of
-      case ".*(は).*" => QuestionTypeQ1000.what
-      case ".*(なに+).*" => QuestionTypeQ1000.what
-      case ".*(なに+ひらがな).*" => QuestionTypeQ1000.what
-      case ".*(なに+漢字).*" =>
-         if ((question \\ "column_6").text.matches(".*(数|体積|長さ|温度|頻度).*"))
-          QuestionTypeQ1000.how_many
-        else
-          QuestionTypeQ1000.what
-      case ".*(何年).*" =>
-        if ((question \\ "column_6").text.matches(".*(日付表現).*"))
-          QuestionTypeQ1000.when
-        else
-          QuestionTypeQ1000.how_many
-      case ".*(何人).*" => QuestionTypeQ1000.how_many
-      case ".*(誰).*" => QuestionTypeQ1000.who
-      case _                   => QuestionTypeQ1000.other
-    }
+      System.err.println(s"Column5: ${(question \\ "B1").text}")
+      val whereRe= """(どこ)""".r
+      val whenRe= """(いつ)""".r
+      val howManyRe= """(いくつ|いくら|どれぐらい)""".r
+      val whatKindOfRe= """(どんな)""".r
+      val isRe= """(は)""".r
+      val whatRe= """(なに+)""".r
+      val whatNotUnitRe= """(なに\+ひらがな)""".r
+      val howManyUnitRe= """(なに\+漢字)""".r
+      val whichYearRe= """(何年)""".r
+      val howManyPplRe= """(何人)""".r
+      val whoRe= """(誰)""".r
+      val dimensionRe= """(数|体積|長さ|温度|頻度)""".r
+      val timeExprRe= """(日付表現)""".r
+
+      (question \\ "B1").text match {
+        case whereRe(questionWord) => QuestionTypeQ1000.where
+        case howManyRe(questionWord) => QuestionTypeQ1000.how_many
+        case whenRe(questionWord) => QuestionTypeQ1000.when
+        case whatKindOfRe(questionWord) => QuestionTypeQ1000.what_kind_of
+        case isRe(questionWord) => QuestionTypeQ1000.what
+        case whatRe(questionWord) => QuestionTypeQ1000.what
+        case whatNotUnitRe(questionWord) => QuestionTypeQ1000.what
+        case howManyUnitRe(questionWord) =>
+          if (dimensionRe.findFirstMatchIn((question \\"D3").text)!=None)
+            QuestionTypeQ1000.how_many
+          else
+            QuestionTypeQ1000.what
+        case whichYearRe(questionWord) =>
+          if (timeExprRe.findFirstMatchIn((question \\ "D3").text)!=None)
+            QuestionTypeQ1000.when
+          else
+            QuestionTypeQ1000.how_many
+        case howManyPplRe(questionWord) => QuestionTypeQ1000.how_many
+        case whoRe(questionWord) => QuestionTypeQ1000.who
+        case _                   => QuestionTypeQ1000.other
+
+
+      }
+
+
   }
+
+  def extractCluesQ1000(text: String, headWord: String): Clues = {
+    val knp = new KNP("juman", "knp")
+    val parses = knp.parse(text)
+    var entityMap = collection.mutable.Map[String,String]()
+    var depTemp = mutable.ArrayBuffer[String]()
+    for (node<-parses) yield {
+      node match {
+        case 基本句ノード(token, depRel, argRels) => token match {
+          case 基本句
+            (tokenID, lemma, pos, coarsePos, voice, ne, negated, features, surfaceString, entityID) => {
+            if ((lemma == headWord) && (argRels.length != 0)) {
+              for (argRel <- argRels) yield {
+                argRel match {
+                  case 述語項関係(role, entityID) => depTemp += entityMap(entityID)
+                }
+              }
+            }
+            else {
+              entityMap += (entityID -> lemma)
+            }
+          }
+        }
+      }
+    }
+    Clues(headWord,depTemp.toArray,text)
+  }
+
+
   def safeMod5(stringIn: String): Boolean ={
     var boolOut=true
-    try {
-      if (stringIn.toInt%5 == 0)
-        {boolOut=false}
+    val idRe= """LC-ECQA2002-(\d+)-01""".r
+
+    stringIn match {
+      case idRe(id) =>
+        System.err.println(s"mod5: ${id.toInt%5}, ${id.toInt}")
+        if (id.toInt%5 == 0)
+          boolOut=false
     }
-    catch {case e: NumberFormatException => boolOut=false}
     boolOut
   }
    /**
@@ -311,14 +369,14 @@ object ExtractQuestionsQ1000 {
    * @param examXML
    * @return
    */
-  def apply(examXML: Node): Array[(String,QuestionTypeQ1000.Value)] = {
+  def apply(examXML: Node): Array[(Clues,QuestionTypeQ1000.Value)] = {
     // extract target questions (i.e. question type != other)
 
-    val totalQuestions = (examXML \\ "ooo_row").filter(e => ((e \"column_4").text != "QUESTION") && (safeMod5((e \"column_2").text) == true)).toArray
+    val totalQuestions = (examXML \\ "question").filter(e => (safeMod5((e \"@id").text) == true)).toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
-    //val targetQuestions = totalQuestions map (q => (q \"column_4").text -> questionTypeQ1000(q)) filter (_._2 != QuestionTypeQ1000.other)
-    val targetQuestions = totalQuestions map (q => (q \"column_4").text -> questionTypeQ1000(q))
-    System.err.println(s"Target questions: ${targetQuestions.length}")
+    val targetQuestions = totalQuestions map (q => extractCluesQ1000((q \\"text").text, (q \\ "B7").text) -> questionTypeQ1000(q)) filter (_._2 != QuestionTypeQ1000.other)
+    //val targetQuestions = totalQuestions map (q => (q \\"text").text -> questionTypeQ1000(q))
+    System.err.println(s"Target questions: ${targetQuestions.length}, ${targetQuestions{0}.toString()}")
     targetQuestions
   }
 }
