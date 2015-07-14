@@ -279,7 +279,6 @@ object ExtractQuestions {
 }
 
 object ExtractQuestionsQ1000 {
-
     def questionTypeQ1000(question: Node): QuestionTypeQ1000.Value = {
       System.err.println(s"Column5: ${(question \\ "B1").text}")
       val whereRe= """(どこ)""".r
@@ -317,40 +316,39 @@ object ExtractQuestionsQ1000 {
         case howManyPplRe(questionWord) => QuestionTypeQ1000.how_many
         case whoRe(questionWord) => QuestionTypeQ1000.who
         case _                   => QuestionTypeQ1000.other
-
-
-      }
-
-
-  }
-
-  def extractCluesQ1000(text: String, headWord: String): Clues = {
-    val knp = new KNP("juman", "knp")
-    val parses = knp.parse(text)
-    var entityMap = collection.mutable.Map[String,String]()
-    var depTemp = mutable.ArrayBuffer[String]()
-    for (node<-parses) yield {
-      node match {
-        case 基本句ノード(token, depRel, argRels) => token match {
-          case 基本句
-            (tokenID, lemma, pos, coarsePos, voice, ne, negated, features, surfaceString, entityID) => {
-            if ((lemma == headWord) && (argRels.length != 0)) {
-              for (argRel <- argRels) yield {
-                argRel match {
-                  case 述語項関係(role, entityID) => depTemp += entityMap(entityID)
-                }
-              }
-            }
-            else {
-              entityMap += (entityID -> lemma)
-            }
-          }
-        }
       }
     }
-    Clues(headWord,depTemp.toArray,text)
-  }
 
+    def extractCluesQ1000(text: String, headWord: String): Array[Clues] = {
+      val knp = new KNP("juman", "knp")
+      val parses = knp.parse(text)
+      var entityMap = collection.mutable.Map[String, String]()
+      var depTemp = mutable.ArrayBuffer[String]()
+      for (parse <- parses) yield {
+        parse match {
+          case KNP解析木(token_nodes) =>
+            for (token_node <- token_nodes) yield {
+              token_node match {
+                case 基本句ノード(token, depRel, argRels) =>
+                  token match {
+                    case 基本句(tokenID, lemma, pos, coarsePos, voice, ne, negated, features, surfaceString, entityID) =>
+                      if ((lemma == headWord) && (argRels.length != 0)) {
+                        for (argRel <- argRels) yield {
+                          argRel match {
+                            case 述語項関係(role, entityID) => depTemp += entityMap(entityID)
+                          }
+                        }
+                      }
+                      else {
+                        entityMap += (entityID -> lemma)
+                      }
+                  }
+              }
+            }
+        }
+      Clues(headWord, depTemp.toArray, text)
+      }
+    }
 
   def safeMod5(stringIn: String): Boolean ={
     var boolOut=true
@@ -369,7 +367,7 @@ object ExtractQuestionsQ1000 {
    * @param examXML
    * @return
    */
-  def apply(examXML: Node): Array[(Clues,QuestionTypeQ1000.Value)] = {
+  def apply(examXML: Node): Array[(Array[Clues],QuestionTypeQ1000.Value)] = {
     // extract target questions (i.e. question type != other)
 
     val totalQuestions = (examXML \\ "question").filter(e => (safeMod5((e \"@id").text) == true)).toArray
