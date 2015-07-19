@@ -69,7 +69,7 @@ class SearchDocument(val index_dir: Directory, val document_map: Map[String, Ele
     //println(query)
     val results = index_searcher.search(query, k)
     val documents =
-      (for (score_doc <- results.scoreDocs) yield {
+      for (score_doc <- results.scoreDocs) yield {
         val doc = index_searcher.doc(score_doc.doc)
         val id = doc.get("id")
         val xml = document_map.get(id).get
@@ -79,7 +79,7 @@ class SearchDocument(val index_dir: Directory, val document_map: Map[String, Ele
         //println(title)
         //println(index_searcher.explain(query, score_doc.doc))
         SearchResult(id, title, text, score_doc.score)
-      }).toArray
+      }
     documents
   }
 }
@@ -233,8 +233,8 @@ object SearchTest {
     val search = new SearchDocument(index, documents)
 //    val results = search("猫舌", 10)
     val results = search("世界で初めて原子爆弾が投下された都市は", 10)
-    for (result <- results) {
-      println("%s %s: %f".format(result.id, result.text, result.score))
-    }
+//    for (result <- results) {
+//      println("%s %s: %f".format(result.id, result.text, result.score))
+//    }
   }
 }

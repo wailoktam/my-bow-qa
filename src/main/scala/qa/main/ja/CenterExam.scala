@@ -24,16 +24,16 @@ object XMLLoaderIgnoringDTD extends XMLLoader[Elem] {
 /**
  * Correct answer table
  * @param answers answer column ID -> (answer, score)
- */
+
 case class AnswerTable(answers: Map[String, (String, Int)] = Map.empty[String, (String, Int)]) {
   def getAnswer(id: String): Option[String] = answers.get(id).map(_._1)
   def getScore(id: String): Option[Int] = answers.get(id).map(_._2)
   def isEmpty: Boolean = answers.isEmpty
 }
-
+*/
 /**
  * Type of a question
- */
+
 object QuestionType extends Enumeration {
   val sentence_true, // choose a true statement
   sentence_false, // choose a false statement
@@ -41,7 +41,7 @@ object QuestionType extends Enumeration {
   other // other (not answered by this system)
   = Value
 }
-
+*/
 object QuestionTypeQ1000 extends Enumeration {
   val how_many, // choose a true statement
   when, // choose a false statement
@@ -70,26 +70,18 @@ case class Clues(headPred:String,
                   )
 
 case class Question(id: String, // 回答欄ID
-                    questionType: QuestionType.Value, // 問題文のタイプ
-                    clues: Array[String], // 問題文中の重要語
-                    times: Array[String], // 問題文中の時間表現
-                    choices: Array[String] // 選択肢から抽出した文
-                    ) {
-  def toXML(): Node = {
-    val cluesXML = clues map (c => <clue>{ c }</clue>)
-    val timesXML = times map (t => <time>{ t }</time>)
-    val choicesXML = choices map (s => <choices>{ s }</choices>)
-    <question id={ id } questionType={ questionType.toString }>
-      { cluesXML }
-      { timesXML }
-      { choicesXML }
-    </question>
-  }
-}
+                    questionType: QuestionTypeQ1000.Value, // 問題文のタイプ
+                    arraryOfClues: Array[Clues],
+                    questionText: String,
+                    answerNumber: Int,
+                    meta: NodeSeq,
+                    answers: NodeSeq
+                     )
 
 /**
  * Extract questions and choices and clue expressions
  */
+/**
 object ExtractQuestions {
 
   /**
@@ -278,9 +270,12 @@ object ExtractQuestions {
   }
 }
 
+*/
+
 object ExtractQuestionsQ1000 {
-    def questionTypeQ1000(question: Node): QuestionTypeQ1000.Value = {
-      System.err.println(s"Column5: ${(question \\ "B1").text}")
+
+  def determineQuestionTypeQ1000(questionXML: Node): QuestionTypeQ1000.Value = {
+      System.err.println(s"Column5: ${(questionXML \\ "B1").text}")
       val whereRe= """(どこ)""".r
       val whenRe= """(いつ)""".r
       val howManyRe= """(いくつ|いくら|どれぐらい)""".r
@@ -294,8 +289,7 @@ object ExtractQuestionsQ1000 {
       val whoRe= """(誰)""".r
       val dimensionRe= """(数|体積|長さ|温度|頻度)""".r
       val timeExprRe= """(日付表現)""".r
-
-      (question \\ "B1").text match {
+      (questionXML \\ "B1").text match {
         case whereRe(questionWord) => QuestionTypeQ1000.where
         case howManyRe(questionWord) => QuestionTypeQ1000.how_many
         case whenRe(questionWord) => QuestionTypeQ1000.when
@@ -304,12 +298,12 @@ object ExtractQuestionsQ1000 {
         case whatRe(questionWord) => QuestionTypeQ1000.what
         case whatNotUnitRe(questionWord) => QuestionTypeQ1000.what
         case howManyUnitRe(questionWord) =>
-          if (dimensionRe.findFirstMatchIn((question \\"D3").text)!=None)
+          if (dimensionRe.findFirstMatchIn((questionXML \\"D3").text)!=None)
             QuestionTypeQ1000.how_many
           else
             QuestionTypeQ1000.what
         case whichYearRe(questionWord) =>
-          if (timeExprRe.findFirstMatchIn((question \\ "D3").text)!=None)
+          if (timeExprRe.findFirstMatchIn((questionXML \\ "D3").text)!=None)
             QuestionTypeQ1000.when
           else
             QuestionTypeQ1000.how_many
@@ -342,13 +336,37 @@ object ExtractQuestionsQ1000 {
                       else {
                         entityMap += (entityID -> lemma)
                       }
+                    case _ =>
                   }
+                case _ =>
               }
             }
+          case _ =>
         }
       Clues(headWord, depTemp.toArray, text)
       }
     }
+
+  def countAnswerNoQ1000(questionXML: Node): Int ={
+    var increment = 0
+    for (answer <-(questionXML \\ "answer")) yield { increment+=1}
+    increment
+  }
+
+
+
+  def makeQuestionQ1000(questionXML: Node)=
+    Question((questionXML \"@id").text,
+      determineQuestionTypeQ1000(questionXML),
+      extractCluesQ1000((questionXML \\ "text").text, (questionXML \\ "B7").text),
+      (questionXML \\ "text").text,
+      countAnswerNoQ1000(questionXML),
+      questionXML \\ "meta",
+      questionXML\\ "answers")
+
+
+
+
 
   def safeMod5(stringIn: String): Boolean ={
     var boolOut=true
@@ -362,19 +380,16 @@ object ExtractQuestionsQ1000 {
     }
     boolOut
   }
-   /**
-   * センター試験 XML から、含意関係認識で解くべき問題を抽出し、問題文から重要語や時間表現などを抽出する
-   * @param examXML
-   * @return
-   */
-  def apply(examXML: Node): Array[(Array[Clues],QuestionTypeQ1000.Value)] = {
+
+
+  def apply(input_output_XML: Node): Array[Question] = {
     // extract target questions (i.e. question type != other)
 
-    val totalQuestions = (examXML \\ "question").filter(e => (safeMod5((e \"@id").text) == true)).toArray
+    val totalQuestions = (input_output_XML \\ "question").filter(e => (safeMod5((e \"@id").text) == true)).toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
-    val targetQuestions = totalQuestions map (q => extractCluesQ1000((q \\"text").text, (q \\ "B7").text) -> questionTypeQ1000(q)) filter (_._2 != QuestionTypeQ1000.other)
+    val targetQuestions = totalQuestions map (q => makeQuestionQ1000(q))
     //val targetQuestions = totalQuestions map (q => (q \\"text").text -> questionTypeQ1000(q))
-    System.err.println(s"Target questions: ${targetQuestions.length}, ${targetQuestions{0}.toString()}")
+    System.err.println(s"Target questions: ${targetQuestions.length}, ${targetQuestions.toString()}")
     targetQuestions
   }
 }
@@ -420,41 +435,41 @@ object CenterExam {
    * @param args
    */
   def main(args: Array[String]): Unit = {
-    if (args.length < 4) {
-      System.err.println("Usage: scala qa.main.ja.CenterExam MAX_SEARCH_RESULTS PROOF_THRESHOLD EXAM_XML OUTPUT_XML [ANSWER_XML]")
+    if (args.length < 3) {
+      System.err.println("Usage: scala qa.main.ja.CenterExam MAX_SEARCH_RESULTS PROOF_THRESHOLD INPUT_OUTPUT_XML")
       System.exit(1)
     }
 
     maxSearchResults = args(0).toInt
     //wordSimilarityThreshold = args(1).toDouble
     scoreThreshold = args(1).toDouble
-    val exam_xml_name = args(2)
-    val output_xml_name = args(3)
-    val answer_xml_name = if (args.length == 5) args(4) else null
+    //val exam_xml_name = args(2)
+    val input_output_xml_name = args(2)
+    //val answer_xml_name = if (args.length == 5) args(4) else null
 
     System.err.println(s"Max search results: $maxSearchResults")
     //System.err.println(s"Word similarity threshold: $wordSimilarityThreshold")
     System.err.println(s"Score threshold: $scoreThreshold")
-    System.err.println(s"Exam file: $exam_xml_name")
-    System.err.println(s"Output file: $output_xml_name")
-    if (answer_xml_name != null)
-      System.err.println(s"Answer table file: $answer_xml_name")
+    //System.err.println(s"Exam file: $exam_xml_name")
+    //System.err.println(s"Output file: $output_xml_name")
+    //if (answer_xml_name != null)
+    //  System.err.println(s"Answer table file: $answer_xml_name")
 
     // read answer table
-    val answerTable =
-      if (answer_xml_name == null) new AnswerTable
-      else {
-        // read correct answers
-        val answer_xml = XMLLoaderIgnoringDTD.loadFile(answer_xml_name)
-        val answers =
-          for (data <- answer_xml \\ "data") yield {
-            val anscol = (data \ "anscolumn_ID").text
-            val ans = (data \ "answer").text
-            val score = (data \ "score").text.toInt
-            (anscol, (ans, score))
-          }
-        new AnswerTable(answers.toMap)
-      }
+    //val answerTable =
+    //  if (answer_xml_name == null) new AnswerTable
+    //  else {
+    //    // read correct answers
+    //    val answer_xml = XMLLoaderIgnoringDTD.loadFile(answer_xml_name)
+    //    val answers =
+    //      for (data <- answer_xml \\ "data") yield {
+    //        val anscol = (data \ "anscolumn_ID").text
+    //        val ans = (data \ "answer").text
+    //        val score = (data \ "score").text.toInt
+    //        (anscol, (ans, score))
+    //      }
+    //    new AnswerTable(answers.toMap)
+    //  }
 
     // create index of textbooks
     System.err.println("Creating index of textbooks")
@@ -467,28 +482,22 @@ object CenterExam {
     // extract questions
     System.err.println("-------------------------------------------------------------------------")
     System.err.println("Preprocessing target questions")
-    val examXML = XMLLoaderIgnoringDTD.loadFile(exam_xml_name)
-    val questions = ExtractQuestionsQ1000(examXML)
+    val input_output_XML = XMLLoaderIgnoringDTD.loadFile(input_output_xml_name)
+    val questions = ExtractQuestionsQ1000(input_output_XML)
     // Run Solver and obtain final answers
     System.err.println("-------------------------------------------------------------------------")
     System.err.println("Run QA solver")
     val solver = new Solver(parser, search, scoreThreshold)
-    val finalAnswers = for (question <- questions) yield {
-      val finalAnswer = solver(question)
+    val outputElems = questions map {f => solver(f)}
 
-    }
+
+
 
     // output all the answers to the XML file
-    /**
-    val output_elems =
-      for ((anscol, answer) <- finalAnswers) yield {
-        <data>
-          <anscolumn_ID>{ anscol }</anscolumn_ID>
-          <answer>{ answer }</answer>
-        </data>
-      }
-    XML.save(output_xml_name, <answerTable>{ output_elems }</answerTable>)
-    */
+
+
+    XML.save(input_output_xml_name, <questions>{outputElems}</questions>,"UTF-8")
+
     // compute scores if answer table is given
     /**
     if (!answerTable.isEmpty) {
@@ -509,7 +518,6 @@ object CenterExam {
       */
   }
 }
-
 //check usage
 //unzip
 //SearchDocument.makeIndexOnMemory

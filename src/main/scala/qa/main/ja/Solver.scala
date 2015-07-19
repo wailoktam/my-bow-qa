@@ -1,4 +1,5 @@
 package qa.main.ja
+import scala.xml._
 
 /**
  * Questions represented as t/h pairs
@@ -39,7 +40,8 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
    * @param t_or_f
    * @param num
    * @return
-   */
+
+
   def mapTrueOrFalse(t_or_f: List[Boolean], num: Int = 0): Int = {
     t_or_f match {
       case Nil => num
@@ -63,30 +65,68 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
     // do something here
     return 0.0
   }
+  */
 
-  def apply(question: (Array[Clues], QuestionTypeQ1000.Value)): Array[Unit] = {
-    // run Solver and obtain score
-    val questionClues = question._1
-    val questionType = question._2
-    //   val choices = question.choices
-    //   System.err.println("===========================================================")
-    //   System.err.println(s"text: $questionClue")
-    // output an answer based on the question type
-    for (questionClue <- questionClues) yield {
-      val finalAnswer = questionType match {
-        case QuestionTypeQ1000.where =>
-          questionClue match {
-            case Clues(headPred, deps, text) =>
-              //        val headRegex="("+headPred+")".r
-              //        val depRegex="(.*)"+("+deps.mkString("|")+")".r
-              val results = search(text, 1)
-              for (result <- results) {
-                println("%s %s: %f".format(result.id, result.title, result.score))
-              }
-              results
-          }
-        //search test = do nothing
+  def sumOfScores(searches: Array[SearchResult]): Double = {
+    var increment: Double = 0
+    for (search <- searches) yield {
+      search match {
+        case SearchResult(id, title, text, score) => increment += score
+        case _ => increment
       }
     }
+    increment
   }
+
+  def makeResponse(searchResult:SearchResult):String = {
+    searchResult match {
+      case SearchResult(id,title,text,score) => title
+      case _ => ""
+    }
+
+
+  }
+
+  def apply(question: Question): Elem = {
+    question match {
+      case Question(id, questionType, arrayOfClues, questionText, answerNumber, meta, answers) =>
+        var hitsFrSameClue = new Array[SearchResult](answerNumber)
+        var hitsFrSameClueWMaxScore = new Array[SearchResult](answerNumber)
+        var counter: Int = 0
+        for (clue <- arrayOfClues) yield {
+                  hitsFrSameClue = questionType match {
+                    case QuestionTypeQ1000.where =>
+                      clue match {
+                        case Clues(headPred, deps, text) =>
+                          //        val headRegex="("+headPred+")".r
+                          //        val depRegex="(.*)"+("+deps.mkString("|")+")".r
+                          search(text, answerNumber)
+                        case _ => new Array[SearchResult](0)
+                      }
+                    case _ => new Array[SearchResult](0)
+                  }
+                  if (counter == 0) {
+                    hitsFrSameClueWMaxScore = hitsFrSameClue
+                  }
+                  else {
+                    if (sumOfScores(hitsFrSameClue) > sumOfScores(hitsFrSameClueWMaxScore)) {
+                      hitsFrSameClueWMaxScore = hitsFrSameClue
+                    }
+                  }
+                  counter += 1
+                }
+
+          <question id={id}>
+            {answers}
+            {meta}
+            <responses annotator="baseline">
+              {for (hit <- hitsFrSameClueWMaxScore) yield
+              <response>{makeResponse(hit)}</response>}
+            </responses>
+          </question>
+
+      case _ => <question></question>
+    }
+    }
+
 }
