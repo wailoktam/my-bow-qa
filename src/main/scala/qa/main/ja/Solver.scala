@@ -40,50 +40,49 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
    * @param t_or_f
    * @param num
    * @return
-
-
-  def mapTrueOrFalse(t_or_f: List[Boolean], num: Int = 0): Int = {
-    t_or_f match {
-      case Nil => num
-      case head :: tail =>
-        mapTrueOrFalse(tail, num * 2 + (if (head) 0 else 1))
-    }
-  }
-
-  /**
+   *
+   *
+   * def mapTrueOrFalse(t_or_f: List[Boolean], num: Int = 0): Int = {
+   * t_or_f match {
+   * case Nil => num
+   * case head :: tail =>
+   * mapTrueOrFalse(tail, num * 2 + (if (head) 0 else 1))
+   * }
+   * }
+   *
+   * /**
    * Return a score to judge whether choice is true or not
+   * */
+   * def confidenceScore(hypothesis: String): Double = {
+   * // search textbooks and create t/h pairs
+   * System.err.println("-------------------------------------------------------------------------")
+   * System.err.println("Search textbooks for premise")
+   * val searchResults = search(hypothesis)
+   * val searchResultsTexts = searchResults.sortBy(_.id.toInt).map(_.text)
+   * val premise = searchResultsTexts.mkString("\n")
+   * System.err.println(s"hypothesis: $hypothesis")
+   * System.err.println(s"premise: $premise")
+   * // do something here
+   * return 0.0
+   * }
    */
-  def confidenceScore(hypothesis: String): Double = {
-    // search textbooks and create t/h pairs
-    System.err.println("-------------------------------------------------------------------------")
-    System.err.println("Search textbooks for premise")
-    val searchResults = search(hypothesis)
-    val searchResultsTexts = searchResults.sortBy(_.id.toInt).map(_.text)
-    val premise = searchResultsTexts.mkString("\n")
-    System.err.println(s"hypothesis: $hypothesis")
-    System.err.println(s"premise: $premise")
-    // do something here
-    return 0.0
-  }
-  */
 
   def sumOfScores(searches: Array[SearchResult]): Double = {
     var increment: Double = 0
     for (search <- searches) yield {
       search match {
         case SearchResult(id, title, text, score) => increment += score
-        case _ => increment
+        case _                                    => increment
       }
     }
     increment
   }
 
-  def makeResponse(searchResult:SearchResult):String = {
+  def makeResponse(searchResult: SearchResult): String = {
     searchResult match {
-      case SearchResult(id,title,text,score) => title
-      case _ => ""
+      case SearchResult(id, title, text, score) => title
+      case _                                    => ""
     }
-
 
   }
 
@@ -94,39 +93,40 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
         var hitsFrSameClueWMaxScore = new Array[SearchResult](answerNumber)
         var counter: Int = 0
         for (clue <- arrayOfClues) yield {
-                  hitsFrSameClue = questionType match {
-                    case QuestionTypeQ1000.where =>
-                      clue match {
-                        case Clues(headPred, deps, text) =>
-                          //        val headRegex="("+headPred+")".r
-                          //        val depRegex="(.*)"+("+deps.mkString("|")+")".r
-                          search(text, answerNumber)
-                        case _ => new Array[SearchResult](0)
-                      }
-                    case _ => new Array[SearchResult](0)
-                  }
-                  if (counter == 0) {
-                    hitsFrSameClueWMaxScore = hitsFrSameClue
-                  }
-                  else {
-                    if (sumOfScores(hitsFrSameClue) > sumOfScores(hitsFrSameClueWMaxScore)) {
-                      hitsFrSameClueWMaxScore = hitsFrSameClue
-                    }
-                  }
-                  counter += 1
-                }
+          hitsFrSameClue = questionType match {
+            case QuestionTypeQ1000.where =>
+              clue match {
+                case Clues(headPred, deps, text) =>
+                  //        val headRegex="("+headPred+")".r
+                  //        val depRegex="(.*)"+("+deps.mkString("|")+")".r
+                  search(text, answerNumber)
+                case _ => new Array[SearchResult](0)
+              }
+            case _ => new Array[SearchResult](0)
+          }
+          if (counter == 0) {
+            hitsFrSameClueWMaxScore = hitsFrSameClue
+          } else {
+            if (sumOfScores(hitsFrSameClue) > sumOfScores(hitsFrSameClueWMaxScore)) {
+              hitsFrSameClueWMaxScore = hitsFrSameClue
+            }
+          }
+          counter += 1
+        }
 
-          <question id={id}>
-            {answers}
-            {meta}
-            <responses annotator="baseline">
-              {for (hit <- hitsFrSameClueWMaxScore) yield
-              <response>{makeResponse(hit)}</response>}
-            </responses>
-          </question>
+        <question id={ id }>
+          { questionText }
+          { answers }
+          { meta }
+          <responses annotator="baseline">
+            {
+              for (hit <- hitsFrSameClueWMaxScore) yield <response>{ makeResponse(hit) }</response>
+            }
+          </responses>
+        </question>
 
       case _ => <question></question>
     }
-    }
+  }
 
 }

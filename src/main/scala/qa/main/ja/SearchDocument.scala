@@ -206,7 +206,6 @@ object SearchDocument {
           id -> xml_doc
         }
 
-
       }).flatten.toArray
     writer.close()
     documents
@@ -220,7 +219,7 @@ object SearchTest {
   def main(args: Array[String]): Unit = {
     // create index
     val target_files = Array("input/textbooks/rite2-ja-textbook.xml",
-      "input/textbooks/riteval-ja-textbook2.xml","input/wiki/wiki_00")
+      "input/textbooks/riteval-ja-textbook2.xml", "input/wiki/wiki_00")
     //    val documents_dir = "src/main/resources/ja/Documents"
     //    val index_dir = documents_dir + "/index"
     //    val cdb_file = documents_dir + "/documents.cdb"
@@ -231,10 +230,10 @@ object SearchTest {
     println("done")
     // try search
     val search = new SearchDocument(index, documents)
-//    val results = search("猫舌", 10)
-    val results = search("世界で初めて原子爆弾が投下された都市は", 10)
-//    for (result <- results) {
-//      println("%s %s: %f".format(result.id, result.text, result.score))
-//    }
+    val results = search("猫舌", 10)
+    //    val results = search("世界で初めて原子爆弾が投下された都市は", 10)
+    for (result <- results) {
+      println("%s %s: %f".format(result.id, result.text, result.score))
+    }
   }
 }
