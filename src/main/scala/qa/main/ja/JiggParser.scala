@@ -215,7 +215,7 @@ object ExtractQuestionsQ1000 {
           {questionText}
           {meta}
           {answers}
-          <annotation>
+          <annotation type="juman/knp" annotator="JiggParser">
           <questionType>{questionType}</questionType>
           <parses>{for (parse <- parses) yield <parse>
             {parse}

@@ -43,7 +43,7 @@ Where {
       <answer>三重県</answer>
       <answer>静岡県</answer>
     </answers>
-          <annotation>
+          <annotation type="juman/knp" annotator="JiggParser">
           <questionType>where</questionType>
           <parses><parse>
             <root>
