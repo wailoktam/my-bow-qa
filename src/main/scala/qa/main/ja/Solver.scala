@@ -32,7 +32,7 @@ case class QuestionAsTextPairs(id: String, // 回答欄ID
 /**
  * Question Answering System
  */
-class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Double) {
+class Solver(val parser: JiggParser, val search: SearchDocument, val scoreThreshold: Double) {
 
   /**
    * true/false の列を、数字（選択肢番号）に変換する
@@ -88,18 +88,18 @@ class Solver(val parser: KNP, val search: SearchDocument, val scoreThreshold: Do
 
   def apply(question: Question): Elem = {
     question match {
-      case Question(id, questionType, arrayOfClues, questionText, answerNumber, meta, answers) =>
-        var hitsFrSameClue = new Array[SearchResult](answerNumber)
-        var hitsFrSameClueWMaxScore = new Array[SearchResult](answerNumber)
+      case Question(id, questionType, parses, arrayOfClues, questionText, meta, answers) =>
+        var hitsFrSameClue = new Array[SearchResult](1)
+        var hitsFrSameClueWMaxScore = new Array[SearchResult](1)
         var counter: Int = 0
         for (clue <- arrayOfClues) yield {
           hitsFrSameClue = questionType match {
             case QuestionTypeQ1000.where =>
               clue match {
-                case Clues(headPred, deps, text) =>
+                case Clue(headPred, deps, text) =>
                   //        val headRegex="("+headPred+")".r
                   //        val depRegex="(.*)"+("+deps.mkString("|")+")".r
-                  search(text, answerNumber)
+                  search(text, 1)
                 case _ => new Array[SearchResult](0)
               }
             case _ => new Array[SearchResult](0)
