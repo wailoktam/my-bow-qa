@@ -3,8 +3,6 @@
 
 package qa.main.ja
 
-//import java.io.{ OutputStreamWriter, BufferedWriter, InputStreamReader, BufferedReader }
-
 import scala.collection.immutable.ListMap
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -20,7 +18,6 @@ object XMLLoaderIgnoringDTD extends XMLLoader[Elem] {
   override def parser: SAXParser = {
     val f = javax.xml.parsers.SAXParserFactory.newInstance()
     f.setNamespaceAware(false)
-    //f.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
     f.setValidating(false)
     f.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
     f.newSAXParser()
@@ -238,7 +235,6 @@ object ExtractQuestionsQ1000 {
     val totalQuestions = (inputXML \\ "question").filter(e => (safeMod5((e \ "@id").text) == true)).toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
     totalQuestions map (q => makeQuestionQ1000(q, parserPath)) map (formatInXML)
-    //val targetQuestions = totalQuestions map (q => (q \\"text").text -> questionTypeQ1000(q))
   }
 }
 
@@ -268,12 +264,7 @@ class JiggParser(val parserPath: String) {
   }
 
 
-  def getNewId: Int = {
-    val id = current_id
-    current_id += 1
-    id
-  }
-  private var current_id = 0
+
 
 
 
