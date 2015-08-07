@@ -1,0 +1,167 @@
+<questions>
+      <question id="LC-ECQA2002-00002-01">
+          <text>東海地方に含まれる県はどこ？</text>
+          <meta>
+      <A.memo/>
+      <B1>どこ</B1>
+      <B2>A</B2>
+      <B3>地理</B3>
+      <B4>県</B4>
+      <B5>東海地方</B5>
+      <B6>国内地域名</B6>
+      <B7>県</B7>
+      <B.memo/>
+      <C1>Select ?x
+Where {
+東海地方	所属県		?x.
+}</C1>
+	    <C2/>
+      <Cmemo/>
+      <D2>複数</D2>
+      <D3>都道府県州名</D3>
+      <D.memo/>
+      <E1>Y</E1>
+      <E2>a</E2>
+      <E3>東海地方</E3>
+      <E4>冒頭</E4>
+      <E5>愛知県、岐阜県、三重県、静岡県の4県を指す場合と、愛知県、岐阜県、三重県の3県を指す場合がある。</E5>
+      <E6/>
+      <E7/>
+      <E8/>
+      <Ememo/>
+      <F1>Y</F1>
+      <F2>Select ?province
+Where {
+?province jwo-prop:地方 jwo-instance:東海地方.
+?province rdf:type jwo-class:県
+}</F2>
+      <Fmemo>タイプ不足により解答が不完全</Fmemo>
+    </meta>
+          <answers>
+      <answer>愛知県</answer>
+      <answer>岐阜県</answer>
+      <answer>三重県</answer>
+      <answer>静岡県</answer>
+    </answers>
+          <annotations>
+        <annotation annotator="JiggParser" type="juman/knp">
+          <questionType>where</questionType>
+          <parses><parse>
+            <root>
+  <document id="d0">
+    <sentences>
+      <sentence id="s0">
+        東海地方に含まれる県はどこ？。
+        <tokens>
+          <token features="&quot;代表表記:東海/とうかい 地名:日本:愛知県:市&quot; &lt;代表表記:東海/とうかい&gt;&lt;地名:日本:地方&gt;&lt;正規化代表表記:東海/とうかい&gt;&lt;品曖&gt;&lt;ALT-東海-とうかい-東海-6-4-0-0-&quot;代表表記:東海/とうかい 地名:日本:地方&quot;&gt;&lt;品曖-地名&gt;&lt;文頭&gt;&lt;漢字&gt;&lt;かな漢字&gt;&lt;名詞相当語&gt;&lt;自立&gt;&lt;内容語&gt;&lt;タグ単位始&gt;&lt;文節始&gt;&lt;固有キー&gt;&lt;NE:LOCATION:S&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="4" posId="6" reading="とうかい" base="東海" inflectionForm="*" inflectionType="*" pos1="地名" pos="名詞" surf="東海" id="s0_tok0"/>
+          <token features="&quot;代表表記:地方/ちほう 地名末尾 カテゴリ:場所-その他&quot; &lt;代表表記:地方/ちほう&gt;&lt;地名末尾&gt;&lt;カテゴリ:場所-その他&gt;&lt;正規化代表表記:地方/ちほう&gt;&lt;Wikipedia上位語:地方/ちほう:0-1&gt;&lt;Wikipediaエントリ:東海地方:0-1&gt;&lt;漢字&gt;&lt;かな漢字&gt;&lt;名詞相当語&gt;&lt;自立&gt;&lt;複合←&gt;&lt;内容語&gt;&lt;タグ単位始&gt;&lt;文節主辞&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="1" posId="6" reading="ちほう" base="地方" inflectionForm="*" inflectionType="*" pos1="普通名詞" pos="名詞" surf="地方" id="s0_tok1"/>
+          <token features="NIL &lt;かな漢字&gt;&lt;ひらがな&gt;&lt;付属&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="1" posId="9" reading="に" base="に" inflectionForm="*" inflectionType="*" pos1="格助詞" pos="助詞" surf="に" id="s0_tok2"/>
+          <token features="&quot;代表表記:含む/ふくむ&quot; &lt;代表表記:含む/ふくむ&gt;&lt;正規化代表表記:含む/ふくむ&gt;&lt;かな漢字&gt;&lt;活用語&gt;&lt;自立&gt;&lt;内容語&gt;&lt;タグ単位始&gt;&lt;文節始&gt;&lt;文節主辞&gt;" inflectionFormId="3" inflectionTypeId="9" pos1Id="0" posId="2" reading="ふくま" base="含む" inflectionForm="未然形" inflectionType="子音動詞マ行" pos1="*" pos="動詞" surf="含ま" id="s0_tok3"/>
+          <token features="&quot;代表表記:れる/れる&quot; &lt;代表表記:れる/れる&gt;&lt;正規化代表表記:れる/れる&gt;&lt;かな漢字&gt;&lt;ひらがな&gt;&lt;活用語&gt;&lt;付属&gt;" inflectionFormId="2" inflectionTypeId="1" pos1Id="7" posId="14" reading="れる" base="れる" inflectionForm="基本形" inflectionType="母音動詞" pos1="動詞性接尾辞" pos="接尾辞" surf="れる" id="s0_tok4"/>
+          <token features="&quot;代表表記:県/けん 漢字読み:音 住所末尾 カテゴリ:組織・団体;場所-その他 ドメイン:政治&quot; &lt;代表表記:県/けん&gt;&lt;漢字読み:音&gt;&lt;住所末尾&gt;&lt;カテゴリ:組織・団体;場所-その他&gt;&lt;ドメイン:政治&gt;&lt;正規化代表表記:県/けん&gt;&lt;漢字&gt;&lt;かな漢字&gt;&lt;名詞相当語&gt;&lt;自立&gt;&lt;内容語&gt;&lt;タグ単位始&gt;&lt;文節始&gt;&lt;文節主辞&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="1" posId="6" reading="けん" base="県" inflectionForm="*" inflectionType="*" pos1="普通名詞" pos="名詞" surf="県" id="s0_tok5"/>
+          <token features="NIL &lt;かな漢字&gt;&lt;ひらがな&gt;&lt;付属&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="2" posId="9" reading="は" base="は" inflectionForm="*" inflectionType="*" pos1="副助詞" pos="助詞" surf="は" id="s0_tok6"/>
+          <token features="&quot;代表表記:どこ/どこ&quot; &lt;代表表記:どこ/どこ&gt;&lt;正規化代表表記:どこ/どこ&gt;&lt;表現文末&gt;&lt;疑問詞&gt;&lt;かな漢字&gt;&lt;ひらがな&gt;&lt;自立&gt;&lt;内容語&gt;&lt;タグ単位始&gt;&lt;文節始&gt;&lt;文節主辞&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="1" posId="7" reading="どこ" base="どこ" inflectionForm="*" inflectionType="*" pos1="名詞形態指示詞" pos="指示詞" surf="どこ" id="s0_tok7"/>
+          <token features="NIL &lt;記英数カ&gt;&lt;英記号&gt;&lt;記号&gt;&lt;付属&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="5" posId="1" reading="？" base="？" inflectionForm="*" inflectionType="*" pos1="記号" pos="特殊" surf="？" id="s0_tok8"/>
+          <token features="NIL &lt;文末&gt;&lt;英記号&gt;&lt;記号&gt;&lt;付属&gt;" inflectionFormId="0" inflectionTypeId="0" pos1Id="1" posId="1" reading="。" base="。" inflectionForm="*" inflectionType="*" pos1="句点" pos="特殊" surf="。" id="s0_tok9"/>
+        </tokens>
+        <basicPhrases>
+          <basicPhrase features="&lt;文節内&gt;&lt;係:文節内&gt;&lt;文頭&gt;&lt;地名疑&gt;&lt;体言&gt;&lt;名詞項候補&gt;&lt;先行詞候補&gt;&lt;正規化代表表記:東海/とうかい&gt;&lt;NE:LOCATION:東海&gt;&lt;照応詞候補:東海&gt;&lt;EID:0&gt;" tokens="s0_tok0" id="s0_bp0"/>
+          <basicPhrase features="&lt;地名&gt;&lt;ニ&gt;&lt;助詞&gt;&lt;体言&gt;&lt;係:ニ格&gt;&lt;区切:0-0&gt;&lt;格要素&gt;&lt;連用要素&gt;&lt;名詞項候補&gt;&lt;先行詞候補&gt;&lt;SM-場所&gt;&lt;正規化代表表記:地方/ちほう&gt;&lt;Wikipedia上位語:地方/ちほう&gt;&lt;Wikipediaエントリ:東海地方&gt;&lt;照応詞候補:東海地方&gt;&lt;解析格:ニ&gt;&lt;EID:1&gt;" tokens="s0_tok1 s0_tok2" id="s0_bp1"/>
+          <basicPhrase features="&lt;態:受動&gt;&lt;〜られる&gt;&lt;連体修飾&gt;&lt;用言:動&gt;&lt;係:連格&gt;&lt;レベル:B&gt;&lt;区切:0-5&gt;&lt;ID:（動詞連体）&gt;&lt;連体節&gt;&lt;動態述語&gt;&lt;正規化代表表記:含む/ふくむ&gt;&lt;用言代表表記:含む/ふくむ+れる/れる&gt;&lt;時制-未来&gt;&lt;格関係1:ニ:地方&gt;&lt;格関係3:ガ:県&gt;&lt;格解析結果:含む/ふくむ+れる/れる:動4:ガ/N/県/3/0/1;ヲ/U/-/-/-/-;ニ/C/地方/1/0/1;ト/U/-/-/-/-;デ/U/-/-/-/-;カラ/U/-/-/-/-;ヨリ/U/-/-/-/-;マデ/U/-/-/-/-;ヘ/U/-/-/-/-;時間/U/-/-/-/-;外の関係/U/-/-/-/-;ノ/U/-/-/-/-;修飾/U/-/-/-/-;ガ２/U/-/-/-/-;ニツク/U/-/-/-/-;トスル/U/-/-/-/-;ニクワエル/U/-/-/-/-;ニヨル/U/-/-/-/-;ヲハジメル/U/-/-/-/-;ニカンスル/U/-/-/-/-&gt;&lt;正規化格解析結果-0:含む/ふくむ:動23:ノ/N/県/3/0/1;ニ/C/地方/1/0/1&gt;&lt;EID:2&gt;&lt;述語項構造:含む/ふくむ+れる/れる:動3:ガ２/N/県/3;ニ/C/東海地方/1&gt;" tokens="s0_tok3 s0_tok4" id="s0_bp2">
+</basicPhrase>
+          <basicPhrase features="&lt;SM-主体&gt;&lt;SM-組織&gt;&lt;ハ&gt;&lt;助詞&gt;&lt;体言&gt;&lt;一文字漢字&gt;&lt;係:未格&gt;&lt;提題&gt;&lt;区切:3-5&gt;&lt;主題表現&gt;&lt;格要素&gt;&lt;連用要素&gt;&lt;名詞項候補&gt;&lt;先行詞候補&gt;&lt;正規化代表表記:県/けん&gt;&lt;照応詞候補:県&gt;&lt;解析連格:ガ&gt;&lt;解析格:ガ&gt;&lt;EID:3&gt;" tokens="s0_tok5 s0_tok6" id="s0_bp3"/>
+          <basicPhrase features="&lt;文末&gt;&lt;疑問詞&gt;&lt;句点&gt;&lt;体言&gt;&lt;指示詞&gt;&lt;用言:判&gt;&lt;体言止&gt;&lt;レベル:C&gt;&lt;区切:5-5&gt;&lt;ID:（文末）&gt;&lt;裸名詞&gt;&lt;係:文末&gt;&lt;提題受:30&gt;&lt;主節&gt;&lt;格要素&gt;&lt;連用要素&gt;&lt;状態述語&gt;&lt;判定詞&gt;&lt;名詞項候補&gt;&lt;正規化代表表記:どこ/どこ&gt;&lt;用言代表表記:どこ/どこ&gt;&lt;時制-無時制&gt;&lt;照応詞候補:どこ&gt;&lt;格関係3:ガ:県&gt;&lt;格解析結果:どこ/どこ:判36:ガ/N/県/3/0/1;外の関係/U/-/-/-/-&gt;&lt;EID:4&gt;&lt;述語項構造:どこ/どこ:判7:ガ/N/県/3&gt;" tokens="s0_tok7 s0_tok8 s0_tok9" id="s0_bp4"/>
+        </basicPhrases>
+        <chunks>
+          <chunk features="&lt;文頭&gt;&lt;地名&gt;&lt;ニ&gt;&lt;助詞&gt;&lt;体言&gt;&lt;係:ニ格&gt;&lt;区切:0-0&gt;&lt;格要素&gt;&lt;連用要素&gt;&lt;正規化代表表記:東海/とうかい+地方/ちほう&gt;&lt;主辞代表表記:地方/ちほう&gt;" tokens="s0_tok0 s0_tok1 s0_tok2" id="s0_chu0"/>
+          <chunk features="&lt;態:受動&gt;&lt;〜られる&gt;&lt;連体修飾&gt;&lt;用言:動&gt;&lt;係:連格&gt;&lt;レベル:B&gt;&lt;区切:0-5&gt;&lt;ID:（動詞連体）&gt;&lt;連体節&gt;&lt;動態述語&gt;&lt;正規化代表表記:含む/ふくむ&gt;&lt;主辞代表表記:含む/ふくむ&gt;" tokens="s0_tok3 s0_tok4" id="s0_chu1"/>
+          <chunk features="&lt;SM-主体&gt;&lt;SM-組織&gt;&lt;ハ&gt;&lt;助詞&gt;&lt;体言&gt;&lt;一文字漢字&gt;&lt;係:未格&gt;&lt;提題&gt;&lt;区切:3-5&gt;&lt;主題表現&gt;&lt;格要素&gt;&lt;連用要素&gt;&lt;正規化代表表記:県/けん&gt;&lt;主辞代表表記:県/けん&gt;" tokens="s0_tok5 s0_tok6" id="s0_chu2"/>
+          <chunk features="&lt;文末&gt;&lt;疑問詞&gt;&lt;句点&gt;&lt;体言&gt;&lt;指示詞&gt;&lt;用言:判&gt;&lt;体言止&gt;&lt;レベル:C&gt;&lt;区切:5-5&gt;&lt;ID:（文末）&gt;&lt;裸名詞&gt;&lt;係:文末&gt;&lt;提題受:30&gt;&lt;主節&gt;&lt;格要素&gt;&lt;連用要素&gt;&lt;状態述語&gt;&lt;正規化代表表記:どこ/どこ&gt;&lt;主辞代表表記:どこ/どこ&gt;" tokens="s0_tok7 s0_tok8 s0_tok9" id="s0_chu3"/>
+        </chunks>
+        <basicPhraseDependencies root="s0_bp4">
+          <basicPhraseDependency label="D" dependent="s0_bp0" head="s0_bp1" id="s0_bpdep0"/>
+          <basicPhraseDependency label="D" dependent="s0_bp1" head="s0_bp2" id="s0_bpdep1"/>
+          <basicPhraseDependency label="D" dependent="s0_bp2" head="s0_bp3" id="s0_bpdep2"/>
+          <basicPhraseDependency label="D" dependent="s0_bp3" head="s0_bp4" id="s0_bpdep3"/>
+        </basicPhraseDependencies>
+        <dependencies root="s0_chu3">
+          <dependency label="D" dependent="s0_chu0" head="s0_chu1" id="s0_dep0"/>
+          <dependency label="D" dependent="s0_chu1" head="s0_chu2" id="s0_dep1"/>
+          <dependency label="D" dependent="s0_chu2" head="s0_chu3" id="s0_dep2"/>
+        </dependencies>
+        <caseRelations>
+          <caseRelation flag="N" label="ガ" depend="s0_tok5" head="s0_bp2" id="s0_cr0"/>
+          <caseRelation flag="U" label="ヲ" depend="unk" head="s0_bp2" id="s0_cr1"/>
+          <caseRelation flag="C" label="ニ" depend="s0_tok1" head="s0_bp2" id="s0_cr2"/>
+          <caseRelation flag="U" label="ト" depend="unk" head="s0_bp2" id="s0_cr3"/>
+          <caseRelation flag="U" label="デ" depend="unk" head="s0_bp2" id="s0_cr4"/>
+          <caseRelation flag="U" label="カラ" depend="unk" head="s0_bp2" id="s0_cr5"/>
+          <caseRelation flag="U" label="ヨリ" depend="unk" head="s0_bp2" id="s0_cr6"/>
+          <caseRelation flag="U" label="マデ" depend="unk" head="s0_bp2" id="s0_cr7"/>
+          <caseRelation flag="U" label="ヘ" depend="unk" head="s0_bp2" id="s0_cr8"/>
+          <caseRelation flag="U" label="時間" depend="unk" head="s0_bp2" id="s0_cr9"/>
+          <caseRelation flag="U" label="外の関係" depend="unk" head="s0_bp2" id="s0_cr10"/>
+          <caseRelation flag="U" label="ノ" depend="unk" head="s0_bp2" id="s0_cr11"/>
+          <caseRelation flag="U" label="修飾" depend="unk" head="s0_bp2" id="s0_cr12"/>
+          <caseRelation flag="U" label="ガ２" depend="unk" head="s0_bp2" id="s0_cr13"/>
+          <caseRelation flag="U" label="ニツク" depend="unk" head="s0_bp2" id="s0_cr14"/>
+          <caseRelation flag="U" label="トスル" depend="unk" head="s0_bp2" id="s0_cr15"/>
+          <caseRelation flag="U" label="ニクワエル" depend="unk" head="s0_bp2" id="s0_cr16"/>
+          <caseRelation flag="U" label="ニヨル" depend="unk" head="s0_bp2" id="s0_cr17"/>
+          <caseRelation flag="U" label="ヲハジメル" depend="unk" head="s0_bp2" id="s0_cr18"/>
+          <caseRelation flag="U" label="ニカンスル" depend="unk" head="s0_bp2" id="s0_cr19"/>
+          <caseRelation flag="N" label="ガ" depend="s0_tok5" head="s0_bp4" id="s0_cr20"/>
+          <caseRelation flag="U" label="外の関係" depend="unk" head="s0_bp4" id="s0_cr21"/>
+        </caseRelations>
+        <coreferences>
+          <coreference basicPhrases="s0_bp0" id="s0_coref0"/>
+          <coreference basicPhrases="s0_bp1" id="s0_coref1"/>
+          <coreference basicPhrases="s0_bp2" id="s0_coref2"/>
+          <coreference basicPhrases="s0_bp3" id="s0_coref3"/>
+          <coreference basicPhrases="s0_bp4" id="s0_coref4"/>
+        </coreferences>
+        <predicateArgumentRelations>
+          <predicateArgumentRelation flag="N" label="ガ２" argument="s0_coref3" predicate="s0_bp2" id="s0_par0"/>
+          <predicateArgumentRelation flag="C" label="ニ" argument="s0_coref1" predicate="s0_bp2" id="s0_par1"/>
+          <predicateArgumentRelation flag="N" label="ガ" argument="s0_coref3" predicate="s0_bp4" id="s0_par2"/>
+        </predicateArgumentRelations>
+        <namedEntities>
+          <namedEntity label="LOCATION" tokens="s0_tok0" id="s0_ne0"/>
+        </namedEntities>
+      </sentence>
+    </sentences>
+  </document>
+</root>
+            </parse>
+          </parses>
+          </annotation>
+        <annotation type="clue" annotator="ClueExtractor">
+          <clues>
+            <clue>
+              <head>
+                    含む
+                  </head><deps>
+                    <dep>
+                        地方
+                      </dep><dep>
+                        県
+                      </dep>
+                  </deps><parse>
+                    東海地方に含まれる県はどこ？。
+                  </parse>
+              </clue><clue>
+              <head>
+                    どこ
+                  </head><deps>
+                    <dep>
+                        県
+                      </dep>
+                  </deps><parse>
+                    東海地方に含まれる県はどこ？。
+                  </parse>
+              </clue>
+          </clues>
+        </annotation>
+        </annotations>
+        </question>
+    </questions>

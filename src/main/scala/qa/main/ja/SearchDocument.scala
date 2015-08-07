@@ -1,13 +1,3 @@
-/**
- * lucene を使って文書検索を行う簡単なプログラム
- * RITE-VAL document 形式の文書を仮定
- * <page>
- *   <id>...</id>
- *   <title>...</title>
- *   <text>...</text>
- * </page>
- */
-
 package qa.main.ja
 
 import java.io.File
@@ -25,6 +15,9 @@ import org.apache.lucene.search._
 import org.apache.lucene.search.similarities._
 import org.apache.lucene.util.Version
 import scala.xml.{ XML, Elem }
+import scala.xml.factory.XMLLoader
+
+import scala.xml.{Document=>_,_}
 
 /**
  * 検索結果文書のクラス
@@ -33,7 +26,8 @@ import scala.xml.{ XML, Elem }
  * @param text 文書の本文
  * @param score 検索スコア
  */
-case class SearchResult(id: String, title: String, text: String, score: Double)
+case class Doc(id: String, title: String, text: String, score: Double)
+
 
 /**
  * tf を常に1にするクラス
@@ -50,7 +44,7 @@ class SimilarityWithConstantTF extends DefaultSimilarity {
  * @param document_map 文書集合
  */
 class SearchDocument(val index_dir: Directory, val document_map: Map[String, Elem], val maxSearchResults: Int = 5) {
-  val analyzer = SearchDocument.makeAnalyzer()
+  val analyzer = Indexing.makeAnalyzer()
   val parser = new QueryParser("text", analyzer)
   //val parser = new MultiFieldQueryParser(Array("title", "text"), analyzer)
   val index_reader = DirectoryReader.open(index_dir)
@@ -58,36 +52,97 @@ class SearchDocument(val index_dir: Directory, val document_map: Map[String, Ele
   // set the similarity function to return tf=1
   index_searcher.setSimilarity(new SimilarityWithConstantTF) // TF を常に1にする
 
-  /**
-   * 文書を検索する
-   * @param input クエリ
-   * @param k 検索結果の数
-   * @return 検索結果
-   */
-  def apply(input: String, k: Int = maxSearchResults): Array[SearchResult] = {
-    val query = parser.parse(input)
-    //println(query)
-    val results = index_searcher.search(query, k)
-    val documents =
-      for (score_doc <- results.scoreDocs) yield {
-        val doc = index_searcher.doc(score_doc.doc)
-        val id = doc.get("id")
-        val xml = document_map.get(id).get
-        //print(xml)
-        val title = (xml \ "title").text
-        val text = (xml \ "text").text
-        //println(title)
-        //println(index_searcher.explain(query, score_doc.doc))
-        SearchResult(id, title, text, score_doc.score)
-      }
-    documents
+  def extractQuestionAndAnnotation(questionXML: Node):QuestionAndAnnotation = {
+    QuestionAndAnnotation((questionXML \ "@id").text,
+      questionXML \\ "text",
+      questionXML \\ "meta",
+      questionXML \\ "answers",
+      questionXML \\ "annotations")
+  }
+
+  def orderedUnique[A](ls: List[A]) = {
+    def loop(set: Set[A], ls: List[A]): List[A] = ls match {
+      case hd :: tail if set contains hd => loop(set, tail)
+      case hd :: tail => hd :: loop(set + hd, tail)
+      case Nil => Nil
+    }
+    loop(Set(), ls)
+  }
+
+
+
+  def annotateWDocs (maxHits: Int, oldQAndA: QuestionAndAnnotation): QuestionAndAnnotation ={
+    oldQAndA match {
+      case QuestionAndAnnotation(id,questionText,meta,answers,oldAnnotations) => {
+        val query = parser.parse(orderedUnique(((oldAnnotations \\ "clue" \\ "parse") map (_.text)).toList).mkString)
+        //println(query)
+        /**
+        old code for ref
+        val searchResult = index_searcher.search(query, maxHits)
+
+        val docs =
+          for (scoreWDoc <- searchResult.scoreDocs) yield {
+            val doc = index_searcher.doc(scoreWDoc.doc)
+            val id = doc.get("id")
+            val xml = document_map.get(id).get
+            //print(xml)
+            val title = (xml \ "title").text
+            val text = (xml \ "text").text
+            //println(title)
+            //println(index_searcher.explain(query, score_doc.doc))
+            Doc(id, title, text, scoreWDoc.score)
+          }
+
+        }
+*/
+        val newAnnotations =
+        <annotations>
+          {for (annotation <- oldAnnotations \\ "annotation") yield
+        {annotation}}
+          <annotation type="doc" annotator="SearchDocument">
+            <docs>
+              {for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield
+            <doc>
+              <did>
+                {index_searcher.doc(scoreWDoc.doc).get("id")}
+              </did>
+              <dtitle>
+                {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "title").text}
+              </dtitle>
+              <dtext>
+                {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "text").text}
+              </dtext>
+            </doc>}
+        </docs>
+        </annotation>
+        </annotations>
+        QuestionAndAnnotation(id,questionText,meta,answers,newAnnotations)
+        }
+      case _ => oldQAndA
+    }
+  }
+
+  def formatInXML(newQAndA: QuestionAndAnnotation):Elem ={
+    newQAndA match {
+      case QuestionAndAnnotation(id, questionText, meta, answers, newAnnotations) =>
+        <question>
+          {questionText}
+          {meta}
+          {answers}
+          {newAnnotations}
+        </question> % Attribute (None, "id", Text(id), Null)
+    }
+  }
+
+
+  def apply(xmlWClues: Node, maxHits: Int): Seq[Elem] = {
+    (xmlWClues \\ "question") map (extractQuestionAndAnnotation) map (annotateWDocs(maxHits,_)) map (formatInXML)
   }
 }
 
-/**
- * SearchDocument クラスで使うもろもろの処理をまとめたオブジェクト
- */
-object SearchDocument {
+
+
+object Indexing {
   /**
    * lucene の Analyzer を作る
    * @return
@@ -122,15 +177,6 @@ object SearchDocument {
     normalized_lines.filter(_.nonEmpty).mkString("\n")
   }
 
-  /**
-   * Create index files from RITE-VAL style documents
-   * Assuming the following structure
-   * <page><title>...</title><id>...</id><text>...</text>
-   * @param target_file_names
-   * @param index_dir_name
-   * @param document_cdb_name
-   * @return
-   */
   /*
   def makeIndexOnFile(target_file_names: Array[String], index_dir_name: String, document_cdb_name: String): Directory = {
     val index_dir = FSDirectory.open(new File(index_dir_name))
@@ -148,29 +194,28 @@ object SearchDocument {
    * @param target_file_names
    * @return
    */
-  def makeIndexOnMemory(target_file_names: Array[String]): (Directory, Map[String, Elem]) = {
+  def makeIndexOnMemory(target_file_names: List[File]): (Directory, Map[String, Elem]) = {
     val index_dir = new RAMDirectory
     val documents = makeIndexMain(target_file_names, index_dir)
     (index_dir, documents.toMap)
   }
 
-  /**
-   * インデックスを作るメインプログラム
-   * @param target_file_names
-   * @param index_dir
-   * @return
-   */
-  private def makeIndexMain(target_file_names: Array[String], index_dir: Directory): Array[(String, Elem)] = {
+
+  private def makeIndexMain(knowledgeFiles: List[File], indexDir: Directory): Array[(String, Elem)] = {
+//    val debugList = List("/home/wailoktam/qa/input/knowledge/rite2-ja-textbook.xml","/home/wailoktam/qa/input/knowledge/riteval-ja-textbook2.xml", "/home/wailoktam/qa/input/knowledge/wiki_00")
     val analyzer = makeAnalyzer()
     val config = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
     config.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
     config.setSimilarity(new SimilarityWithConstantTF)
-    val writer = new IndexWriter(index_dir, config) // overwrite existing index
+    val writer = new IndexWriter(indexDir, config) // overwrite existing index
     var id = 0
     val documents: Array[(String, Elem)] =
-      (for (target_file_name <- target_file_names) yield {
-        val target_xml = XML.loadFile(target_file_name)
-        // each <p> as a document
+//      (for (target_file_name <- target_file_names) yield {
+      (for (knowledgeFile <- knowledgeFiles) yield {
+
+        System.err.println(s"kb path: ${knowledgeFile.getAbsolutePath()}")
+        val target_xml = XML.loadFile(knowledgeFile.getAbsolutePath())
+        // each <p> as a doc
         /*
         (for (p <- target_xml \\ "p") yield {
           //if (p.text != normalize(p.text)) println(p.text + "\n\t->" + normalize(p.text))
@@ -212,28 +257,45 @@ object SearchDocument {
   }
 }
 
+
+
 /**
  * 文書検索を試すプログラム
  */
-object SearchTest {
+object SearchDocument {
+
+  def getListOfFiles(dir: String):List[File] = {
+    val d = new File(dir)
+    if (d.exists && d.isDirectory) {
+      d.listFiles.filter(_.isFile).toList
+    } else {
+      List[File]()
+    }
+  }
+
   def main(args: Array[String]): Unit = {
+    if (args.length < 3) {
+      System.err.println("Usage: scala qa.main.ja.SearchDocument KB_PATH INPUT_XML OUTPUT_XML")
+      System.exit(1)
+    }
     // create index
-    val target_files = Array("input/textbooks/rite2-ja-textbook.xml",
-      "input/textbooks/riteval-ja-textbook2.xml", "input/wiki/wiki_00")
+    val kb_files = getListOfFiles(args(0))
     //    val documents_dir = "src/main/resources/ja/Documents"
     //    val index_dir = documents_dir + "/index"
     //    val cdb_file = documents_dir + "/documents.cdb"
     //    new File(index_dir).mkdirs()
     println("Creating index")
     //SearchDocument.makeIndexOnFile(target_files, index_dir, cdb_file)
-    val (index, documents) = SearchDocument.makeIndexOnMemory(target_files)
+    val (index, documents) = Indexing.makeIndexOnMemory(kb_files)
     println("done")
     // try search
     val search = new SearchDocument(index, documents)
-    val results = search("猫舌", 10)
-    //    val results = search("世界で初めて原子爆弾が投下された都市は", 10)
-    for (result <- results) {
-      println("%s %s: %f".format(result.id, result.text, result.score))
-    }
+    val elems = search(XMLLoaderIgnoringDTD.loadFile(args(1)),10)
+    XML.save(args(2), <questions>
+      {for (elem <- elems) yield {
+        elem
+      }}
+    </questions>, "UTF-8")
   }
 }
+

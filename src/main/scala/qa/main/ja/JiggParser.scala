@@ -1,6 +1,3 @@
-// Wrapper for Juman/KNP
-// KNP.parse parses a text into KNP parse trees （KNP解析木)
-
 package qa.main.ja
 
 import scala.collection.immutable.ListMap
@@ -32,18 +29,17 @@ object QuestionTypeQ1000 extends Enumeration {
   = Value
 }
 
-case class Clue(headPred: String,
-                deps: List[String],
-                parse: String)
+
 
 case class Question(id: String, // 回答欄ID
                     questionType: QuestionTypeQ1000.Value, // 問題文のタイプ
                     parses: Array[Elem],
-                    arraryOfClues: Array[Clue],
+//                    arraryOfClues: Array[Clue],
                     questionText: NodeSeq,
 //                    answerNumber: Int,
                     meta: NodeSeq,
-                    answers: NodeSeq)
+                    answers: NodeSeq
+                     )
 
 object ExtractQuestionsQ1000 {
   /**
@@ -87,86 +83,6 @@ object ExtractQuestionsQ1000 {
     }
   }
 
-  def predIsHead(parseXML:Node, headId: String):Boolean = {
-    if ((parseXML \\ "@predicate").text == headId) true
-    else false
-  }
-
-  def argIsHead(parseXML:Node, altHeadIds: Seq[String]):Boolean ={
-    val altHeadIdsRe = altHeadIds.mkString("|").r
-    (parseXML \\ "@argument").text match  {
-      case altHeadRe => true
-      case _ => false
-    }
-  }
-
-  def findIdOfGivenHead(node: Node, givenHead:String):Boolean = {
-    val lexemeExtractorRe = """.*?<正規化代表表記:(.+?)/.+>.*""".r
-    System.err.println(s"givenHead: ${givenHead}")
-    (node \\ "@features").text match {
-      case lexemeExtractorRe(lexeme) if (lexeme == givenHead) => true
-      case _ => false
-    }
-  }
-
-  def predOrArgIsHead(parseXML:Node, headId: String, altHeadIds: Seq[String]): Boolean = {
-    if ((predIsHead(parseXML, headId) == true) || (argIsHead(parseXML, altHeadIds)==true))
-      true
-    else false
-  }
-
-  def findLexemebyId(id:String, parseXML:Node):String = {
-    val lexemeExtractorRe = """.*?<正規化代表表記:(.+?)/.+>.*""".r
-    ((parseXML \\ "basicPhrase").find(n=> (n\"@id").text == id).getOrElse(<dummy></dummy>)\\"@features").text match {
-      case lexemeExtractorRe(lexeme) => {
-        System.err.println(s"headPredlexeme: ${lexeme}")
-        lexeme
-      }
-      case _ => {
-        System.err.println(s"failedHeadPredLexeme: ${parseXML}")
-        System.err.println(s"failedHeadPredLexeme: ${(parseXML \\ "basicPhrase").find(n=> (n\"@id").text == id)}")
-        ""
-      }
-    }
-  }
-
-
-
-  def findLexemebyAltId(altId:String, parseXML:Node):String ={
-    val lexemes = (parseXML \\ "coreference")filter{n=>(n\\"@id").text==altId}map(n=> (n\\"@basicPhrases").text )map(s=>findLexemebyId(s,parseXML))
-    if (lexemes.length == 1) lexemes.head
-    else ""
-  }
-
-  def makeClue(semRels:Seq[Node], parseXML:Node): Array[Clue] ={
-    var clueMap = collection.mutable.Map[String, List[String]]()
-    for (semRel <- semRels) yield {
-      if (clueMap.contains((semRel \\ "@predicate" ).text) == false){
-        clueMap((semRel\\"@predicate").text) = List ((semRel\\"@argument").text)
-      }
-      else clueMap((semRel\\"@predicate").text) = ((semRel\\"@argument").text)::(clueMap((semRel \\  "@predicate").text))
-    }
-    clueMap.map(t=>Clue(findLexemebyId(t._1,parseXML),t._2.map(s=>findLexemebyAltId(s,parseXML)),(parseXML\\"sentence").text)).toArray
-  }
-
-
-
-
-  /**
-   * using meta data to determine clues
-   */
-
-
-
-  def extractCluesQ1000(questionXML: Node, parses: Array[Elem]): Array[Clue] = {
-    val clues = for (parse <- parses) yield {
-    val headId =  (((parse \\ "basicPhrase").find(n=>findIdOfGivenHead(n,(questionXML \\ "B7").text))).getOrElse(<dummy></dummy>)\\"@id").text
-    val altHeadIds = (parse \\ "coreference") filter { n => (n \\ "@basicPhrases").text == headId } map (n => (n \\ "@id").text)
-    System.err.println(s"altheadId: ${altHeadIds}")
-    makeClue((parse \\ "predicateArgumentRelation") filter (n => predOrArgIsHead(n, headId, altHeadIds)), parse)
-    }
-    clues.flatten
-  }
 
 
   def countAnswerNoQ1000(questionXML: Node): Int = {
@@ -188,7 +104,7 @@ object ExtractQuestionsQ1000 {
     Question((questionXML \ "@id").text,
       determineQuestionTypeQ1000(questionXML, parserPath),
       parses,
-      extractCluesQ1000(questionXML,parses),
+//      extractCluesQ1000(questionXML,parses),
       questionXML \\ "text",
       //      countAnswerNoQ1000(questionXML),
       questionXML \\ "meta",
@@ -210,23 +126,21 @@ object ExtractQuestionsQ1000 {
 
   def formatInXML(question: Question):Elem ={
     question match {
-      case Question(id,questionType,parses,arrayOfClues,questionText,meta,answers) =>
+      case Question(id,questionType,parses,questionText,meta,answers) =>
         <question id={id}>
           {questionText}
           {meta}
           {answers}
+          <annotations>
           <annotation type="juman/knp" annotator="JiggParser">
           <questionType>{questionType}</questionType>
           <parses>{for (parse <- parses) yield <parse>
             {parse}
             </parse>}
           </parses>
-          <clues>
-            {for (clue <- arrayOfClues) yield <clue>
-            {clue}
-          </clue>}
-          </clues>
           </annotation>
+          </annotations>
+
         </question>
     }
   }
