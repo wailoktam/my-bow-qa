@@ -1,3 +1,5 @@
+/**
+
 package qa.main.ja
 import scala.xml._
 
@@ -88,10 +90,11 @@ class Solver(val parser: JiggParser, val search: SearchDocument, val scoreThresh
 
   def apply(question: Question): Elem = {
     question match {
-      case Question(id, questionType, parses, arrayOfClues, questionText, meta, answers) =>
+      case Question(id, questionType, parses, questionText, meta, answers) =>
         var hitsFrSameClue = new Array[SearchResult](1)
         var hitsFrSameClueWMaxScore = new Array[SearchResult](1)
         var counter: Int = 0
+        /**
         for (clue <- arrayOfClues) yield {
           hitsFrSameClue = questionType match {
             case QuestionTypeQ1000.where =>
@@ -113,7 +116,7 @@ class Solver(val parser: JiggParser, val search: SearchDocument, val scoreThresh
           }
           counter += 1
         }
-
+*/
         <question id={ id }>
           { questionText }
           { answers }
@@ -130,3 +133,4 @@ class Solver(val parser: JiggParser, val search: SearchDocument, val scoreThresh
   }
 
 }
+*/
