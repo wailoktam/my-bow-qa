@@ -2,6 +2,7 @@ package qa.main.ja
 
 import java.io.File
 import java.io.StringReader
+import org.apache.commons.lang3.StringEscapeUtils
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer
 import org.apache.lucene.document._
@@ -16,6 +17,7 @@ import org.apache.lucene.search.similarities._
 import org.apache.lucene.util.Version
 import scala.xml.{ XML, Elem }
 import scala.xml.factory.XMLLoader
+import scala.io.Source
 
 import scala.xml.{Document=>_,_}
 
@@ -177,7 +179,83 @@ object Indexing {
     normalized_lines.filter(_.nonEmpty).mkString("\n")
   }
 
-  /*
+
+  def cleanFile(fileName:String):Array[String] = {
+    val tagRe = """<\/?doc.*?>""".r
+    val bufferedSource = Source.fromFile(fileName)
+    val lines = bufferedSource.getLines.toArray
+//    System.err.println(s"linesb4: ${lines.mkString}")
+//    System.err.println(s"linesLength: ${Source.fromFile(fileName).getLines.length}")
+//    System.err.println(s"linesb4: ${lines}")
+    val outLines = new Array[String](lines.length)
+//    for (line <- lines) yield {
+    for ((line,lineNo) <- lines.zipWithIndex) yield {
+//      System.err.println(s"lineb4: ${line}")
+      if (tagRe.findFirstIn(line)!=None)
+        {
+//          System.err.println(s"hit line: ${line}")
+          outLines(lineNo) = line
+        }
+      else
+        {
+//          System.err.println(s"miss line: ${line}")
+          outLines(lineNo) = StringEscapeUtils.escapeXml11(line)
+        }
+    }
+    bufferedSource.close
+    outLines
+  }
+
+
+
+
+  private def makeIndexMain(knowledgeFiles: Array[String], indexDir: Directory): Array[(String, Elem)] = {
+//    val debugList = List("/home/wailoktam/qa/input/knowledge/rite2-ja-textbook.xml","/home/wailoktam/qa/input/knowledge/riteval-ja-textbook2.xml", "/home/wailoktam/qa/input/knowledge/wiki_00")
+    val analyzer = makeAnalyzer()
+    val config = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
+    config.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
+    config.setSimilarity(new SimilarityWithConstantTF)
+    val writer = new IndexWriter(indexDir, config) // overwrite existing index
+    var id = 0
+    for (knowledgeFile <- knowledgeFiles) yield {
+      System.err.println(s"preprocessing file: ${knowledgeFile}")
+      val contentToWrite = "<file>\n" + cleanFile(knowledgeFile).mkString + "</file>"
+      val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(knowledgeFile)))
+      bw.write(contentToWrite)
+      bw.close()
+    }
+    val documents: Array[(String, Elem)] =
+      (for (knowledgeFile <- knowledgeFiles) yield {
+          for (doc <- XML.loadFile(knowledgeFile) \\ "doc") yield {
+            val id = (doc \ "@id").text
+//            System.err.println(s"id: ${id}")
+            val title = (doc \ "@title").text
+//            System.err.println(s"title: ${title}")
+            val text = doc.text
+//            System.err.println(s"text: ${text}")
+            val document = new Document()
+            document.add(new StringField("id", id, Store.YES))
+            document.add(new TextField("text", new StringReader(title + text)))
+            writer.addDocument(document)
+            val xml_doc = <page><title>{ title }</title><text>{ text }</text></page>
+            id -> xml_doc
+          }
+      }).flatten.toArray
+    writer.close()
+    documents
+  }
+
+  def recursiveListFiles(f: File): Array[File] = {
+    val these = f.listFiles
+    these ++ these.filter(_.isDirectory).flatMap(recursiveListFiles)
+  }
+
+
+  def makeFileList(dirName:String):Array[String]={
+    recursiveListFiles(new File(dirName)).filter(_.isFile).map(_.getAbsolutePath)
+  }
+
+/**
   def makeIndexOnFile(target_file_names: Array[String], index_dir_name: String, document_cdb_name: String): Directory = {
     val index_dir = FSDirectory.open(new File(index_dir_name))
     val documents = makeIndexMain(target_file_names, index_dir)
@@ -189,104 +267,36 @@ object Indexing {
   }
 */
 
-  /**
-   * Create index on memory from RITE-VAL style documents
-   * @param target_file_names
-   * @return
-   */
-  def makeIndexOnMemory(target_file_names: List[File]): (Directory, Map[String, Elem]) = {
-    val index_dir = new RAMDirectory
-    val documents = makeIndexMain(target_file_names, index_dir)
+
+  def apply(dirName:String):(Directory, Map[String, Elem]) = {
+    val index_dir = FSDirectory.open(new File("wikiIndex"))
+    val documents = makeIndexMain(makeFileList(dirName), index_dir)
     (index_dir, documents.toMap)
-  }
-
-
-  private def makeIndexMain(knowledgeFiles: List[File], indexDir: Directory): Array[(String, Elem)] = {
-//    val debugList = List("/home/wailoktam/qa/input/knowledge/rite2-ja-textbook.xml","/home/wailoktam/qa/input/knowledge/riteval-ja-textbook2.xml", "/home/wailoktam/qa/input/knowledge/wiki_00")
-    val analyzer = makeAnalyzer()
-    val config = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
-    config.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
-    config.setSimilarity(new SimilarityWithConstantTF)
-    val writer = new IndexWriter(indexDir, config) // overwrite existing index
-    var id = 0
-    val documents: Array[(String, Elem)] =
-//      (for (target_file_name <- target_file_names) yield {
-      (for (knowledgeFile <- knowledgeFiles) yield {
-
-        System.err.println(s"kb path: ${knowledgeFile.getAbsolutePath()}")
-        val target_xml = XML.loadFile(knowledgeFile.getAbsolutePath())
-        // each <p> as a doc
-        /*
-        (for (p <- target_xml \\ "p") yield {
-          //if (p.text != normalize(p.text)) println(p.text + "\n\t->" + normalize(p.text))
-          val text = normalize(p.text)
-          if (text.nonEmpty) {
-            val idstr = id.toString
-            val document = new Document()
-            document.add(new StringField("id", idstr, Store.YES))
-            document.add(new TextField("text", new StringReader(text)))
-            writer.addDocument(document)
-            val xml_doc = <page><title></title><text>{ text }</text></page>
-            //println(xml_doc)
-            id += 1
-            Some(idstr -> xml_doc)
-          } else
-            None
-        }).flatten
-        */
-        // each <page> as a document
-
-        for (page <- target_xml \\ "page") yield {
-          val id = (page \ "id").text
-          val title = (page \ "title").text
-          val text = (page \ "text").text
-          //println(title)
-          val document = new Document()
-          document.add(new StringField("id", id, Store.YES))
-          document.add(new TextField("text", new StringReader(title + text)))
-          //document.add(new TextField("text", new StringReader(text)))
-          writer.addDocument(document)
-          val xml_doc = <page><title>{ title }</title><text>{ text }</text></page>
-          //println(xml_doc)
-          id -> xml_doc
-        }
-
-      }).flatten.toArray
-    writer.close()
-    documents
   }
 }
 
 
 
-/**
- * 文書検索を試すプログラム
- */
 object SearchDocument {
 
-  def getListOfFiles(dir: String):List[File] = {
-    val d = new File(dir)
-    if (d.exists && d.isDirectory) {
-      d.listFiles.filter(_.isFile).toList
-    } else {
-      List[File]()
-    }
-  }
 
   def main(args: Array[String]): Unit = {
     if (args.length < 3) {
-      System.err.println("Usage: scala qa.main.ja.SearchDocument KB_PATH INPUT_XML OUTPUT_XML")
+      System.err.println("Usage: scala qa.main.ja.SearchDocument KB_DIR INPUT_XML OUTPUT_XML")
       System.exit(1)
     }
     // create index
-    val kb_files = getListOfFiles(args(0))
+
+
+
+//    val kb_files = recursiveListFiles(new File(args(0))).filter(_.isFile)
     //    val documents_dir = "src/main/resources/ja/Documents"
     //    val index_dir = documents_dir + "/index"
     //    val cdb_file = documents_dir + "/documents.cdb"
     //    new File(index_dir).mkdirs()
     println("Creating index")
     //SearchDocument.makeIndexOnFile(target_files, index_dir, cdb_file)
-    val (index, documents) = Indexing.makeIndexOnMemory(kb_files)
+    val (index, documents) = Indexing(args(0))
     println("done")
     // try search
     val search = new SearchDocument(index, documents)
