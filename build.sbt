@@ -10,6 +10,10 @@ sbtVersion := "0.13.8"
 
 javaOptions += "-Xmx3G"
 
+fork := true
+
+resolvers += DefaultMavenRepository
+
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.0.1",
   "org.scalatest" %% "scalatest" % "2.1.3" % "test",
@@ -17,8 +21,10 @@ libraryDependencies ++= Seq(
   "org.apache.lucene" % "lucene-queryparser" % "4.10.0",
   "org.apache.lucene" % "lucene-analyzers-common" % "4.10.0",
   "org.apache.lucene" % "lucene-analyzers-kuromoji" % "4.10.0",
-  "com.ibm.icu" % "icu4j" % "55.1"
+  "com.ibm.icu" % "icu4j" % "55.1",
+  "org.apache.commons" % "commons-lang3" % "3.4"
 ).map(_ withSources() withJavadoc())
+
 
 // This settings is from plugin "sbt-start-script", which makes task "start-script" available
 // "start-script" creates a script "target/start" for running the application without sbt

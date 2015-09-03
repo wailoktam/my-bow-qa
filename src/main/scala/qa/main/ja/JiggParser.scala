@@ -29,17 +29,14 @@ object QuestionTypeQ1000 extends Enumeration {
   = Value
 }
 
-
-
 case class Question(id: String, // 回答欄ID
                     questionType: QuestionTypeQ1000.Value, // 問題文のタイプ
                     parses: Array[Elem],
-//                    arraryOfClues: Array[Clue],
+                    //                    arraryOfClues: Array[Clue],
                     questionText: NodeSeq,
-//                    answerNumber: Int,
+                    //                    answerNumber: Int,
                     meta: NodeSeq,
-                    answers: NodeSeq
-                     )
+                    answers: NodeSeq)
 
 object ExtractQuestionsQ1000 {
   /**
@@ -60,12 +57,12 @@ object ExtractQuestionsQ1000 {
     val dimensionRe = """(数|体積|長さ|温度|頻度)""".r
     val timeExprRe = """(日付表現)""".r
     (questionXML \\ "B1").text match {
-      case whereRe(questionWord) => QuestionTypeQ1000.where
-      case howManyRe(questionWord) => QuestionTypeQ1000.how_many
-      case whenRe(questionWord) => QuestionTypeQ1000.when
-      case whatKindOfRe(questionWord) => QuestionTypeQ1000.what_kind_of
-      case isRe(questionWord) => QuestionTypeQ1000.what
-      case whatRe(questionWord) => QuestionTypeQ1000.what
+      case whereRe(questionWord)       => QuestionTypeQ1000.where
+      case howManyRe(questionWord)     => QuestionTypeQ1000.how_many
+      case whenRe(questionWord)        => QuestionTypeQ1000.when
+      case whatKindOfRe(questionWord)  => QuestionTypeQ1000.what_kind_of
+      case isRe(questionWord)          => QuestionTypeQ1000.what
+      case whatRe(questionWord)        => QuestionTypeQ1000.what
       case whatNotUnitRe(questionWord) => QuestionTypeQ1000.what
       case howManyUnitRe(questionWord) =>
         if (dimensionRe.findFirstMatchIn((questionXML \\ "D3").text) != None)
@@ -78,12 +75,10 @@ object ExtractQuestionsQ1000 {
         else
           QuestionTypeQ1000.how_many
       case howManyPplRe(questionWord) => QuestionTypeQ1000.how_many
-      case whoRe(questionWord) => QuestionTypeQ1000.who
-      case _ => QuestionTypeQ1000.other
+      case whoRe(questionWord)        => QuestionTypeQ1000.who
+      case _                          => QuestionTypeQ1000.other
     }
   }
-
-
 
   def countAnswerNoQ1000(questionXML: Node): Int = {
     var increment = 0
@@ -93,7 +88,7 @@ object ExtractQuestionsQ1000 {
     increment
   }
 
-  def parseQuestion(questionXML: Node,parserPath: String):Array[Elem]={
+  def parseQuestion(questionXML: Node, parserPath: String): Array[Elem] = {
     val jigg = new JiggParser(parserPath)
     val parses = jigg.parse((questionXML \\ "text").text)
     parses
@@ -104,7 +99,7 @@ object ExtractQuestionsQ1000 {
     Question((questionXML \ "@id").text,
       determineQuestionTypeQ1000(questionXML, parserPath),
       parses,
-//      extractCluesQ1000(questionXML,parses),
+      //      extractCluesQ1000(questionXML,parses),
       questionXML \\ "text",
       //      countAnswerNoQ1000(questionXML),
       questionXML \\ "meta",
@@ -124,23 +119,25 @@ object ExtractQuestionsQ1000 {
     boolOut
   }
 
-  def formatInXML(question: Question):Elem ={
+  def formatInXML(question: Question): Elem = {
     question match {
-      case Question(id,questionType,parses,questionText,meta,answers) =>
-        <question id={id}>
-          {questionText}
-          {meta}
-          {answers}
+      case Question(id, questionType, parses, questionText, meta, answers) =>
+        <question id={ id }>
+          { questionText }
+          { meta }
+          { answers }
           <annotations>
-          <annotation type="juman/knp" annotator="JiggParser">
-          <questionType>{questionType}</questionType>
-          <parses>{for (parse <- parses) yield <parse>
-            {parse}
-            </parse>}
-          </parses>
-          </annotation>
+            <annotation type="juman/knp" annotator="JiggParser">
+              <questionType>{ questionType }</questionType>
+              <parses>
+                {
+                  for (parse <- parses) yield <parse>
+                                                { parse }
+                                              </parse>
+                }
+              </parses>
+            </annotation>
           </annotations>
-
         </question>
     }
   }
@@ -154,7 +151,6 @@ object ExtractQuestionsQ1000 {
 
 // Interface to run Jigg
 class JiggParser(val parserPath: String) {
-
 
   def normalize(text: String): String = {
     val chars =
@@ -177,26 +173,19 @@ class JiggParser(val parserPath: String) {
     normalized_text
   }
 
-
-
-
-
-
-  def runJigg(parserPath: String, inputStringParam: String):Elem  = {
+  def runJigg(parserPath: String, inputStringParam: String): Elem = {
     val inputString = "echo " + inputStringParam
-    val jiggCommand = "java -cp "+ parserPath + " jigg.pipeline.Pipeline -annotators ssplit,juman,knp"
+    val jiggCommand = "java -cp " + parserPath + " jigg.pipeline.Pipeline -annotators ssplit,juman,knp"
     System.err.println(s"jiggComman: ${inputString}|${jiggCommand}")
     val jiggOutput = XMLLoaderIgnoringDTD.loadString((inputString #| jiggCommand).!!)
     jiggOutput
   }
 
-
-
   def parse(text: String): Array[Elem] = {
     // sentence spliting
     // currently, newline and "。" is regarded as sentence boundaries
     val sentences: Array[String] = normalize(text).split("""\n+|。\n*""").map(_ + "。")
-    val jigg_outputs = sentences map {k=>runJigg(parserPath,k)}
+    val jigg_outputs = sentences map { k => runJigg(parserPath, k) }
     jigg_outputs
   }
 }
@@ -209,10 +198,12 @@ object JiggParser {
     }
     val elems = ExtractQuestionsQ1000(XMLLoaderIgnoringDTD.loadFile(args(1)), args(0))
     XML.save(args(2), <questions>
-      {for (elem <- elems) yield {
-        elem
-      }}
-      </questions>, "UTF-8")
+                        {
+                          for (elem <- elems) yield {
+                            elem
+                          }
+                        }
+                      </questions>, "UTF-8")
   }
 }
 
