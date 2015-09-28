@@ -19,12 +19,13 @@ all:
 	wget ${SBTURL}${SBT}
 	tar -xvzf ${SBT}
 	./sbt/bin/sbt compile
+	./sbt/bin/sbt assembly
 
 .PHONY: run-indexing 
 run-indexing:
-#	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
-#	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
-#	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
+	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
+	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
+	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
 	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI4) $(INDEX)
 
 .PHONY: run-parsing-question

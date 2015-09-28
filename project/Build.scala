@@ -1,12 +1,30 @@
-import sbt._
-import sbt.Keys._
-import java.io.{File, FileInputStream, BufferedInputStream, ByteArrayOutputStream, ObjectOutputStream}
+import java.io.File
+
+import org.apache.commons.io.FileUtils.{copyURLToFile, deleteQuietly}
 import org.rauschig.jarchivelib.ArchiverFactory
-import org.apache.commons.compress.compressors.CompressorStreamFactory
-import org.apache.commons.io.FileUtils.deleteQuietly
-import org.apache.commons.io.FileUtils.copyURLToFile
+import sbt._
+
+
 
 object qaBuild extends Build {
+
+  val resourcePacked = settingKey[File]("Directory in which packed resources are located.")
+
+  val dataDirectory = settingKey[File]("Directory in which data os located.")
+
+  val unpackResources = taskKey[Unit]("Unpack resources.")
+
+  val wiki1File = settingKey[File]("Location of unpacked wiki files part 1")
+
+  val wiki2File = settingKey[File]("Location of unpacked wiki files part 2")
+
+  val wiki3File = settingKey[File]("Location of unpacked wiki files part 3")
+
+  val wiki4File = settingKey[File]("Location of unpacked wiki files part 4")
+
+  val indexFile = settingKey[File]("Location of index created for Wiki")
+
+
 
   // need to download a file if it does not exist
   def needToDownload(destinationFile: File)(implicit logger: Logger) =
@@ -47,4 +65,20 @@ object qaBuild extends Build {
         throw e
     }
   }
+
+  def indexWiki(wikiFile: File, indexFile: File)(implicit logger: Logger) {
+    val scalacCommand = "scalac " + "src/main/scala/Indexing.scala"
+//    logger.error(scalacCommand.!!)
+    val scalaCommand = "scala " + "qa.main.ja.Indexing.scala " + wikiFile + " " + indexFile
+//     logger.error(scalaCommand.!!)
+  }
+
+  def wrapper(cleanTool: File, preProcessedFile: File, processedFile: File)(implicit logger: Logger) {
+    if (!processedFile.exists()) {
+      val pythonCommand = "python " + cleanTool + " -o " + processedFile + " " + preProcessedFile
+      logger.error(pythonCommand.!!)
+    }
+  }
+
 }
+

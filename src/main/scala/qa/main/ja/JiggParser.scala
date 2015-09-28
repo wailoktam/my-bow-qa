@@ -1,15 +1,8 @@
 package qa.main.ja
 
-import scala.collection.immutable.ListMap
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
-import com.ibm.icu.text.Transliterator
-import scala.util.matching.Regex
-import sys.process._
-import java.io.File
-import scala.xml.factory.XMLLoader
+import scala.sys.process._
 import scala.xml._
-import scala.io.Source
+import scala.xml.factory.XMLLoader
 
 object XMLLoaderIgnoringDTD extends XMLLoader[Elem] {
   override def parser: SAXParser = {
@@ -109,7 +102,6 @@ object ExtractQuestionsQ1000 {
   def safeMod5(stringIn: String): Boolean = {
     var boolOut = true
     val idRe = """LC-ECQA2002-(\d+)-01""".r
-
     stringIn match {
       case idRe(id) =>
         System.err.println(s"mod5: ${id.toInt % 5}, ${id.toInt}")
@@ -143,7 +135,8 @@ object ExtractQuestionsQ1000 {
   }
 
   def apply(inputXML: Node, parserPath: String): Array[Elem] = {
-    val totalQuestions = (inputXML \\ "question").filter(e => (safeMod5((e \ "@id").text) == true)).toArray
+    //    val totalQuestions = (inputXML \\ "question").filter(e => (safeMod5((e \ "@id").text) == true)).toArray
+    val totalQuestions = (inputXML \\ "question").toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
     totalQuestions map (q => makeQuestionQ1000(q, parserPath)) map (formatInXML)
   }

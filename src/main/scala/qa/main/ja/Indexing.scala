@@ -1,28 +1,18 @@
 package qa.main.ja
 
 import java.io.File
-import java.io.StringReader
 import org.apache.commons.lang3.StringEscapeUtils
-import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer
-import org.apache.lucene.document._
-import org.apache.lucene.document._
 import org.apache.lucene.document.Field.Store
-import org.apache.lucene.queryparser.classic.MultiFieldQueryParser
-import org.apache.lucene.queryparser.classic.QueryParser
+import org.apache.lucene.document._
 import org.apache.lucene.index._
-import org.apache.lucene.store._
-import org.apache.lucene.search._
 import org.apache.lucene.search.similarities._
 import org.apache.lucene.util.Version
-import scala.xml.{ XML, Elem }
-import scala.xml.factory.XMLLoader
+import org.apache.lucene.store._
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.xml.pull._
-import java.io.FileOutputStream
-import scala.collection.mutable.ArrayBuffer
-
-import scala.xml.{ Document => _, _ }
+import scala.xml.{ Document => _, XML, _ }
 
 //case class Doc(id: String, title: String, text: String, score: Double)
 
@@ -37,9 +27,10 @@ object pullAndAdd {
    */
 
   def attrsToString(attrs: MetaData) = {
+    val nonDocTagRe = """<(?!\/?doc(?=>|\s.*>))\/?.*?>""".r
     attrs.length match {
       case 0 => ""
-      case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(m.value.toString) + "'").reduceLeft(_ + _)
+      case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(nonDocTagRe.replaceAllIn(m.value.toString, "")) + "'").reduceLeft(_ + _)
     }
   }
 
@@ -69,7 +60,7 @@ object pullAndAdd {
     val xml = new XMLEventReader(Source.fromFile(xmlFile))
     var insideDoc = false
     var buf = ArrayBuffer[String]()
-    System.err.println(s"buf length: ${buf.length}")
+    //System.err.println(s"buf length: ${buf.length}")
     //    var idXmlPairs = ArrayBuffer[(String,Elem)]()
 
     for (event <- xml) {
@@ -136,6 +127,7 @@ class Indexing {
 
   def cleanFile(fileName: String): Array[String] = {
     val tagRe = """<\/?doc.*?>""".r
+    val nonDocTagRe = """<(?!\/?doc(?=>|\s.*>))\/?.*?>""".r
     val bufferedSource = Source.fromFile(fileName)
     val lines = bufferedSource.getLines.toArray
     //    System.err.println(s"linesb4: ${lines.mkString}")
@@ -149,7 +141,10 @@ class Indexing {
         //          System.err.println(s"hit line: ${line}")
         outLines(lineNo) = line
       } else {
-        //          System.err.println(s"miss line: ${line}")
+        //        if (nonDocTagRe.findFirstIn(line) != None) {
+        //          System.err.println(s"hit: ${line}")
+
+        //        }
         outLines(lineNo) = StringEscapeUtils.escapeXml11(line)
       }
     }
@@ -167,15 +162,15 @@ class Indexing {
     config.setSimilarity(new SimilarityWithConstantTF)
     val writer = new IndexWriter(indexDir, config) // overwrite existing index
     //    var id = 0
-    /**
-     * for (knowledgeFile <- knowledgeFiles) yield {
-     * System.err.println(s"preprocessing file: ${knowledgeFile}")
-     * val contentToWrite = "<file>\n" + cleanFile(knowledgeFile).mkString + "</file>"
-     * val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(knowledgeFile)))
-     * bw.write(contentToWrite)
-     * bw.close()
-     * }
-     */
+
+    for (knowledgeFile <- knowledgeFiles) yield {
+      System.err.println(s"preprocessing file: ${knowledgeFile}")
+      val contentToWrite = "<file>\n" + cleanFile(knowledgeFile).mkString + "</file>"
+      val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(knowledgeFile)))
+      bw.write(contentToWrite)
+      bw.close()
+    }
+
     knowledgeFiles.map(pullAndAdd(writer, _))
     //  val docXmlPairs = knowledgeFiles.map(pullAndAdd(writer,_)).flatten.toArray
     writer.close
@@ -232,11 +227,14 @@ class Indexing {
 
 object Indexing {
 
+  //  def main(args: Array[String]): Unit = {
   def main(args: Array[String]): Unit = {
+
     if (args.length < 2) {
       System.err.println("Usage: scala qa.main.ja.Indexing KB_DIR INDEX_DIR")
       System.exit(1)
     }
+
     // create index
 
     //    val kb_files = recursiveListFiles(new File(args(0))).filter(_.isFile)

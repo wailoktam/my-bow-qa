@@ -1,11 +1,12 @@
+package qa.main.ja
+
 import java.io.File
 
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.IndexSearcher
-import org.apache.lucene.store.{ FSDirectory, Directory }
-import qa.main.ja.{ SimilarityWithConstantTF, Indexing, XMLLoaderIgnoringDTD, QuestionAndAnnotation }
+import org.apache.lucene.store.{ Directory, FSDirectory }
 
 import scala.xml._
 

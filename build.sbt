@@ -1,4 +1,5 @@
 import scalariform.formatter.preferences._
+import AssemblyKeys._
 
 name := "qa"
 
@@ -13,6 +14,9 @@ javaOptions += "-Xmx3G"
 fork := true
 
 resolvers += DefaultMavenRepository
+
+assemblySettings
+
 
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.0.1",
@@ -47,3 +51,44 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(IndentSpaces, 2)
   .setPreference(IndentWithTabs, false)
 
+
+dataDirectory := file("~/data")
+
+wiki1File := (dataDirectory in Compile).value / "wiki1"
+
+wiki2File := (dataDirectory in Compile).value / "wiki2"
+
+wiki3File := (dataDirectory in Compile).value / "wiki3"
+
+wiki4File := (dataDirectory in Compile).value / "jawiki" / "4"
+
+indexFile := (resourceDirectory in Compile).value / "index"
+
+unpackResources := {
+  implicit val logger = streams.value.log
+  // `unpackArchive` and `downloadResource` are defined in project/Build.scala
+//  downloadResource(wiki1URL.value, wiki1Pack.value)
+//  downloadResource(wiki2URL.value, wiki2Pack.value)
+//  downloadResource(wiki3URL.value, wiki3Pack.value)
+//  downloadResource(wiki4URL.value, wiki4Pack.value)
+//  downloadResource(wikiExURL.value, wikiEx.value)
+//  cleanWiki(wikiEx.value, wiki1Pack.value, wiki1File.value)
+//  cleanWiki(wikiEx.value, wiki2Pack.value, wiki2File.value)
+//  cleanWiki(wikiEx.value, wiki3Pack.value, wiki3File.value)
+//  indexWiki(wiki4File.value, indexFile.value)
+}
+
+compile in Compile := {
+  unpackResources.value
+  (compile in Compile).value
+}
+
+
+
+//lazy val runWrapper = taskKey[Unit]("runWrapper")
+
+//fullRunTask(runWrapper, Runtime, "qa.main.ja.Wrapper", Def.setting{wiki4File.value}.toString,Def.setting{indexFile.value}.toString)
+
+//TaskKey[Unit]("myTask") := (runMain in Compile).toTask("Wrapper " + Def.setting{wiki4File.value}.toString + " " + Def.setting{indexFile.value}.toString).value
+
+//mainClass in (Compile, run) := Some("qa.main.ja.Wrapper")

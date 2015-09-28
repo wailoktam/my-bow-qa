@@ -1,16 +1,6 @@
 package qa.main.ja
 
-import scala.collection.immutable.ListMap
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
-import com.ibm.icu.text.Transliterator
-import scala.util.matching.Regex
-import sys.process._
-import java.io.File
-import scala.xml.factory.XMLLoader
-import scala.xml._
-import scala.xml.Null
-import scala.io.Source
+import scala.xml.{ Null, _ }
 
 case class Clue(headPred: String,
                 deps: List[String],
@@ -89,7 +79,8 @@ object ExtractClues {
         clueMap((semRel \\ "@predicate").text) = List((semRel \\ "@argument").text)
       } else clueMap((semRel \\ "@predicate").text) = ((semRel \\ "@argument").text) :: (clueMap((semRel \\ "@predicate").text))
     }
-    System.err.println(s"parseXMLsentence: ${(parseXML \\ "sentence").text}")
+
+    System.err.println(s"clueMap: ${clueMap.mkString}")
     clueMap.map(t => Clue(findLexemebyId(t._1, parseXML), t._2.map(s => findLexemebyAltId(s, parseXML)), (parseXML \\ "sentence").text.split('\n').map(_.trim.filter(_ >= ' ')).mkString)).toArray
   }
 
@@ -121,7 +112,9 @@ object ExtractClues {
           val headId = (((parse \\ "basicPhrase").find(n => findIdOfGivenHead(n, (meta \\ "B7").text))).getOrElse(<dummy></dummy>) \\ "@id").text
           val altHeadIds = (parse \\ "coreference") filter { n => (n \\ "@basicPhrases").text == headId } map (n => (n \\ "@id").text)
           System.err.println(s"altheadId: ${altHeadIds}")
-          makeClue((parse \\ "predicateArgumentRelation") filter (n => predOrArgIsHead(n, headId, altHeadIds)), parse)
+          if ((parse \\ "predicateArgumentRelation").length != 0)
+            makeClue((parse \\ "predicateArgumentRelation") filter (n => predOrArgIsHead(n, headId, altHeadIds)), parse)
+          else Array(Clue((meta \\ "B7").text, List[String](), (parse \\ "sentence").text))
         }
         System.err.println(s"clues content: ${clues}")
         System.err.println(s"clues flatten length: ${clues.flatten.length}")
