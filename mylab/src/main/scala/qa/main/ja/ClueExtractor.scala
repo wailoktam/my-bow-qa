@@ -1,6 +1,8 @@
 package qa.main.ja
 
+import scala.util.matching.Regex
 import scala.xml.{ Null, _ }
+import java.io._
 
 case class Clue(headPred: String,
                 deps: List[String],
@@ -46,6 +48,14 @@ object ExtractClues {
     }
   }
 
+  def findIdOfTopic(node: Node): Boolean = {
+    val topicIdentifierRe = """.*?(?<!準)主題表現.*""".r
+    (node \\ "@features").text match {
+      case topicIdentifierRe() => true
+      case _                   => false
+    }
+  }
+
   def predOrArgIsHead(parseXML: Node, headId: String, altHeadIds: Seq[String]): Boolean = {
     if ((predIsHead(parseXML, headId) == true) || (argIsHead(parseXML, altHeadIds) == true)) true
     else false
@@ -72,15 +82,25 @@ object ExtractClues {
     else ""
   }
 
-  def makeClue(semRels: Seq[Node], parseXML: Node): Array[Clue] = {
+  def makeClue(semRels: Seq[Node], parseXML: Node, altTopicIDs: Seq[String], bw: BufferedWriter): Array[Clue] = {
     var clueMap = collection.mutable.Map[String, List[String]]()
-    for (semRel <- semRels) yield {
+    bw.write("semRels:" + semRels.mkString + "\n")
+    System.err.println(s"semRels: ${semRels.mkString}")
+    bw.write("altTopicIDs:" + altTopicIDs.mkString + "\n")
+    System.err.println(s"altTopicIDs: ${altTopicIDs.mkString}")
+    bw.write("contained number:" + semRels.filter(n => altTopicIDs.contains((n \\ "@argument").text)).length + "\n")
+    System.err.println(s"contained number: ${semRels.filter(n => altTopicIDs.contains((n \\ "@argument").text)).length}")
+    for (semRel <- semRels.filter(n => altTopicIDs.contains((n \\ "@argument").text))) yield {
+      bw.write("altTopicIDs in for loop:" + altTopicIDs.mkString + "\n")
+      bw.write("semRel argument in for loop:" + (semRel \\ "@argument").text + "\n")
+      System.err.println(s"altTopicIDs in for loop: ${altTopicIDs.mkString}")
+      System.err.println(s"semRel argument in for loop: ${(semRel \\ "@argument").text}")
+      //    for (semRel <- semRels.filter(n=>n\\"@id" == (semRels.find(n=>altTopicIDs.contains(n \\ "argument"))) \\ "@id").text)) yield {
       if (clueMap.contains((semRel \\ "@predicate").text) == false) {
         clueMap((semRel \\ "@predicate").text) = List((semRel \\ "@argument").text)
       } else clueMap((semRel \\ "@predicate").text) = ((semRel \\ "@argument").text) :: (clueMap((semRel \\ "@predicate").text))
     }
 
-    System.err.println(s"clueMap: ${clueMap.mkString}")
     clueMap.map(t => Clue(findLexemebyId(t._1, parseXML), t._2.map(s => findLexemebyAltId(s, parseXML)), (parseXML \\ "sentence").text.split('\n').map(_.trim.filter(_ >= ' ')).mkString)).toArray
   }
 
@@ -105,16 +125,31 @@ object ExtractClues {
     }
   }
 
-  def annotateWClues(oldQAndA: QuestionAndAnnotation): QuestionAndAnnotation = {
+  def annotateWClues(oldQAndA: QuestionAndAnnotation, bw: BufferedWriter): QuestionAndAnnotation = {
     oldQAndA match {
       case QuestionAndAnnotation(id, questionText, meta, answers, oldAnnotations) => {
         val clues = for (parse <- oldAnnotations \\ "parse") yield {
-          val headId = (((parse \\ "basicPhrase").find(n => findIdOfGivenHead(n, (meta \\ "B7").text))).getOrElse(<dummy></dummy>) \\ "@id").text
-          val altHeadIds = (parse \\ "coreference") filter { n => (n \\ "@basicPhrases").text == headId } map (n => (n \\ "@id").text)
-          System.err.println(s"altheadId: ${altHeadIds}")
-          if ((parse \\ "predicateArgumentRelation").length != 0)
-            makeClue((parse \\ "predicateArgumentRelation") filter (n => predOrArgIsHead(n, headId, altHeadIds)), parse)
-          else Array(Clue((meta \\ "B7").text, List[String](), (parse \\ "sentence").text))
+          val topicId = (parse \\ "basicPhrase").collectFirst { case n if (findIdOfTopic(n)) => (n \\ "@id").text }
+          System.err.println(s"basicPhrase: ${(parse \\ "basicPhrase").mkString}")
+          //            System.err.println(s"topic: ${topicId.get}")
+          //          val headId = (((parse \\ "basicPhrase").find(n => findIdOfGivenHead(n, (meta \\ "B7").text))).getOrElse(<dummy></dummy>) \\ "@id").text
+          //          val altTopicIds = (parse \\ "coreference") filter { n => (n \\ "@basicPhrases").text == topicId.get } map (n => (n \\ "@id").text)
+          val altTopicIds = (parse \\ "coreference") collect { case n if (topicId != None && (n \\ "@basicPhrases").text == topicId.get) => n } map (n => (n \\ "@id").text)
+          bw.write("alTopicId:" + altTopicIds + "\n")
+          System.err.println(s"alTopicId: ${altTopicIds}")
+          if (altTopicIds.length != 0 && (parse \\ "predicateArgumentRelation").length != 0 && altTopicIds.toSet.intersect((parse \\ "predicateArgumentRelation").map(n => (n \\ "@argument").text).toSet) != Set())
+            makeClue((parse \\ "predicateArgumentRelation"), parse, altTopicIds, bw)
+          //            makeClue((parse \\ "predicateArgumentRelation") filter (n => predOrArgIsHead(n, headId, altHeadIds)), parse)
+          //          else Array(Clue((meta \\ "B7").text, List[String](), (parse \\ "sentence").text))
+          else {
+            Array(Clue("", List[String](), (parse \\ "sentence").text))
+          }
+        }
+        for (clue <- clues) yield {
+
+          bw.write("every clue content" + clue.mkString + "\n")
+          System.err.println(s"every clue content: ${clue.mkString}")
+
         }
         System.err.println(s"clues content: ${clues}")
         System.err.println(s"clues flatten length: ${clues.flatten.length}")
@@ -153,7 +188,10 @@ object ExtractClues {
           </annotations>
         QuestionAndAnnotation(id, questionText, meta, answers, newAnnotations)
       }
-      case _ => oldQAndA
+      case _ => {
+        System.err.println("shit\n")
+        oldQAndA
+      }
     }
   }
 
@@ -162,7 +200,10 @@ object ExtractClues {
    */
 
   def apply(questionXML: Node): Seq[Elem] = {
-    (questionXML \\ "question") map (extractQuestionAndAnnotation) map (annotateWClues) map (formatInXML)
+    val file = new File("bugInClueExtractor")
+    val bw = new BufferedWriter(new FileWriter(file))
+
+    (questionXML \\ "question") map (extractQuestionAndAnnotation) map (annotateWClues(_, bw)) map (formatInXML)
   }
 }
 

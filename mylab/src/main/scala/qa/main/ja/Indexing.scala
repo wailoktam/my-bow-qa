@@ -97,6 +97,16 @@ class SimilarityWithConstantTF extends DefaultSimilarity {
   //override def lengthNorm(state: FieldInvertState): Float = 1
 }
 
+class SimilarityWithConstantIDF extends DefaultSimilarity {
+  override def idf(freq: Long, numDocs: Long): Float = 1
+  //override def lengthNorm(state: FieldInvertState): Float = 1
+}
+
+class SimilarityWithConstantNOM extends DefaultSimilarity {
+  override def lengthNorm(state: FieldInvertState): Float = 1
+  //override def lengthNorm(state: FieldInvertState): Float = 1
+}
+
 class Indexing {
 
   /**

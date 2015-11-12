@@ -146,8 +146,10 @@ object ExtractQuestionsQ1000 {
 class JiggParser(val parserPath: String) {
 
   def normalize(text: String): String = {
+
+    val nbTxt = text.replaceAll("\uFEFF", "")
     val chars =
-      text.replaceAll("""[\t 　]+""", "") map { // スペースは削除
+      nbTxt.replaceAll("""[\t 　]+""", "") map { // スペースは削除
         // 半角を全角に変換
         c =>
           if ((('A' to 'Z') contains c) ||
@@ -170,14 +172,15 @@ class JiggParser(val parserPath: String) {
     val inputString = "echo " + inputStringParam
     val jiggCommand = "java -cp " + parserPath + " jigg.pipeline.Pipeline -annotators ssplit,juman,knp"
     System.err.println(s"jiggComman: ${inputString}|${jiggCommand}")
-    val jiggOutput = XMLLoaderIgnoringDTD.loadString((inputString #| jiggCommand).!!)
+    //    val jiggOutput = XMLLoaderIgnoringDTD.loadString((inputString #| jiggCommand).!!)
+    val jiggOutput = XML.loadString((inputString #| jiggCommand).!!)
     jiggOutput
   }
 
   def parse(text: String): Array[Elem] = {
     // sentence spliting
     // currently, newline and "。" is regarded as sentence boundaries
-    val sentences: Array[String] = normalize(text).split("""\n+|。\n*""").map(_ + "。")
+    val sentences: Array[String] = normalize(text).split("""\n+|？|。\n*""").map(_ + "。")
     val jigg_outputs = sentences map { k => runJigg(parserPath, k) }
     jigg_outputs
   }

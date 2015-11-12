@@ -1,9 +1,9 @@
 SBTURL := https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/
 SBT := sbt-0.13.9.tgz
 PACKED := packed
-JAWIKI1 := ~/data/jawiki/1
-JAWIKI2 := ~/data/jawiki/2
-JAWIKI3 := ~/data/jawiki/3
+#JAWIKI1 := ~/data/jawiki/1
+#JAWIKI2 := ~/data/jawiki/2
+#JAWIKI3 := ~/data/jawiki/3
 JAWIKI4 := ~/data/jawiki/4
 JAR := target/scala-2.11/qa-assembly-1.0.jar
 INDEX := index
@@ -23,9 +23,9 @@ all:
 
 .PHONY: run-indexing 
 run-indexing:
-	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
-	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
-	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
+#	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
+#	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
+#	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
 	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI4) $(INDEX)
 
 .PHONY: run-parsing-question
@@ -38,7 +38,7 @@ run-clue-extraction :
 
 .PHONY: run-search 
 run-search :
-	java -cp $(JAR) qa.main.ja.SearchDocument $(INDEX) $(INPUT2SEARCH) $(INPUT2ANSWER)
+	java -cp $(JAR) qa.main.ja.SearchDocument $(INDEX) $(INPUT2SEARCH) $(INPUT2ANSWER) 1 1.0 1.0
 
 .PHONY: run-answer 
 run-answer :

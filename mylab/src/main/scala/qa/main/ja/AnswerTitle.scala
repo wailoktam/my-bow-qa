@@ -1,6 +1,5 @@
 package qa.main.ja
 import scala.xml._
-import scala.xml.factory.XMLLoader
 
 object BaselineAnswering {
 
@@ -15,9 +14,7 @@ object BaselineAnswering {
             <annotation type="response" annotator="AnswerTitle">
               <responses>
                 {
-                  for (doc <- oldAnnotations \\ "doc") yield <response>
-                                                               { (doc \\ "dtitle").text }
-                                                             </response>
+                  for (doc <- oldAnnotations \\ "doc") yield <response>{ (doc \\ "dtitle").text.trim }</response>
                 }
               </responses>
             </annotation>
