@@ -1,5 +1,3 @@
-SBTURL := https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/
-SBT := sbt-0.13.9.tgz
 PACKED := packed
 #JAWIKI1 := ~/data/jawiki/1
 #JAWIKI2 := ~/data/jawiki/2
@@ -16,8 +14,6 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
 all:
-	wget ${SBTURL}${SBT}
-	tar -xvzf ${SBT}
 	./sbt/bin/sbt compile
 	./sbt/bin/sbt assembly
 
