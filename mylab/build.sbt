@@ -67,11 +67,11 @@ indexFile := (resourceDirectory in Compile).value / "index"
 
 unpackResources := {
   implicit val logger = streams.value.log
-  // `unpackArchive` and `downloadResource` are defined in project/Build.scala
+// `unpackArchive` and `downloadResource` are defined in project/Build.scala
 //  downloadResource(wiki1URL.value, wiki1Pack.value)
 //  downloadResource(wiki2URL.value, wiki2Pack.value)
 //  downloadResource(wiki3URL.value, wiki3Pack.value)
-//  downloadResource(wiki4URL.value, wiki4Pack.value)
+//    downloadResource(wiki4URL.value, wiki4Pack.value)
 //  downloadResource(wikiExURL.value, wikiEx.value)
 //  cleanWiki(wikiEx.value, wiki1Pack.value, wiki1File.value)
 //  cleanWiki(wikiEx.value, wiki2Pack.value, wiki2File.value)

@@ -1,9 +1,15 @@
-JAWIKI4URL := https://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles4.xml.bz2
+#SBTURL := https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/
+#SBT := sbt-0.13.9.tgz
+JAWIKI4URL := https://dumps.wikimedia.org/jawiki/latest
+JAWIKI4FILE := jawiki-latest-pages-articles4.xml.bz2
 PACKED := packed
-#JAWIKI1 := ~/data/jawiki/1
-#JAWIKI2 := ~/data/jawiki/2
-#JAWIKI3 := ~/data/jawiki/3
-JAWIKI4 := ~/data/jawiki/4
+JAWIKI1 := ~/data/jawiki/1
+JAWIKI2 := ~/data/jawiki/2
+JAWIKI3 := ~/data/jawiki/3
+JAWIKI4 := data/jawiki/4
+WIKITOOLURL := http://medialab.di.unipi.it/Project/SemaWiki/Tools
+WIKITOOLFILE := WikiExtractor.py
+WIKITOOL := tool
 JAR := target/scala-2.11/qa-assembly-1.0.jar
 INDEX := index
 PARSERPATH := ~/jigg/jar/*
@@ -15,16 +21,20 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
 all:
-	wget ${JAWIKI4URL} --directory-prefix=${JAWIKI4}
+
+	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
+	wget ${WIKITOOLURL}/${WIKITOOLFILE} --directory-prefix=${HOME}/${WIKITOOL}
 	./sbt/bin/sbt compile
 	./sbt/bin/sbt assembly
 
-.PHONY: run-indexing 
-run-indexing:
+.PHONY: run-preprocessing 
+run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
-	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI4) $(INDEX)
+	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4} ${HOME}/${JAWIKI4}/${JAWIKI4FILE}
+	java -cp $(JAR) qa.main.ja.Indexing ${HOME}/${JAWIKI4} $(INDEX)
+
 
 .PHONY: run-parsing-question
 run-parsing-question:
