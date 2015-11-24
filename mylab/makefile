@@ -2,14 +2,16 @@
 #SBT := sbt-0.13.9.tgz
 JAWIKI4URL := https://dumps.wikimedia.org/jawiki/latest
 JAWIKI4FILE := jawiki-latest-pages-articles4.xml.bz2
+JUMANPATH := /share/tools/juman-7.0/bin/juman
+KNPPATH := /share/tools/knp-4.11/bin/knp
 PACKED := packed
-JAWIKI1 := ~/data/jawiki/1
-JAWIKI2 := ~/data/jawiki/2
-JAWIKI3 := ~/data/jawiki/3
-JAWIKI4 := data/jawiki/4
-WIKITOOLURL := http://medialab.di.unipi.it/Project/SemaWiki/Tools
-WIKITOOLFILE := WikiExtractor.py
-WIKITOOL := tool
+#JAWIKI1 := ~/data/jawiki/1
+#JAWIKI2 := ~/data/jawiki/2
+#JAWIKI3 := ~/data/jawiki/3
+#JAWIKI4 := data/jawiki/4
+#WIKITOOLURL := http://medialab.di.unipi.it/Project/SemaWiki/Tools
+#WIKITOOLFILE := WikiExtractor.py
+WIKITOOL := qa/tool
 JAR := target/scala-2.11/qa-assembly-1.0.jar
 INDEX := index
 PARSERPATH := ~/jigg/jar/*
@@ -23,7 +25,6 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 all:
 
 	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
-	wget ${WIKITOOLURL}/${WIKITOOLFILE} --directory-prefix=${HOME}/${WIKITOOL}
 	./sbt/bin/sbt compile
 	./sbt/bin/sbt assembly
 
@@ -38,7 +39,7 @@ run-preprocessing:
 
 .PHONY: run-parsing-question
 run-parsing-question:
-	java -cp $(JAR) qa.main.ja.JiggParser $(PARSERPATH) $(INPUT2PARSE) $(INPUT2CLUEX)
+	java -cp $(JAR) qa.main.ja.JiggParser $(PARSERPATH) $(JUMANPATH) $(KNPPATH) $(INPUT2PARSE) $(INPUT2CLUEX)
 
 .PHONY: run-clue-extraction 
 run-clue-extraction :
