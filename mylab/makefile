@@ -8,7 +8,7 @@ PACKED := packed
 #JAWIKI1 := ~/data/jawiki/1
 #JAWIKI2 := ~/data/jawiki/2
 #JAWIKI3 := ~/data/jawiki/3
-#JAWIKI4 := data/jawiki/4
+JAWIKI4 := data/jawiki/4
 #WIKITOOLURL := http://medialab.di.unipi.it/Project/SemaWiki/Tools
 WIKITOOLFILE := WikiExtractor.py
 WIKITOOL := qa/tool
@@ -34,7 +34,7 @@ run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
 	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4} ${HOME}/${JAWIKI4}/${JAWIKI4FILE}
-	java -cp $(JAR) qa.main.ja.Indexing ${HOME}/${JAWIKI4} $(INDEX)
+	java -cp $(JAR) qa.main.ja.Indexing ${HOME}${JAWIKI4} $(INDEX)
 
 
 .PHONY: run-parsing-question
