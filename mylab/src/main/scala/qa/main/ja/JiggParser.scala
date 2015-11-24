@@ -35,7 +35,7 @@ object ExtractQuestionsQ1000 {
   /**
    * using metadata for determining question type
    */
-  def determineQuestionTypeQ1000(questionXML: Node, parserPath: String) = {
+  def determineQuestionTypeQ1000(questionXML: Node) = {
     val whereRe = """(どこ)""".r
     val whenRe = """(いつ)""".r
     val howManyRe = """(いくつ|いくら|どれぐらい)""".r
@@ -81,16 +81,16 @@ object ExtractQuestionsQ1000 {
     increment
   }
 
-  def parseQuestion(questionXML: Node, parserPath: String): Array[Elem] = {
-    val jigg = new JiggParser(parserPath)
+  def parseQuestion(questionXML: Node, parserPath: String, jumanPath: String, knpPath: String): Array[Elem] = {
+    val jigg = new JiggParser(parserPath, jumanPath, knpPath)
     val parses = jigg.parse((questionXML \\ "text").text)
     parses
   }
 
-  def makeQuestionQ1000(questionXML: Node, parserPath: String) = {
-    val parses = parseQuestion(questionXML, parserPath)
+  def makeQuestionQ1000(questionXML: Node, parserPath: String, jumanPath: String, knpPath: String) = {
+    val parses = parseQuestion(questionXML, parserPath, jumanPath, knpPath)
     Question((questionXML \ "@id").text,
-      determineQuestionTypeQ1000(questionXML, parserPath),
+      determineQuestionTypeQ1000(questionXML),
       parses,
       //      extractCluesQ1000(questionXML,parses),
       questionXML \\ "text",
@@ -134,16 +134,16 @@ object ExtractQuestionsQ1000 {
     }
   }
 
-  def apply(inputXML: Node, parserPath: String): Array[Elem] = {
+  def apply(inputXML: Node, parserPath: String, jumanPath: String, knpPath: String): Array[Elem] = {
     //    val totalQuestions = (inputXML \\ "question").filter(e => (safeMod5((e \ "@id").text) == true)).toArray
     val totalQuestions = (inputXML \\ "question").toArray
     System.err.println(s"Total questions: ${totalQuestions.length}")
-    totalQuestions map (q => makeQuestionQ1000(q, parserPath)) map (formatInXML)
+    totalQuestions map (q => makeQuestionQ1000(q, parserPath, jumanPath, knpPath)) map (formatInXML)
   }
 }
 
 // Interface to run Jigg
-class JiggParser(val parserPath: String) {
+class JiggParser(val parserPath: String, jumanPath: String, knpPath: String) {
 
   def normalize(text: String): String = {
 
@@ -168,9 +168,9 @@ class JiggParser(val parserPath: String) {
     normalized_text
   }
 
-  def runJigg(parserPath: String, inputStringParam: String): Elem = {
+  def runJigg(parserPath: String, jumanPath: String, knpPath: String, inputStringParam: String): Elem = {
     val inputString = "echo " + inputStringParam
-    val jiggCommand = "java -cp " + parserPath + " jigg.pipeline.Pipeline -annotators ssplit,juman,knp"
+    val jiggCommand = "java -cp " + parserPath + " jigg.pipeline.Pipeline -annotators ssplit,juman,knp" + " -juman.command " + jumanPath + " -knp.command " + knpPath
     System.err.println(s"jiggComman: ${inputString}|${jiggCommand}")
     //    val jiggOutput = XMLLoaderIgnoringDTD.loadString((inputString #| jiggCommand).!!)
     val jiggOutput = XML.loadString((inputString #| jiggCommand).!!)
@@ -181,19 +181,19 @@ class JiggParser(val parserPath: String) {
     // sentence spliting
     // currently, newline and "。" is regarded as sentence boundaries
     val sentences: Array[String] = normalize(text).split("""\n+|？|。\n*""").map(_ + "。")
-    val jigg_outputs = sentences map { k => runJigg(parserPath, k) }
+    val jigg_outputs = sentences map { k => runJigg(parserPath, jumanPath, knpPath, k) }
     jigg_outputs
   }
 }
 
 object JiggParser {
   def main(args: Array[String]): Unit = {
-    if (args.length < 3) {
-      System.err.println("Usage: scala qa.main.ja.JiggParser JIGG_PATH INPUT_XML OUTPUT_XML")
+    if (args.length < 5) {
+      System.err.println("Usage: scala qa.main.ja.JiggParser JIGG_PATH JUMAN_PATH KNP_PATH INPUT_XML OUTPUT_XML")
       System.exit(1)
     }
-    val elems = ExtractQuestionsQ1000(XMLLoaderIgnoringDTD.loadFile(args(1)), args(0))
-    XML.save(args(2), <questions>
+    val elems = ExtractQuestionsQ1000(XMLLoaderIgnoringDTD.loadFile(args(3)), args(0), args(1), args(2))
+    XML.save(args(4), <questions>
                         {
                           for (elem <- elems) yield {
                             elem

@@ -1,3 +1,4 @@
+JAWIKI4URL := https://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles4.xml.bz2
 PACKED := packed
 #JAWIKI1 := ~/data/jawiki/1
 #JAWIKI2 := ~/data/jawiki/2
@@ -14,6 +15,7 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
 all:
+	wget ${JAWIKI4URL} --directory-prefix=${JAWIKI4}
 	./sbt/bin/sbt compile
 	./sbt/bin/sbt assembly
 
