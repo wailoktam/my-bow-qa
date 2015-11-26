@@ -192,7 +192,8 @@ object JiggParser {
       System.err.println("Usage: scala qa.main.ja.JiggParser JIGG_PATH JUMAN_PATH KNP_PATH INPUT_XML OUTPUT_XML")
       System.exit(1)
     }
-    val elems = ExtractQuestionsQ1000(XMLLoaderIgnoringDTD.loadFile(args(3)), args(0), args(1), args(2))
+    val elems = ExtractQuestionsQ1000(XML.loadFile(args(3)), args(0), args(1), args(2))
+//    val elems = ExtractQuestionsQ1000(XMLLoaderIgnoringDTD.loadFile(args(3)), args(0), args(1), args(2))
     XML.save(args(4), <questions>
                         {
                           for (elem <- elems) yield {
