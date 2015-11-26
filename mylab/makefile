@@ -33,8 +33,8 @@ run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
-	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4} ${HOME}/${JAWIKI4}/${JAWIKI4FILE}
-	java -cp $(JAR) qa.main.ja.Indexing ${HOME}${JAWIKI4} $(INDEX)
+#	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4} ${HOME}/${JAWIKI4}/${JAWIKI4FILE}
+	java -cp $(JAR) qa.main.ja.Indexing ${HOME}/${JAWIKI4} $(INDEX)
 
 
 .PHONY: run-parsing-question
