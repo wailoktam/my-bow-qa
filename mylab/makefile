@@ -5,6 +5,9 @@ JAWIKI4FILE := jawiki-latest-pages-articles4.xml.bz2
 JUMANPATH := /share/tools/juman-7.0/bin/juman
 KNPPATH := /share/tools/knp-4.11/bin/knp
 PACKED := packed
+JIGGURL := https://github.com/mynlp/jigg/raw/master/jar
+JIGGFILE := jigg-0.4.jar
+JIGGPATH := jigg/jar
 #JAWIKI1 := ~/data/jawiki/1
 #JAWIKI2 := ~/data/jawiki/2
 #JAWIKI3 := ~/data/jawiki/3
@@ -25,22 +28,25 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 .PHONY: all
 all:
 
-	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
-	./sbt/bin/sbt compile
-	./sbt/bin/sbt assembly
+#	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
+#	./sbt/bin/sbt compile
+#	./sbt/bin/sbt assembly
+	mkdir jigg
+	mkdir jar
+	wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGPATH}
 
 .PHONY: run-preprocessing 
 run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
-#	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4CLN} ${HOME}/${JAWIKI4RAW}/${JAWIKI4FILE}
-	java -cp $(JAR) qa.main.ja.Indexing ${HOME}/${JAWIKI4CLN} $(INDEX)
+#	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${JAWIKI4CLN} ${JAWIKI4RAW}/${JAWIKI4FILE}
+#	java -cp $(JAR) qa.main.ja.Indexing ${JAWIKI4CLN} $(INDEX)
 
 
 .PHONY: run-parsing-question
 run-parsing-question:
-	java -cp $(JAR) qa.main.ja.JiggParser $(PARSERPATH) $(JUMANPATH) $(KNPPATH) $(INPUT2PARSE) $(INPUT2CLUEX)
+	java -cp $(JAR) qa.main.ja.JiggParser ${HOME}/${JIGGPATH}/${JIGGFILE} $(JUMANPATH) $(KNPPATH) $(INPUT2PARSE) $(INPUT2CLUEX)
 
 .PHONY: run-clue-extraction 
 run-clue-extraction :
