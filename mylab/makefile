@@ -35,7 +35,7 @@ all:
 	cd jigg
 	mkdir -p jar
 	cd ..
-	wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGPATH}
+	wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}
 
 .PHONY: run-preprocessing 
 run-preprocessing:
