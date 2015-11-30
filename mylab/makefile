@@ -37,6 +37,7 @@ ifneq "$(wildcard ${HOME}/${JIGGPATH})" ""
 	mkdir -p jar
 	cd ..
 	wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}
+endif
 
 .PHONY: run-preprocessing 
 run-preprocessing:
