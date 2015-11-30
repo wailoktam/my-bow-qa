@@ -28,7 +28,7 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 .PHONY: all
 all:
 
-#	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
+	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4RAW}
 #	./sbt/bin/sbt compile
 #	./sbt/bin/sbt assembly
 ifeq "$(wildcard ${HOME}/${JIGGPATH})" ""
