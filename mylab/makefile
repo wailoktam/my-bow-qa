@@ -75,4 +75,4 @@ run-answer :
 
 
 .PHONY: run
-run: run-parsing-question run-clue-extraction run-search run-answer
+run: run-preprocessing run-parsing-question run-clue-extraction run-search run-answer
