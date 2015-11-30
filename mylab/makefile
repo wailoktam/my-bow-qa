@@ -7,7 +7,7 @@ KNPPATH := /share/tools/knp-4.11/bin/knp
 PACKED := packed
 JIGGURL := https://github.com/mynlp/jigg/raw/master/jar
 JIGGFILE := jigg-0.4.jar
-JIGGPATH := jigg/jar
+JIGGPATH := qa/jigg/jar
 #JAWIKI1 := ~/data/jawiki/1
 #JAWIKI2 := ~/data/jawiki/2
 #JAWIKI3 := ~/data/jawiki/3
@@ -27,30 +27,33 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
 all:
-ifeq  "$(wildcard ${HOME}/${JAWIKI4RAW})" ""
+#ifeq  "$(wildcard ${HOME}/${JAWIKI4RAW})" ""
+${HOME}/${JAWIKI4RAW}:
 	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4RAW}
-endif
+#endif
 #	./sbt/bin/sbt compile
 #	./sbt/bin/sbt assembly
-ifeq "$(wildcard ${HOME}/${JIGGPATH})" ""
+${HOME}/${JIGGPATH}:
 	mkdir -p jigg
 	cd jigg
 	mkdir -p jar
 	cd ..
 	wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}
-endif
+#endif
 
 .PHONY: run-preprocessing 
 run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
-ifeq "$(wildcard ${HOME}/${JAWIKI4CLN})" ""
+#ifeq "$(wildcard ${HOME}/${JAWIKI4CLN})" ""
+${HOME}/${JAWIKICLN}:
 	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4CLN} ${HOME}/${JAWIKI4RAW}/${JAWIKI4FILE}
-endif
-ifeq "$(wildcard ${HOME}/${INDEX})" ""
+#endif
+#ifeq "$(wildcard ${HOME}/${INDEX})" ""
+${HOME}/${INDEX}:
 	java -cp $(JAR) qa.main.ja.Indexing ${HOME}/${JAWIKI4CLN} ${HOME}/${INDEX}
-endif
+#endif
 
 
 
