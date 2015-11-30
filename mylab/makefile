@@ -35,15 +35,17 @@ all:
 	cd jigg
 	mkdir -p jar
 	cd ..
-	wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}
+	if [ ! -d "${HOME}/${JIGGPATH}" ];then \ 
+		wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}; \
+	fi
 
 .PHONY: run-preprocessing 
 run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
-#	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${JAWIKI4CLN} ${JAWIKI4RAW}/${JAWIKI4FILE}
-#	java -cp $(JAR) qa.main.ja.Indexing ${JAWIKI4CLN} $(INDEX)
+	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${JAWIKI4CLN} ${JAWIKI4RAW}/${JAWIKI4FILE}
+	java -cp $(JAR) qa.main.ja.Indexing ${JAWIKI4CLN} $(INDEX)
 
 
 .PHONY: run-parsing-question
