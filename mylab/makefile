@@ -42,12 +42,12 @@ ${HOME}/${JIGGPATH}:
 #endif
 
 .PHONY: run-preprocessing 
-run-preprocessing: ${HOME}/${JAWIKICLN} ${HOME}/${INDEX}
+run-preprocessing: ${HOME}/${JAWIKI4CLN} ${HOME}/${INDEX}
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
 #ifeq "$(wildcard ${HOME}/${JAWIKI4CLN})" ""
-${HOME}/${JAWIKICLN}:
+${HOME}/${JAWIKI4CLN}:
 	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4CLN} ${HOME}/${JAWIKI4RAW}/${JAWIKI4FILE}
 #endif
 #ifeq "$(wildcard ${HOME}/${INDEX})" ""
