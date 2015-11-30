@@ -45,8 +45,10 @@ run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
+ifeq "$(wildcard ${JAWIKI4CLN})" ""
 	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${JAWIKI4CLN} ${JAWIKI4RAW}/${JAWIKI4FILE}
 	java -cp $(JAR) qa.main.ja.Indexing ${JAWIKI4CLN} $(INDEX)
+endif
 
 
 .PHONY: run-parsing-question
