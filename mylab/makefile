@@ -26,7 +26,7 @@ INPUT2ANSWER := input/questions/qa-sampleDocRetrieved.xml
 OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
-all:
+all: ${HOME}/${INDEX} ${HOME}/${JIGGPATH}
 #ifeq  "$(wildcard ${HOME}/${JAWIKI4RAW})" ""
 ${HOME}/${JAWIKI4RAW}:
 	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4RAW}
@@ -42,7 +42,7 @@ ${HOME}/${JIGGPATH}:
 #endif
 
 .PHONY: run-preprocessing 
-run-preprocessing:
+run-preprocessing: ${HOME}/${JAWIKICLN} ${HOME}/${INDEX}
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
