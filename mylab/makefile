@@ -31,12 +31,12 @@ all:
 #	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
 #	./sbt/bin/sbt compile
 #	./sbt/bin/sbt assembly
-	mkdir -p jigg
-	cd jigg
-	mkdir -p jar
-	cd ..
-	if [ ! -d "${HOME}/${JIGGPATH}" ];then 
-		wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}; fi
+	ifneq ($(wildcard ${HOME}/${JIGGPATH})
+		mkdir -p jigg
+		cd jigg
+		mkdir -p jar
+		cd ..
+		wget ${JIGGURL}/${JIGGFILE} --directory-prefix=${HOME}/${JIGGPATH}
 
 .PHONY: run-preprocessing 
 run-preprocessing:
