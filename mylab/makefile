@@ -11,13 +11,13 @@ JIGGPATH := jigg/jar
 #JAWIKI1 := ~/data/jawiki/1
 #JAWIKI2 := ~/data/jawiki/2
 #JAWIKI3 := ~/data/jawiki/3
-JAWIKI4RAW := data/downloaded/jawiki/4
-JAWIKI4CLN := data/clean/jawiki/4
+JAWIKI4RAW := qa/data/downloaded/jawiki/4
+JAWIKI4CLN := qa/data/clean/jawiki/4
 #WIKITOOLURL := http://medialab.di.unipi.it/Project/SemaWiki/Tools
 WIKITOOLFILE := WikiExtractor.py
 WIKITOOL := qa/tool
 JAR := target/scala-2.11/qa-assembly-1.0.jar
-INDEX := index
+INDEX := qa/index
 PARSERPATH := ~/jigg/jar/*
 INPUT2PARSE := input/questions/NIILC-ECQA2015_dev.xml
 INPUT2CLUEX := input/questions/qa-sampleParsed.xml
@@ -27,8 +27,8 @@ OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
 all:
-ifeq  "$(wildcard ${JAWIKI4RAW})" ""
-	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${JAWIKI4RAW}
+ifeq  "$(wildcard ${HOME}/${JAWIKI4RAW})" ""
+	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4RAW}
 endif
 #	./sbt/bin/sbt compile
 #	./sbt/bin/sbt assembly
@@ -45,10 +45,13 @@ run-preprocessing:
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI1) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI2) $(INDEX)
 #	java -cp $(JAR) qa.main.ja.Indexing $(JAWIKI3) $(INDEX)
-ifeq "$(wildcard ${JAWIKI4CLN})" ""
-	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${JAWIKI4CLN} ${JAWIKI4RAW}/${JAWIKI4FILE}
-	java -cp $(JAR) qa.main.ja.Indexing ${JAWIKI4CLN} $(INDEX)
+ifeq "$(wildcard ${HOME}/${JAWIKI4CLN})" ""
+	python ${HOME}/${WIKITOOL}/${WIKITOOLFILE} -s --output ${HOME}/${JAWIKI4CLN} ${HOME}/${JAWIKI4RAW}/${JAWIKI4FILE}
 endif
+ifeq "$(wildcard ${HOME}/${INDEX})" ""
+	java -cp $(JAR) qa.main.ja.Indexing ${HOME}/${JAWIKI4CLN} ${HOME}/${INDEX}
+endif
+
 
 
 .PHONY: run-parsing-question
@@ -61,7 +64,7 @@ run-clue-extraction :
 
 .PHONY: run-search 
 run-search :
-	java -cp $(JAR) qa.main.ja.SearchDocument $(INDEX) $(INPUT2SEARCH) $(INPUT2ANSWER) 1 1.0 1.0
+	java -cp $(JAR) qa.main.ja.SearchDocument ${HOME}/${INDEX} $(INPUT2SEARCH) $(INPUT2ANSWER) 1 1.0 1.0
 
 .PHONY: run-answer 
 run-answer :
