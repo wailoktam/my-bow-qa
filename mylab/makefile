@@ -26,7 +26,7 @@ INPUT2ANSWER := input/questions/qa-sampleDocRetrieved.xml
 OUTPUT := input/questions/qa-sampleAnswered.xml
 
 .PHONY: all
-all: ${HOME}/${INDEX} ${HOME}/${JIGGPATH}
+all: ${HOME}/${JAWIKIRAW} ${HOME}/${JIGGPATH}
 #ifeq  "$(wildcard ${HOME}/${JAWIKI4RAW})" ""
 ${HOME}/${JAWIKI4RAW}:
 	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4RAW}
