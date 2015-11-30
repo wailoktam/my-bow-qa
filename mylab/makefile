@@ -31,7 +31,7 @@ all:
 #	wget ${JAWIKI4URL}/${JAWIKI4FILE} --directory-prefix=${HOME}/${JAWIKI4}
 #	./sbt/bin/sbt compile
 #	./sbt/bin/sbt assembly
-	ifneq ($(wildcard ${HOME}/${JIGGPATH})
+	ifneq ($(wildcard ${HOME}/${JIGGPATH}))
 		mkdir -p jigg
 		cd jigg
 		mkdir -p jar
