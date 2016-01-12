@@ -1,6 +1,6 @@
 package qa.main.ja
 
-import java.io.{FileWriter, BufferedWriter, File}
+import java.io.{ FileWriter, BufferedWriter, File }
 import java.util.regex._
 import org.apache.commons.lang3.StringEscapeUtils
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer
@@ -17,173 +17,170 @@ import scala.xml.{ Document => _, XML, _ }
 
 //case class Doc(id: String, title: String, text: String, score: Double)
 
-
-
-
 /**
-
-class PullAndAdd(writer: IndexWriter) {
-  /**
-   * def attrsToString(attrs: MetaData) = {
-   * attrs.length match {
-   * case 0 => ""
-   * case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(m.value.toString) + "'").reduceLeft(_ + _)
-   * }
-   * }
-   */
-
-  def attrsToString(attrs: MetaData) = {
-    val nonDocTagRe = """<(?!\/?doc(?=>|\s.*>))\/?.*?>""".r
-    attrs.length match {
-      case 0 => ""
-      case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(nonDocTagRe.replaceAllIn(m.value.toString, "")) + "'").reduceLeft(_ + _)
-    }
-  }
-
-  def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]): Unit = {
-    //  def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]):(String,Elem) = {
-    //    System.err.println("buf", buf.mkString)
-
-  }
-
-
-
-
-
-  def apply(writer: IndexWriter, xmlFile: String): Unit = {
-    //  def apply(writer: IndexWriter, xmlFile: String): Array[(String, Elem)] = {
-    val xml = new XMLEventReader(Source.fromFile(xmlFile))
-    var insideDoc = false
-    var buf = ArrayBuffer[String]()
-
-    //    var idXmlPairs = ArrayBuffer[(String,Elem)]()
-
-    for (event <- xml) {
-      event match {
-        case EvElemStart(_, "doc", attrs, _) => {
-          insideDoc = true
-          buf += "<" + "doc" + attrsToString(attrs) + ">"
-        }
-        case EvElemEnd(_, "doc") => {
-//          System.err.println(s"buf in event parser: ${buf}")
-          buf += "</doc>"
-          insideDoc = false
-          //          idXmlPairs += addXMLToDoc(writer,buf)
-          addXMLToDoc(writer, buf)
-          buf.clear
-        }
-        case EvText(t) => {
-          if (insideDoc) {
-            buf += t
-          }
-        }
-        case _ => // ignore
-      }
-    }
-    //    idXmlPairs.toArray
-  }
-}
-
-
-
-class PullAndAddPage (writer: IndexWriter) extends PullAndAdd(writer) {
-
-  override def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]): Unit ={
-    val x = XML.loadString(buf.mkString)
-    //    val x = buf.mkString
-    val id = (x \ "@id").text
-    //            System.err.println(s"id: ${id}")
-    val title = (x \ "@title").text
-    //    val firstpara = (x \ "@firstpara").text
-    val text = x.text
-
-    val wholeDocument = new Document()
-    wholeDocument.add(new StringField("id", id, Store.YES))
-    wholeDocument.add(new TextField("text", text, Store.YES))
-    wholeDocument.add(new TextField("title", title, Store.YES))
-    writer.addDocument(wholeDocument)
-       //    System.err.println(s"text: ${text}")
-    for ((p,paraCounter)<- paras.zipWithIndex) {
-      System.err.println(s"paracounter: ${paraCounter}")
-      if ((p == "") == false) {
-        if (paraCounter == 1) {
-          val wholeDocument = new Document()
-          System.err.println(s"pid: ${id}")
-          System.err.println(s"pid: ${text}")
-          wholeDocument.add(new StringField("id", id, Store.YES))
-          wholeDocument.add(new TextField("text", text, Store.YES))
-          wholeDocument.add(new IntField("isDoc", 1, Store.YES))
-          writer.addDocument(wholeDocument)
-          val titleAsDocument = new  Document()
-          val pid = id + "-" + paraCounter
-          System.err.println(s"pid: ${pid}")
-          System.err.println(s"text: ${p}")
-          titleAsDocument.add(new StringField("id", pid, Store.YES))
-          titleAsDocument.add(new TextField("text", title, Store.YES))
-          titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
-          writer.addDocument(titleAsDocument)
-        } else {
-          val document = new Document()
-          val pid = id + "-" + paraCounter
-          System.err.println(s"pid: ${pid}")
-          System.err.println(s"text: ${p}")
-          document.add(new StringField("id", pid, Store.YES))
-          document.add(new IntField("isDoc", 0, Store.YES))
-          document.add(new TextField("text", p, Store.YES))
-          writer.addDocument(document)
-        }
-      }
-    }
-  }
-}
-
-class PullAndAddPara (writer: IndexWriter) extends PullAndAdd(writer) {
-
-  override def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]): Unit ={
-    val x = XML.loadString(buf.mkString)
-    //    val x = buf.mkString
-    val id = (x \ "@id").text
-    //            System.err.println(s"id: ${id}")
-    val title = (x \ "@title").text
-    //    val firstpara = (x \ "@firstpara").text
-    val text = x.text
-    val paras = text.split("\n")
-    //    System.err.println(s"text: ${text}")
-    for ((p,paraCounter)<- paras.zipWithIndex) {
-      System.err.println(s"paracounter: ${paraCounter}")
-      if ((p == "") == false) {
-        if (paraCounter == 1) {
-          val wholeDocument = new Document()
-          System.err.println(s"pid: ${id}")
-          System.err.println(s"pid: ${text}")
-          wholeDocument.add(new StringField("id", id, Store.YES))
-          wholeDocument.add(new TextField("text", text, Store.YES))
-          wholeDocument.add(new IntField("isDoc", 1, Store.YES))
-          writer.addDocument(wholeDocument)
-          val titleAsDocument = new  Document()
-          val pid = id + "-" + paraCounter
-          System.err.println(s"pid: ${pid}")
-          System.err.println(s"text: ${p}")
-          titleAsDocument.add(new StringField("id", pid, Store.YES))
-          titleAsDocument.add(new TextField("text", title, Store.YES))
-          titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
-          writer.addDocument(titleAsDocument)
-        } else {
-          val document = new Document()
-          val pid = id + "-" + paraCounter
-          System.err.println(s"pid: ${pid}")
-          System.err.println(s"text: ${p}")
-          document.add(new StringField("id", pid, Store.YES))
-          document.add(new IntField("isDoc", 0, Store.YES))
-          document.add(new TextField("text", p, Store.YES))
-          writer.addDocument(document)
-        }
-      }
-    }
-  }
-}
-
-  */
+ *
+ * class PullAndAdd(writer: IndexWriter) {
+ * /**
+ * def attrsToString(attrs: MetaData) = {
+ * attrs.length match {
+ * case 0 => ""
+ * case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(m.value.toString) + "'").reduceLeft(_ + _)
+ * }
+ * }
+ * */
+ *
+ * def attrsToString(attrs: MetaData) = {
+ * val nonDocTagRe = """<(?!\/?doc(?=>|\s.*>))\/?.*?>""".r
+ * attrs.length match {
+ * case 0 => ""
+ * case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(nonDocTagRe.replaceAllIn(m.value.toString, "")) + "'").reduceLeft(_ + _)
+ * }
+ * }
+ *
+ * def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]): Unit = {
+ * //  def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]):(String,Elem) = {
+ * //    System.err.println("buf", buf.mkString)
+ *
+ * }
+ *
+ *
+ *
+ *
+ *
+ * def apply(writer: IndexWriter, xmlFile: String): Unit = {
+ * //  def apply(writer: IndexWriter, xmlFile: String): Array[(String, Elem)] = {
+ * val xml = new XMLEventReader(Source.fromFile(xmlFile))
+ * var insideDoc = false
+ * var buf = ArrayBuffer[String]()
+ *
+ * //    var idXmlPairs = ArrayBuffer[(String,Elem)]()
+ *
+ * for (event <- xml) {
+ * event match {
+ * case EvElemStart(_, "doc", attrs, _) => {
+ * insideDoc = true
+ * buf += "<" + "doc" + attrsToString(attrs) + ">"
+ * }
+ * case EvElemEnd(_, "doc") => {
+ * //          System.err.println(s"buf in event parser: ${buf}")
+ * buf += "</doc>"
+ * insideDoc = false
+ * //          idXmlPairs += addXMLToDoc(writer,buf)
+ * addXMLToDoc(writer, buf)
+ * buf.clear
+ * }
+ * case EvText(t) => {
+ * if (insideDoc) {
+ * buf += t
+ * }
+ * }
+ * case _ => // ignore
+ * }
+ * }
+ * //    idXmlPairs.toArray
+ * }
+ * }
+ *
+ *
+ *
+ * class PullAndAddPage (writer: IndexWriter) extends PullAndAdd(writer) {
+ *
+ * override def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]): Unit ={
+ * val x = XML.loadString(buf.mkString)
+ * //    val x = buf.mkString
+ * val id = (x \ "@id").text
+ * //            System.err.println(s"id: ${id}")
+ * val title = (x \ "@title").text
+ * //    val firstpara = (x \ "@firstpara").text
+ * val text = x.text
+ *
+ * val wholeDocument = new Document()
+ * wholeDocument.add(new StringField("id", id, Store.YES))
+ * wholeDocument.add(new TextField("text", text, Store.YES))
+ * wholeDocument.add(new TextField("title", title, Store.YES))
+ * writer.addDocument(wholeDocument)
+ * //    System.err.println(s"text: ${text}")
+ * for ((p,paraCounter)<- paras.zipWithIndex) {
+ * System.err.println(s"paracounter: ${paraCounter}")
+ * if ((p == "") == false) {
+ * if (paraCounter == 1) {
+ * val wholeDocument = new Document()
+ * System.err.println(s"pid: ${id}")
+ * System.err.println(s"pid: ${text}")
+ * wholeDocument.add(new StringField("id", id, Store.YES))
+ * wholeDocument.add(new TextField("text", text, Store.YES))
+ * wholeDocument.add(new IntField("isDoc", 1, Store.YES))
+ * writer.addDocument(wholeDocument)
+ * val titleAsDocument = new  Document()
+ * val pid = id + "-" + paraCounter
+ * System.err.println(s"pid: ${pid}")
+ * System.err.println(s"text: ${p}")
+ * titleAsDocument.add(new StringField("id", pid, Store.YES))
+ * titleAsDocument.add(new TextField("text", title, Store.YES))
+ * titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
+ * writer.addDocument(titleAsDocument)
+ * } else {
+ * val document = new Document()
+ * val pid = id + "-" + paraCounter
+ * System.err.println(s"pid: ${pid}")
+ * System.err.println(s"text: ${p}")
+ * document.add(new StringField("id", pid, Store.YES))
+ * document.add(new IntField("isDoc", 0, Store.YES))
+ * document.add(new TextField("text", p, Store.YES))
+ * writer.addDocument(document)
+ * }
+ * }
+ * }
+ * }
+ * }
+ *
+ * class PullAndAddPara (writer: IndexWriter) extends PullAndAdd(writer) {
+ *
+ * override def addXMLToDoc(writer: IndexWriter, buf: ArrayBuffer[String]): Unit ={
+ * val x = XML.loadString(buf.mkString)
+ * //    val x = buf.mkString
+ * val id = (x \ "@id").text
+ * //            System.err.println(s"id: ${id}")
+ * val title = (x \ "@title").text
+ * //    val firstpara = (x \ "@firstpara").text
+ * val text = x.text
+ * val paras = text.split("\n")
+ * //    System.err.println(s"text: ${text}")
+ * for ((p,paraCounter)<- paras.zipWithIndex) {
+ * System.err.println(s"paracounter: ${paraCounter}")
+ * if ((p == "") == false) {
+ * if (paraCounter == 1) {
+ * val wholeDocument = new Document()
+ * System.err.println(s"pid: ${id}")
+ * System.err.println(s"pid: ${text}")
+ * wholeDocument.add(new StringField("id", id, Store.YES))
+ * wholeDocument.add(new TextField("text", text, Store.YES))
+ * wholeDocument.add(new IntField("isDoc", 1, Store.YES))
+ * writer.addDocument(wholeDocument)
+ * val titleAsDocument = new  Document()
+ * val pid = id + "-" + paraCounter
+ * System.err.println(s"pid: ${pid}")
+ * System.err.println(s"text: ${p}")
+ * titleAsDocument.add(new StringField("id", pid, Store.YES))
+ * titleAsDocument.add(new TextField("text", title, Store.YES))
+ * titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
+ * writer.addDocument(titleAsDocument)
+ * } else {
+ * val document = new Document()
+ * val pid = id + "-" + paraCounter
+ * System.err.println(s"pid: ${pid}")
+ * System.err.println(s"text: ${p}")
+ * document.add(new StringField("id", pid, Store.YES))
+ * document.add(new IntField("isDoc", 0, Store.YES))
+ * document.add(new TextField("text", p, Store.YES))
+ * writer.addDocument(document)
+ * }
+ * }
+ * }
+ * }
+ * }
+ *
+ */
 
 /**
  * tf を常に1にするクラス
@@ -213,38 +210,37 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
   val sect5Re = """======([^=]*)======""".r
   val tableRe = """(?<=\{\{)[^\{\}]+(?=\}\})""".r
   val tableRemoveRe = """\{\{[^\{\}]*\}\}""".r
-//  val tableRe = """{{(.*)}}""".r
+  //  val tableRe = """{{(.*)}}""".r
 
-
-  def etcCollect(pageText:String):String =
+  def etcCollect(pageText: String): String =
     {
-//      println ("b4:"+pageText)
+      //      println ("b4:"+pageText)
       val tableText = tableRe.findAllIn(pageText)
-      if  (tableText.hasDefiniteSize) "||"+ pageText
+      if (tableText.hasDefiniteSize) "||" + pageText
       else {
-        tableText.mkString("\n") + etcCollect(tableRemoveRe.replaceAllIn(pageText,"").mkString)
+        tableText.mkString("\n") + etcCollect(tableRemoveRe.replaceAllIn(pageText, "").mkString)
       }
     }
 
   def addParaToDoc(paraWriter: IndexWriter, textWoTable: String, id: String, file: BufferedWriter) = {
     val paraNumStream = Stream.iterate(1)(_ + 1).iterator
     file.write("<" + "text" + ">" + "\n")
-    textWoTable.split("\n").map(p=>{
-      if ((p=="")==false) {
-      val para = new Document()
-      val paraID = id+"/"+paraNumStream.next().toString()
-      //    print (pageText)
-      //    System.err.println(s"pid: ${pageID}")
-      //    System.err.println(s"ptext: ${pageText}")
-      para.add(new StringField("id", paraID, Store.YES))
-      para.add(new TextField("text", p, Store.YES))
-      paraWriter.addDocument(para)
-      file.write("<" + "para" + ">" + "\n")
-      file.write("<" + "id" + ">" + "\n")
-      file.write(paraID+"\n")
-      file.write("</" + "id" + ">" + "\n")
-      file.write(StringEscapeUtils.escapeXml11(p)+"\n")
-      file.write("</" + "para" + ">" + "\n")
+    textWoTable.split("\n").map(p => {
+      if ((p == "") == false) {
+        val para = new Document()
+        val paraID = id + "/" + paraNumStream.next().toString()
+        //    print (pageText)
+        //    System.err.println(s"pid: ${pageID}")
+        //    System.err.println(s"ptext: ${pageText}")
+        para.add(new StringField("id", paraID, Store.YES))
+        para.add(new TextField("text", p, Store.YES))
+        paraWriter.addDocument(para)
+        file.write("<" + "para" + ">" + "\n")
+        file.write("<" + "id" + ">" + "\n")
+        file.write(paraID + "\n")
+        file.write("</" + "id" + ">" + "\n")
+        file.write(StringEscapeUtils.escapeXml11(p) + "\n")
+        file.write("</" + "para" + ">" + "\n")
       }
     }
     )
@@ -256,7 +252,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     val bw1 = new BufferedWriter(new FileWriter(file1))
     val xmlDir = new File("onePagePerFile")
     xmlDir.mkdir()
-    val file2 = new File("onePagePerFile/"+pageID+".xml")
+    val file2 = new File("onePagePerFile/" + pageID + ".xml")
     val bw2 = new BufferedWriter(new FileWriter(file2))
     val file3 = new File("bugInIndexing3")
     val bw3 = new BufferedWriter(new FileWriter(file3))
@@ -267,19 +263,19 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     val pageTitle = (x \\ "page" \ "@title").text
     //    val firstpara = (x \ "@firstpara").text
 
-    val pageText = (x \\ "page")(0).child.collect {case Text(t) => t}.mkString("\n")
+    val pageText = (x \\ "page")(0).child.collect { case Text(t) => t }.mkString("\n")
     val tableText = new StringBuilder
-    tableText.append(etcCollect(pageText).split("\\|\\|") (0))
-    val pageTextWoTable = etcCollect(pageText).split("\\|\\|") (1)
+    tableText.append(etcCollect(pageText).split("\\|\\|")(0))
+    val pageTextWoTable = etcCollect(pageText).split("\\|\\|")(1)
     val mainPage = new Document()
-//    print (pageText)
-//    System.err.println(s"pid: ${pageID}")
-//    System.err.println(s"ptext: ${pageText}")
+    //    print (pageText)
+    //    System.err.println(s"pid: ${pageID}")
+    //    System.err.println(s"ptext: ${pageText}")
     mainPage.add(new StringField("id", pageID, Store.YES))
     mainPage.add(new TextField("title", pageTitle, Store.YES))
     mainPage.add(new TextField("text", pageTextWoTable, Store.YES))
     pageWriter.addDocument(mainPage)
-    bw2.write("<" + "page" +  ">"+ "\n")
+    bw2.write("<" + "page" + ">" + "\n")
     bw2.write("<" + "id" + ">" + "\n")
     bw2.write(pageID + "\n")
     bw2.write("</" + "id" + ">" + "\n")
@@ -293,16 +289,16 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
       for (section1 <- (x \\ "section1")) {
         val sect1ID = pageID + "-" + sect1NumStream.next().toString()
         val sect1 = new Document()
-//space killed?
+        //space killed?
         val sect1Title = (section1 \ "@title").text
-        val sect1Text = section1.child.collect {case Text(t) => t}.mkString("\n")
-        val sect1TextWoTable = etcCollect(sect1Text).split("\\|\\|") (1)
-        tableText.append(etcCollect(sect1Text).split("\\|\\|") (0))
+        val sect1Text = section1.child.collect { case Text(t) => t }.mkString("\n")
+        val sect1TextWoTable = etcCollect(sect1Text).split("\\|\\|")(1)
+        tableText.append(etcCollect(sect1Text).split("\\|\\|")(0))
         sect1.add(new StringField("id", sect1ID, Store.YES))
         sect1.add(new TextField("title", sect1Title, Store.YES))
         sect1.add(new TextField("text", sect1TextWoTable, Store.YES))
         pageWriter.addDocument(sect1)
-        bw2.write("<" + "sect1" +  ">"+ "\n")
+        bw2.write("<" + "sect1" + ">" + "\n")
         bw2.write("<" + "id" + ">" + "\n")
         bw2.write(sect1ID + "\n")
         bw2.write("</" + "id" + ">" + "\n")
@@ -316,14 +312,14 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
             val sect2ID = sect1ID + "-" + sect2NumStream.next().toString()
             val sect2 = new Document()
             val sect2Title = (section2 \ "@title").text
-            val sect2Text = section2.child.collect {case Text(t) => t}.mkString("\n")
-            val sect2TextWoTable = etcCollect(sect2Text).split("\\|\\|") (1)
-            tableText.append(etcCollect(sect2Text).split("\\|\\|") (0))
+            val sect2Text = section2.child.collect { case Text(t) => t }.mkString("\n")
+            val sect2TextWoTable = etcCollect(sect2Text).split("\\|\\|")(1)
+            tableText.append(etcCollect(sect2Text).split("\\|\\|")(0))
             sect2.add(new StringField("id", sect2ID, Store.YES))
             sect2.add(new TextField("title", sect2Title, Store.YES))
             sect2.add(new TextField("text", sect2TextWoTable, Store.YES))
             pageWriter.addDocument(sect2)
-            bw2.write("<" + "sect2" +  ">"+ "\n")
+            bw2.write("<" + "sect2" + ">" + "\n")
             bw2.write("<" + "id" + ">" + "\n")
             bw2.write(sect2ID + "\n")
             bw2.write("</" + "id" + ">" + "\n")
@@ -332,135 +328,134 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
             bw2.write("</" + "title" + ">" + "\n")
             addParaToDoc(paraWriter, sect2TextWoTable, sect2ID, bw2)
             //            print("sect2"+sect2ID+"\n")
-//            print("sect2"+sect2Text+"\n")
+            //            print("sect2"+sect2Text+"\n")
             if ((section2 \ "section3") != "") {
               val sect3NumStream = Stream.iterate(1)(_ + 1).iterator
               for (section3 <- (section2 \ "section3")) {
                 val sect3ID = sect2ID + "-" + sect3NumStream.next().toString()
                 val sect3 = new Document()
                 val sect3Title = (section3 \ "@title").text
-                val sect3Text = section3.child.collect {case Text(t) => t}.mkString("\n")
-                val sect3TextWoTable = etcCollect(sect3Text).split("\\|\\|") (1)
-                tableText.append(etcCollect(sect3Text).split("\\|\\|") (0))
+                val sect3Text = section3.child.collect { case Text(t) => t }.mkString("\n")
+                val sect3TextWoTable = etcCollect(sect3Text).split("\\|\\|")(1)
+                tableText.append(etcCollect(sect3Text).split("\\|\\|")(0))
                 sect3.add(new StringField("id", sect3ID, Store.YES))
                 sect3.add(new TextField("title", sect3Title, Store.YES))
                 sect3.add(new TextField("text", sect3TextWoTable, Store.YES))
                 pageWriter.addDocument(sect3)
-                bw2.write("<" + "sect3" +  ">"+ "\n")
+                bw2.write("<" + "sect3" + ">" + "\n")
                 bw2.write("<" + "id" + ">" + "\n")
                 bw2.write(sect3ID + "\n")
                 bw2.write("</" + "id" + ">" + "\n")
                 bw2.write("<" + "title" + ">" + "\n")
                 bw2.write(StringEscapeUtils.escapeXml11(sect3Title) + "\n")
                 bw2.write("</" + "title" + ">" + "\n")
-                addParaToDoc(paraWriter, sect3TextWoTable, sect3ID,bw2)
+                addParaToDoc(paraWriter, sect3TextWoTable, sect3ID, bw2)
                 if ((section3 \ "section4") != "") {
                   val sect4NumStream = Stream.iterate(1)(_ + 1).iterator
                   for (section4 <- (section3 \ "section4")) {
                     val sect4ID = sect3ID + "-" + sect4NumStream.next().toString()
                     val sect4 = new Document()
                     val sect4Title = (section4 \ "@title").text
-                    val sect4Text = section4.child.collect {case Text(t) => t}.mkString("\n")
-                    val sect4TextWoTable = etcCollect(sect4Text).split("\\|\\|") (1)
-                    tableText.append(etcCollect(sect4Text).split("\\|\\|") (0))
-//                    print(sect4Text)
+                    val sect4Text = section4.child.collect { case Text(t) => t }.mkString("\n")
+                    val sect4TextWoTable = etcCollect(sect4Text).split("\\|\\|")(1)
+                    tableText.append(etcCollect(sect4Text).split("\\|\\|")(0))
+                    //                    print(sect4Text)
                     sect4.add(new StringField("id", sect4ID, Store.YES))
                     sect4.add(new TextField("title", sect4Title, Store.YES))
                     sect4.add(new TextField("text", sect4TextWoTable, Store.YES))
                     pageWriter.addDocument(sect4)
-                    bw2.write("<" + "sect4" +  ">"+ "\n")
+                    bw2.write("<" + "sect4" + ">" + "\n")
                     bw2.write("<" + "id" + ">" + "\n")
                     bw2.write(sect4ID + "\n")
                     bw2.write("</" + "id" + ">" + "\n")
                     bw2.write("<" + "title" + ">" + "\n")
                     bw2.write(StringEscapeUtils.escapeXml11(sect4Title) + "\n")
                     bw2.write("</" + "title" + ">" + "\n")
-                    addParaToDoc(paraWriter, sect4TextWoTable, sect4ID,bw2)
+                    addParaToDoc(paraWriter, sect4TextWoTable, sect4ID, bw2)
                     if ((section4 \ "section5") != "") {
                       val sect5NumStream = Stream.iterate(1)(_ + 1).iterator
                       for (section5 <- (section4 \ "section5")) {
                         val sect5ID = sect4ID + "-" + sect5NumStream.next().toString()
                         val sect5 = new Document()
                         val sect5Title = (section5 \ "@title").text
-                        val sect5Text = section5.child.collect {case Text(t) => t}.mkString("\n")
-                        val sect5TextWoTable = etcCollect(sect5Text).split("\\|\\|") (1)
-                        tableText.append(etcCollect(sect5Text).split("\\|\\|") (0))
+                        val sect5Text = section5.child.collect { case Text(t) => t }.mkString("\n")
+                        val sect5TextWoTable = etcCollect(sect5Text).split("\\|\\|")(1)
+                        tableText.append(etcCollect(sect5Text).split("\\|\\|")(0))
                         sect5.add(new StringField("id", sect5ID, Store.YES))
                         sect5.add(new TextField("title", sect5Title, Store.YES))
                         sect5.add(new TextField("text", sect5TextWoTable, Store.YES))
                         pageWriter.addDocument(sect5)
-                        bw2.write("<" + "sect5" +  ">"+ "\n")
+                        bw2.write("<" + "sect5" + ">" + "\n")
                         bw2.write("<" + "id" + ">" + "\n")
                         bw2.write(sect5ID + "\n")
                         bw2.write("</" + "id" + ">" + "\n")
                         bw2.write("<" + "title" + ">" + "\n")
                         bw2.write(StringEscapeUtils.escapeXml11(sect5Title) + "\n")
                         bw2.write("</" + "title" + ">" + "\n")
-                        addParaToDoc(paraWriter, sect5TextWoTable, sect5ID,bw2)
-                        bw2.write("</" + "sect5" +  ">"+ "\n")
+                        addParaToDoc(paraWriter, sect5TextWoTable, sect5ID, bw2)
+                        bw2.write("</" + "sect5" + ">" + "\n")
                       }
                     }
-                    bw2.write("</" + "sect4" +  ">"+ "\n")
+                    bw2.write("</" + "sect4" + ">" + "\n")
                   }
                 }
-                bw2.write("</" + "sect3" +  ">"+ "\n")
+                bw2.write("</" + "sect3" + ">" + "\n")
               }
             }
-            bw2.write("</" + "sect2" +  ">"+ "\n")
+            bw2.write("</" + "sect2" + ">" + "\n")
           }
         }
-        bw2.write("</" + "sect1" +  ">"+ "\n")
+        bw2.write("</" + "sect1" + ">" + "\n")
       }
     }
-
 
     val tableEtc = new Document()
     //    print (pageText)
     //    System.err.println(s"pid: ${pageID}")
     //    System.err.println(s"ptext: ${pageText}")
-    tableEtc.add(new StringField("id", pageID.toString()+"-0", Store.YES))
+    tableEtc.add(new StringField("id", pageID.toString() + "-0", Store.YES))
     tableEtc.add(new TextField("text", tableText.result, Store.YES))
     pageWriter.addDocument(tableEtc)
-    bw2.write("<" + "table" +  ">"+ "\n")
-    bw2.write(StringEscapeUtils.escapeXml11(tableText.result)+ "\n")
-    bw2.write("</" + "table" +  ">"+ "\n")
-    bw2.write("</" + "page" +  ">"+ "\n")
-//    print("page"+pageID+"\n")
-//    print ("pageText"+pageText+"\n")
-//    print("page"+pageTextWoTable+"\n")
-//    print("table"+tableText+"\n")
+    bw2.write("<" + "table" + ">" + "\n")
+    bw2.write(StringEscapeUtils.escapeXml11(tableText.result) + "\n")
+    bw2.write("</" + "table" + ">" + "\n")
+    bw2.write("</" + "page" + ">" + "\n")
+    //    print("page"+pageID+"\n")
+    //    print ("pageText"+pageText+"\n")
+    //    print("page"+pageTextWoTable+"\n")
+    //    print("table"+tableText+"\n")
     bw2.close()
     XML.loadFile(file2)
   }
-/**
-    val paras = text.split("\n")
-        //    System.err.println(s"text: ${text}")
-    for ((p,paraCounter)<- paras.zipWithIndex) {
-      System.err.println(s"paracounter: ${paraCounter}")
-      if ((p == "") == false) {
-        if (paraCounter == 1) {
-
-          val titleAsDocument = new  Document()
-          val pid = id + "-" + paraCounter
-          System.err.println(s"pid: ${pid}")
-          System.err.println(s"text: ${p}")
-          titleAsDocument.add(new StringField("id", pid, Store.YES))
-          titleAsDocument.add(new TextField("text", title, Store.YES))
-          titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
-          writer.addDocument(titleAsDocument)
-        } else {
-          val document = new Document()
-          val pid = id + "-" + paraCounter
-          System.err.println(s"pid: ${pid}")
-          System.err.println(s"text: ${p}")
-          document.add(new StringField("id", pid, Store.YES))
-          document.add(new IntField("isDoc", 0, Store.YES))
-          document.add(new TextField("text", p, Store.YES))
-          writer.addDocument(document)
-*/
+  /**
+   * val paras = text.split("\n")
+   * //    System.err.println(s"text: ${text}")
+   * for ((p,paraCounter)<- paras.zipWithIndex) {
+   * System.err.println(s"paracounter: ${paraCounter}")
+   * if ((p == "") == false) {
+   * if (paraCounter == 1) {
+   *
+   * val titleAsDocument = new  Document()
+   * val pid = id + "-" + paraCounter
+   * System.err.println(s"pid: ${pid}")
+   * System.err.println(s"text: ${p}")
+   * titleAsDocument.add(new StringField("id", pid, Store.YES))
+   * titleAsDocument.add(new TextField("text", title, Store.YES))
+   * titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
+   * writer.addDocument(titleAsDocument)
+   * } else {
+   * val document = new Document()
+   * val pid = id + "-" + paraCounter
+   * System.err.println(s"pid: ${pid}")
+   * System.err.println(s"text: ${p}")
+   * document.add(new StringField("id", pid, Store.YES))
+   * document.add(new IntField("isDoc", 0, Store.YES))
+   * document.add(new TextField("text", p, Store.YES))
+   * writer.addDocument(document)
+   */
 
   def apply(fileName: String) = {
-    
+
     val bufferedSource = Source.fromFile(fileName)
     val lines = bufferedSource.getLines
     var pageFound = 0
@@ -472,7 +467,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     var firstPage = 1
     var buf = ArrayBuffer[String]()
     val pageNumStream = Stream.iterate(1)(_ + 1).iterator
-    for (line<- lines) {
+    for (line <- lines) {
       line match {
         case pageRe(pageTitle) => {
           if (sect5Found == 1) {
@@ -586,78 +581,78 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
 
         case _ =>
           {
-          buf += StringEscapeUtils.escapeXml11(line)
+            buf += StringEscapeUtils.escapeXml11(line)
             /**
-            if (i == (lines.size-1)) {
-              if (sect5Found == 1 ) {
-                buf += "</" + "section5"+  ">"
-                sect5Found = 0
-              }
-              if (sect4Found == 1 ) {
-                buf += "</" + "section4"+  ">"
-                sect4Found = 0
-              }
-              if (sect3Found == 1 ) {
-                buf += "</" + "section3"+  ">"
-                sect3Found = 0
-              }
-              if (sect2Found == 1 ) {
-                buf += "</" + "section2"+  ">"
-                sect2Found = 0
-              }
-              if (sect1Found == 1 ) {
-                buf += "</" + "section1"+  ">"
-                sect1Found = 0
-              }
-              if (pageFound == 1) {
-                val pageID = pageNumStream.next
-                buf += "</" + "page"+">"
-                addPageToDoc(pageWriter, paraWriter, buf, pageID)
-                buf = ArrayBuffer[String]()
-              }
-            }
-          */
+             * if (i == (lines.size-1)) {
+             * if (sect5Found == 1 ) {
+             * buf += "</" + "section5"+  ">"
+             * sect5Found = 0
+             * }
+             * if (sect4Found == 1 ) {
+             * buf += "</" + "section4"+  ">"
+             * sect4Found = 0
+             * }
+             * if (sect3Found == 1 ) {
+             * buf += "</" + "section3"+  ">"
+             * sect3Found = 0
+             * }
+             * if (sect2Found == 1 ) {
+             * buf += "</" + "section2"+  ">"
+             * sect2Found = 0
+             * }
+             * if (sect1Found == 1 ) {
+             * buf += "</" + "section1"+  ">"
+             * sect1Found = 0
+             * }
+             * if (pageFound == 1) {
+             * val pageID = pageNumStream.next
+             * buf += "</" + "page"+">"
+             * addPageToDoc(pageWriter, paraWriter, buf, pageID)
+             * buf = ArrayBuffer[String]()
+             * }
+             * }
+             */
           }
-        }
+      }
     }
-  if (sect5Found == 1 ) {
-    buf += "</" + "section5"+  ">"
-    sect5Found = 0
-  }
-  if (sect4Found == 1 ) {
-    buf += "</" + "section4"+  ">"
-    sect4Found = 0
-  }
-  if (sect3Found == 1 ) {
-    buf += "</" + "section3"+  ">"
-    sect3Found = 0
-  }
-  if (sect2Found == 1 ) {
-    buf += "</" + "section2"+  ">"
-    sect2Found = 0
-  }
-  if (sect1Found == 1 ) {
-    buf += "</" + "section1"+  ">"
-    sect1Found = 0
-  }
-  if (pageFound == 1) {
-    val pageID = pageNumStream.next
-    buf += "</" + "page"+">"
-    addPageToDoc(pageWriter, paraWriter, buf, pageID.toString)
-    buf = ArrayBuffer[String]()
-  }
-//    val titleIdxs = (0 until wholeFile.size).filter {
-//      i =>
-//      wholeFile(i) match titleRe && (i > 0 && wholeFile(i-1)=="" )
-//    }
+    if (sect5Found == 1) {
+      buf += "</" + "section5" + ">"
+      sect5Found = 0
+    }
+    if (sect4Found == 1) {
+      buf += "</" + "section4" + ">"
+      sect4Found = 0
+    }
+    if (sect3Found == 1) {
+      buf += "</" + "section3" + ">"
+      sect3Found = 0
+    }
+    if (sect2Found == 1) {
+      buf += "</" + "section2" + ">"
+      sect2Found = 0
+    }
+    if (sect1Found == 1) {
+      buf += "</" + "section1" + ">"
+      sect1Found = 0
+    }
+    if (pageFound == 1) {
+      val pageID = pageNumStream.next
+      buf += "</" + "page" + ">"
+      addPageToDoc(pageWriter, paraWriter, buf, pageID.toString)
+      buf = ArrayBuffer[String]()
+    }
+    //    val titleIdxs = (0 until wholeFile.size).filter {
+    //      i =>
+    //      wholeFile(i) match titleRe && (i > 0 && wholeFile(i-1)=="" )
+    //    }
 
-//    val wholeFile = bufferedSource.getLines.mkString("\n")
-//    val pages = wholeFile.split("\n\\[\\[.*\\]\\]\n")
-//    for (page <- titles) bw.write("page start\n" + page+"page end\n")
-//    for (page <- pages) bw.write("page start\n" + page+"page end\n")
-//    bw.close()
+    //    val wholeFile = bufferedSource.getLines.mkString("\n")
+    //    val pages = wholeFile.split("\n\\[\\[.*\\]\\]\n")
+    //    for (page <- titles) bw.write("page start\n" + page+"page end\n")
+    //    for (page <- pages) bw.write("page start\n" + page+"page end\n")
+    //    bw.close()
     bufferedSource.close
-    
+
   }
 
 }
@@ -696,7 +691,6 @@ class Indexing {
    * @return
    */
 
-
   def cleanFile(fileName: String): Array[String] = {
     val docTagRe = """<\/?doc.*?>""".r
     val openDocTagRe = """<doc.*?>""".r
@@ -719,64 +713,61 @@ class Indexing {
     //    for (line <- lines) yield {
     for ((line, lineNo) <- lines.zipWithIndex) yield {
       //      System.err.println(s"lineb4: ${line}")
-      if (fileTagRe.findFirstIn(line) != None){
-        outLines(lineNo) = nonDocTagRe.replaceAllIn(line,"")
-      }
-      else{
+      if (fileTagRe.findFirstIn(line) != None) {
+        outLines(lineNo) = nonDocTagRe.replaceAllIn(line, "")
+      } else {
         if (docTagRe.findFirstIn(line) != None) {
-        //          System.err.println(s"hit line: ${line}")
+          //          System.err.println(s"hit line: ${line}")
           if (openDocTagRe.findFirstIn(line) != None) {
             val captureTitleRe(title) = line
             capturedTitle = title
             openTagLineNo = lineNo
-          }
-          else {
+          } else {
             titleFound = 0
             firstParaFound = 0
           }
           outLines(lineNo) = line
 
         } else {
-          val titleInDoc= capturedTitle
-          val firstParaRe= """\S+[^\n]+""".r
+          val titleInDoc = capturedTitle
+          val firstParaRe = """\S+[^\n]+""".r
           System.err.println(s"titleInDoc: ${capturedTitle.mkString}")
           System.err.println(s"line: ${line.mkString}")
           System.err.println(s"titleFound: ${titleFound}")
           if ((line contains titleInDoc) && (titleFound == 0)) {
             System.err.println(s"titleline: ${line.mkString}")
             titleFound = 1
-          }
-          else {line match {
-            case firstParaRe() if (titleFound == 1) && (firstParaFound == 0) => {
-              val captureOpenDocTagContenteRe(content) = outLines(openTagLineNo)
-              System.err.println(s"content: ${content.mkString}")
-              outLines(openTagLineNo) = content+" firstpara=\""+StringEscapeUtils.escapeXml11(line)+"\">"
-              System.err.println(s"rewritten: ${outLines(openTagLineNo).mkString}")
-              firstParaFound = 1
+          } else {
+            line match {
+              case firstParaRe() if (titleFound == 1) && (firstParaFound == 0) => {
+                val captureOpenDocTagContenteRe(content) = outLines(openTagLineNo)
+                System.err.println(s"content: ${content.mkString}")
+                outLines(openTagLineNo) = content + " firstpara=\"" + StringEscapeUtils.escapeXml11(line) + "\">"
+                System.err.println(s"rewritten: ${outLines(openTagLineNo).mkString}")
+                firstParaFound = 1
+              }
+              case _ =>
             }
-            case _ =>
           }
-        }
-        //        if (nonDocTagRe.findFirstIn(line) != None) {
-        //          System.err.println(s"hit: ${line}")
+          //        if (nonDocTagRe.findFirstIn(line) != None) {
+          //          System.err.println(s"hit: ${line}")
 
-        //        }
-//          outLines(lineNo) = line
-        outLines(lineNo) = StringEscapeUtils.escapeXml11(line)
+          //        }
+          //          outLines(lineNo) = line
+          outLines(lineNo) = StringEscapeUtils.escapeXml11(line)
         }
       }
     }
     bufferedSource.close
-//    System.err.println(s"outlines: ${outLines.mkString("\n")}")
+    //    System.err.println(s"outlines: ${outLines.mkString("\n")}")
     outLines
   }
-
 
   //  private def makeIndexMain(knowledgeFiles: Array[String], indexDir: Directory): Array[(String, Elem)] = {
   private def makeIndexMain(knowledgeFiles: Array[String], indexDirName: String): Unit = {
 
-    val pageIndexDir = FSDirectory.open(new File(indexDirName+"/page"))
-    val paraIndexDir = FSDirectory.open(new File(indexDirName+"/para"))
+    val pageIndexDir = FSDirectory.open(new File(indexDirName + "/page"))
+    val paraIndexDir = FSDirectory.open(new File(indexDirName + "/para"))
     //    val debugList = List("/home/wailoktam/qa/input/knowledge/rite2-ja-textbook.xml","/home/wailoktam/qa/input/knowledge/riteval-ja-textbook2.xml", "/home/wailoktam/qa/input/knowledge/wiki_00")
     val analyzer = new JapaneseAnalyzer()
     val config1 = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
@@ -787,24 +778,24 @@ class Indexing {
     config2.setSimilarity(new SimilarityWithConstantTF)
     val pageWriter = new IndexWriter(pageIndexDir, config1) // overwrite existing index
     val paraWriter = new IndexWriter(paraIndexDir, config2) // overwrite existing index
-    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter,paraWriter)
+    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, paraWriter)
     //    var id = 0
     /**
-    for (knowledgeFile <- knowledgeFiles) yield {
-      System.err.println(s"preprocessing file: ${knowledgeFile}")
-      val contentToWrite = "<file>\n" + cleanFile(knowledgeFile).mkString("\n") + "\n</file>"
-      val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(knowledgeFile)))
-      bw.write(contentToWrite)
-      bw.close()
-    }
-    */
+     * for (knowledgeFile <- knowledgeFiles) yield {
+     * System.err.println(s"preprocessing file: ${knowledgeFile}")
+     * val contentToWrite = "<file>\n" + cleanFile(knowledgeFile).mkString("\n") + "\n</file>"
+     * val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(knowledgeFile)))
+     * bw.write(contentToWrite)
+     * bw.close()
+     * }
+     */
     for (knowledgeFile <- knowledgeFiles) yield {
       pullAndAddInstance(knowledgeFile)
     }
-//    pullAndAddPageInstance = new pullAndAddPage(pageWriter)
-//    pullAndAddParaInstance = new pullAndAddPara(parawriter)
-//    knowledgeFiles.map(pullAndAddPageInstance(_))
-//    knowledgeFiles.map(pullAndAddParaInstance(_))
+    //    pullAndAddPageInstance = new pullAndAddPage(pageWriter)
+    //    pullAndAddParaInstance = new pullAndAddPara(parawriter)
+    //    knowledgeFiles.map(pullAndAddPageInstance(_))
+    //    knowledgeFiles.map(pullAndAddParaInstance(_))
     //  val docXmlPairs = knowledgeFiles.map(pullAndAdd(writer,_)).flatten.toArray
     pageWriter.close
     paraWriter.close
