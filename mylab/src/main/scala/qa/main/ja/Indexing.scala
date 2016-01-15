@@ -467,6 +467,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     var firstPage = 1
     var buf = ArrayBuffer[String]()
     val pageNumStream = Stream.iterate(1)(_ + 1).iterator
+    val file4 = new File("bugInIndexing4")
+    val bw4 = new BufferedWriter(new FileWriter(file4))
     for (line <- lines) {
       line match {
         case pageRe(pageTitle) => {
@@ -493,6 +495,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
           if (pageFound == 1) {
             val pageID = pageNumStream.next
             buf += "</" + "page" + ">"
+            bw4.write(pageID+"\n")
             addPageToDoc(pageWriter, paraWriter, buf, pageID.toString())
             buf = ArrayBuffer[String]()
           }
@@ -638,6 +641,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     if (pageFound == 1) {
       val pageID = pageNumStream.next
       buf += "</" + "page" + ">"
+      bw4.write(pageID+"\n")
       addPageToDoc(pageWriter, paraWriter, buf, pageID.toString)
       buf = ArrayBuffer[String]()
     }
