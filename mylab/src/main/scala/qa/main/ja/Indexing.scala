@@ -454,7 +454,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
    * writer.addDocument(document)
    */
 
-  def apply(fileName: String) = {
+  def apply(fileName: String, fileID: String) = {
 
     val bufferedSource = Source.fromFile(fileName)
     val lines = bufferedSource.getLines
@@ -467,8 +467,9 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     var firstPage = 1
     var buf = ArrayBuffer[String]()
     val pageNumStream = Stream.iterate(1)(_ + 1).iterator
-    val file4 = new File("bugInIndexing4")
-    val bw4 = new BufferedWriter(new FileWriter(file4))
+//    val pageID = pageNumStream.next
+//    val file4 = new File("bugInIndexing4")
+//    val bw4 = new BufferedWriter(new FileWriter(file4))
     for (line <- lines) {
       line match {
         case pageRe(pageTitle) => {
@@ -495,8 +496,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
           if (pageFound == 1) {
             val pageID = pageNumStream.next
             buf += "</" + "page" + ">"
-            bw4.write(pageID+"\n")
-            addPageToDoc(pageWriter, paraWriter, buf, pageID.toString())
+            System.err.println(s"fileID and pageID first: ${fileID+":"+pageID.toString()}")
+            addPageToDoc(pageWriter, paraWriter, buf, fileID+":"+pageID.toString())
             buf = ArrayBuffer[String]()
           }
           buf += "<" + "page" + " title=" + "\"" + StringEscapeUtils.escapeXml11(pageTitle) + "\"" + ">"
@@ -641,8 +642,9 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     if (pageFound == 1) {
       val pageID = pageNumStream.next
       buf += "</" + "page" + ">"
-      bw4.write(pageID+"\n")
-      addPageToDoc(pageWriter, paraWriter, buf, pageID.toString)
+//      bw4.write(pageID+"\n")
+      System.err.println(s"fileID And pageID final: ${fileID+":"+pageID.toString()}")
+      addPageToDoc(pageWriter, paraWriter, buf, fileID+":"+pageID.toString)
       buf = ArrayBuffer[String]()
     }
     //    val titleIdxs = (0 until wholeFile.size).filter {
@@ -735,19 +737,19 @@ class Indexing {
         } else {
           val titleInDoc = capturedTitle
           val firstParaRe = """\S+[^\n]+""".r
-          System.err.println(s"titleInDoc: ${capturedTitle.mkString}")
-          System.err.println(s"line: ${line.mkString}")
-          System.err.println(s"titleFound: ${titleFound}")
+//          System.err.println(s"titleInDoc: ${capturedTitle.mkString}")
+//          System.err.println(s"line: ${line.mkString}")
+//          System.err.println(s"titleFound: ${titleFound}")
           if ((line contains titleInDoc) && (titleFound == 0)) {
-            System.err.println(s"titleline: ${line.mkString}")
+//            System.err.println(s"titleline: ${line.mkString}")
             titleFound = 1
           } else {
             line match {
               case firstParaRe() if (titleFound == 1) && (firstParaFound == 0) => {
                 val captureOpenDocTagContenteRe(content) = outLines(openTagLineNo)
-                System.err.println(s"content: ${content.mkString}")
+//                System.err.println(s"content: ${content.mkString}")
                 outLines(openTagLineNo) = content + " firstpara=\"" + StringEscapeUtils.escapeXml11(line) + "\">"
-                System.err.println(s"rewritten: ${outLines(openTagLineNo).mkString}")
+//                System.err.println(s"rewritten: ${outLines(openTagLineNo).mkString}")
                 firstParaFound = 1
               }
               case _ =>
@@ -783,6 +785,7 @@ class Indexing {
     val pageWriter = new IndexWriter(pageIndexDir, config1) // overwrite existing index
     val paraWriter = new IndexWriter(paraIndexDir, config2) // overwrite existing index
     val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, paraWriter)
+    val fileNumStream = Stream.iterate(1)(_ + 1).iterator
     //    var id = 0
     /**
      * for (knowledgeFile <- knowledgeFiles) yield {
@@ -794,7 +797,9 @@ class Indexing {
      * }
      */
     for (knowledgeFile <- knowledgeFiles) yield {
-      pullAndAddInstance(knowledgeFile)
+      val fileID = fileNumStream.next
+      System.err.println(s"fileID: ${fileID}")
+      pullAndAddInstance(knowledgeFile,fileID.toString())
     }
     //    pullAndAddPageInstance = new pullAndAddPage(pageWriter)
     //    pullAndAddParaInstance = new pullAndAddPara(parawriter)
