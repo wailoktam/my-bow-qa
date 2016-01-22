@@ -267,13 +267,17 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     val tableText = new StringBuilder
     tableText.append(etcCollect(pageText).split("\\|\\|")(0))
     val pageTextWoTable = etcCollect(pageText).split("\\|\\|")(1)
+    val pageParaCount = pageTextWoTable.split("\n").filter{p => ((p == "") == false)}.length
     val mainPage = new Document()
+    System.err.println(s"id: ${pageID}")
+    System.err.println(s"pageParaCount: ${pageParaCount}")
     //    print (pageText)
     //    System.err.println(s"pid: ${pageID}")
     //    System.err.println(s"ptext: ${pageText}")
     mainPage.add(new StringField("id", pageID, Store.YES))
     mainPage.add(new TextField("title", pageTitle, Store.YES))
     mainPage.add(new TextField("text", pageTextWoTable, Store.YES))
+    mainPage.add(new LongField("paras", pageParaCount, Store.YES))
     pageWriter.addDocument(mainPage)
     bw2.write("<" + "page" + ">" + "\n")
     bw2.write("<" + "id" + ">" + "\n")
@@ -282,21 +286,27 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     bw2.write("<" + "title" + ">" + "\n")
     bw2.write(StringEscapeUtils.escapeXml11(pageTitle) + "\n")
     bw2.write("</" + "title" + ">" + "\n")
+
     addParaToDoc(paraWriter, pageTextWoTable, pageID, bw2)
 
     if ((x \\ "section1") != "") {
       val sect1NumStream = Stream.iterate(1)(_ + 1).iterator
       for (section1 <- (x \\ "section1")) {
         val sect1ID = pageID + "-" + sect1NumStream.next().toString()
+
         val sect1 = new Document()
         //space killed?
         val sect1Title = (section1 \ "@title").text
         val sect1Text = section1.child.collect { case Text(t) => t }.mkString("\n")
         val sect1TextWoTable = etcCollect(sect1Text).split("\\|\\|")(1)
         tableText.append(etcCollect(sect1Text).split("\\|\\|")(0))
+        val sect1ParaCount = sect1TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+        System.err.println(s"id: ${sect1ID}")
+        System.err.println(s"sect1ParaCount: ${sect1ParaCount}")
         sect1.add(new StringField("id", sect1ID, Store.YES))
         sect1.add(new TextField("title", sect1Title, Store.YES))
         sect1.add(new TextField("text", sect1TextWoTable, Store.YES))
+        sect1.add(new LongField("paras", sect1ParaCount, Store.YES))
         pageWriter.addDocument(sect1)
         bw2.write("<" + "sect1" + ">" + "\n")
         bw2.write("<" + "id" + ">" + "\n")
@@ -315,9 +325,13 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
             val sect2Text = section2.child.collect { case Text(t) => t }.mkString("\n")
             val sect2TextWoTable = etcCollect(sect2Text).split("\\|\\|")(1)
             tableText.append(etcCollect(sect2Text).split("\\|\\|")(0))
+            val sect2ParaCount = sect2TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+            System.err.println(s"id: ${sect2ID}")
+            System.err.println(s"sect2ParaCount: ${sect2ParaCount}")
             sect2.add(new StringField("id", sect2ID, Store.YES))
             sect2.add(new TextField("title", sect2Title, Store.YES))
             sect2.add(new TextField("text", sect2TextWoTable, Store.YES))
+            sect2.add(new LongField("paras", sect2ParaCount, Store.YES))
             pageWriter.addDocument(sect2)
             bw2.write("<" + "sect2" + ">" + "\n")
             bw2.write("<" + "id" + ">" + "\n")
@@ -338,9 +352,13 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
                 val sect3Text = section3.child.collect { case Text(t) => t }.mkString("\n")
                 val sect3TextWoTable = etcCollect(sect3Text).split("\\|\\|")(1)
                 tableText.append(etcCollect(sect3Text).split("\\|\\|")(0))
+                val sect3ParaCount = sect3TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+                System.err.println(s"id: ${sect3ID}")
+                System.err.println(s"sect3ParaCount: ${sect3ParaCount}")
                 sect3.add(new StringField("id", sect3ID, Store.YES))
                 sect3.add(new TextField("title", sect3Title, Store.YES))
                 sect3.add(new TextField("text", sect3TextWoTable, Store.YES))
+                sect3.add(new LongField("paras", sect3ParaCount, Store.YES))
                 pageWriter.addDocument(sect3)
                 bw2.write("<" + "sect3" + ">" + "\n")
                 bw2.write("<" + "id" + ">" + "\n")
@@ -359,10 +377,14 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
                     val sect4Text = section4.child.collect { case Text(t) => t }.mkString("\n")
                     val sect4TextWoTable = etcCollect(sect4Text).split("\\|\\|")(1)
                     tableText.append(etcCollect(sect4Text).split("\\|\\|")(0))
+                    val sect4ParaCount = sect4TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
                     //                    print(sect4Text)
+                    System.err.println(s"id: ${sect4ID}")
+                    System.err.println(s"sect4ParaCount: ${sect4ParaCount}")
                     sect4.add(new StringField("id", sect4ID, Store.YES))
                     sect4.add(new TextField("title", sect4Title, Store.YES))
                     sect4.add(new TextField("text", sect4TextWoTable, Store.YES))
+                    sect4.add(new LongField("paras", sect4ParaCount, Store.YES))
                     pageWriter.addDocument(sect4)
                     bw2.write("<" + "sect4" + ">" + "\n")
                     bw2.write("<" + "id" + ">" + "\n")
@@ -381,9 +403,13 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
                         val sect5Text = section5.child.collect { case Text(t) => t }.mkString("\n")
                         val sect5TextWoTable = etcCollect(sect5Text).split("\\|\\|")(1)
                         tableText.append(etcCollect(sect5Text).split("\\|\\|")(0))
+                        val sect5ParaCount = sect5TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+                        System.err.println(s"id: ${sect5ID}")
+                        System.err.println(s"sect5ParaCount: ${sect5ParaCount}")
                         sect5.add(new StringField("id", sect5ID, Store.YES))
                         sect5.add(new TextField("title", sect5Title, Store.YES))
                         sect5.add(new TextField("text", sect5TextWoTable, Store.YES))
+                        sect5.add(new LongField("paras", sect5ParaCount, Store.YES))
                         pageWriter.addDocument(sect5)
                         bw2.write("<" + "sect5" + ">" + "\n")
                         bw2.write("<" + "id" + ">" + "\n")
@@ -467,9 +493,9 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     var firstPage = 1
     var buf = ArrayBuffer[String]()
     val pageNumStream = Stream.iterate(1)(_ + 1).iterator
-//    val pageID = pageNumStream.next
-//    val file4 = new File("bugInIndexing4")
-//    val bw4 = new BufferedWriter(new FileWriter(file4))
+    //    val pageID = pageNumStream.next
+    //    val file4 = new File("bugInIndexing4")
+    //    val bw4 = new BufferedWriter(new FileWriter(file4))
     for (line <- lines) {
       line match {
         case pageRe(pageTitle) => {
@@ -496,8 +522,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
           if (pageFound == 1) {
             val pageID = pageNumStream.next
             buf += "</" + "page" + ">"
-            System.err.println(s"fileID and pageID first: ${fileID+":"+pageID.toString()}")
-            addPageToDoc(pageWriter, paraWriter, buf, fileID+":"+pageID.toString())
+            System.err.println(s"fileID and pageID first: ${fileID + ":" + pageID.toString()}")
+            addPageToDoc(pageWriter, paraWriter, buf, fileID + ":" + pageID.toString())
             buf = ArrayBuffer[String]()
           }
           buf += "<" + "page" + " title=" + "\"" + StringEscapeUtils.escapeXml11(pageTitle) + "\"" + ">"
@@ -642,9 +668,9 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     if (pageFound == 1) {
       val pageID = pageNumStream.next
       buf += "</" + "page" + ">"
-//      bw4.write(pageID+"\n")
-      System.err.println(s"fileID And pageID final: ${fileID+":"+pageID.toString()}")
-      addPageToDoc(pageWriter, paraWriter, buf, fileID+":"+pageID.toString)
+      //      bw4.write(pageID+"\n")
+      System.err.println(s"fileID And pageID final: ${fileID + ":" + pageID.toString()}")
+      addPageToDoc(pageWriter, paraWriter, buf, fileID + ":" + pageID.toString)
       buf = ArrayBuffer[String]()
     }
     //    val titleIdxs = (0 until wholeFile.size).filter {
@@ -737,19 +763,19 @@ class Indexing {
         } else {
           val titleInDoc = capturedTitle
           val firstParaRe = """\S+[^\n]+""".r
-//          System.err.println(s"titleInDoc: ${capturedTitle.mkString}")
-//          System.err.println(s"line: ${line.mkString}")
-//          System.err.println(s"titleFound: ${titleFound}")
+          //          System.err.println(s"titleInDoc: ${capturedTitle.mkString}")
+          //          System.err.println(s"line: ${line.mkString}")
+          //          System.err.println(s"titleFound: ${titleFound}")
           if ((line contains titleInDoc) && (titleFound == 0)) {
-//            System.err.println(s"titleline: ${line.mkString}")
+            //            System.err.println(s"titleline: ${line.mkString}")
             titleFound = 1
           } else {
             line match {
               case firstParaRe() if (titleFound == 1) && (firstParaFound == 0) => {
                 val captureOpenDocTagContenteRe(content) = outLines(openTagLineNo)
-//                System.err.println(s"content: ${content.mkString}")
+                //                System.err.println(s"content: ${content.mkString}")
                 outLines(openTagLineNo) = content + " firstpara=\"" + StringEscapeUtils.escapeXml11(line) + "\">"
-//                System.err.println(s"rewritten: ${outLines(openTagLineNo).mkString}")
+                //                System.err.println(s"rewritten: ${outLines(openTagLineNo).mkString}")
                 firstParaFound = 1
               }
               case _ =>
@@ -799,7 +825,7 @@ class Indexing {
     for (knowledgeFile <- knowledgeFiles) yield {
       val fileID = fileNumStream.next
       System.err.println(s"fileID: ${fileID}")
-      pullAndAddInstance(knowledgeFile,fileID.toString())
+      pullAndAddInstance(knowledgeFile, fileID.toString())
     }
     //    pullAndAddPageInstance = new pullAndAddPage(pageWriter)
     //    pullAndAddParaInstance = new pullAndAddPara(parawriter)
