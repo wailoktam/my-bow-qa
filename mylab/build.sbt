@@ -13,7 +13,7 @@ javaOptions += "-Xmx3G"
 
 fork := true
 
-resolvers += DefaultMavenRepository
+resolvers += "Atilika Open Source repository" at "http://www.atilika.org/nexus/content/repositories/atilika"
 
 assemblySettings
 
@@ -25,10 +25,11 @@ libraryDependencies ++= Seq(
   "org.apache.lucene" % "lucene-queryparser" % "4.10.0",
   "org.apache.lucene" % "lucene-analyzers-common" % "4.10.0",
   "org.apache.lucene" % "lucene-analyzers-kuromoji" % "4.10.0",
-  "com.ibm.icu" % "icu4j" % "55.1",
+  "com.ibm.icu" % "icu4j" % "56.1",
   "org.apache.commons" % "commons-lang3" % "3.4",
-  "net.sf.py4j" % "py4j" % "0.9"
-).map(_ withSources() withJavadoc())
+  "net.sf.py4j" % "py4j" % "0.9",
+  "org.atilika.kuromoji" % "kuromoji" % "0.7.7"
+)
 
 
 // This settings is from plugin "sbt-start-script", which makes task "start-script" available
