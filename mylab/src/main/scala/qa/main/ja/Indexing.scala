@@ -440,6 +440,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     //    System.err.println(s"pid: ${pageID}")
     //    System.err.println(s"ptext: ${pageText}")
     tableEtc.add(new StringField("id", pageID.toString() + "-0", Store.YES))
+    tableEtc.add(new IntField("paras", 0, Store.YES))
     tableEtc.add(new TextField("text", tableText.result, Store.YES))
     pageWriter.addDocument(tableEtc)
     bw2.write("<" + "table" + ">" + "\n")
