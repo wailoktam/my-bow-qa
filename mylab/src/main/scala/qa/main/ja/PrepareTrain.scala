@@ -1,6 +1,6 @@
 package qa.main.ja
 
-import java.io.File
+import java.io.{FileWriter, BufferedWriter, File}
 
 import org.apache.lucene.index.{Term, DirectoryReader}
 import org.apache.lucene.search.{TermQuery, IndexSearcher}
@@ -21,7 +21,7 @@ object PrepareTrainMain {
   }
 
   def sectPara(id: String):Int =  {
-    val paraIDRe = """\/\d+""".r
+    val paraIDRe = """(?<=\\)\d+""".r
     paraIDRe.findFirstIn(id).getOrElse("0").toInt
   }
 
@@ -120,7 +120,7 @@ object PrepareTrainMain {
 
 
 
-    def checkQuestionAndAnnotation(questionXML: Node, indexDir: FSDirectory, csvFile: File): Unit = {
+    def checkQuestionAndAnnotation(questionXML: Node, indexDir: FSDirectory, csvBw: BufferedWriter): Unit = {
       val index_reader = DirectoryReader.open(indexDir)
       val index_searcher = new IndexSearcher(index_reader)
       for (doc <- (questionXML \\ "doc")) yield {
@@ -150,19 +150,23 @@ object PrepareTrainMain {
           case Some(splitID) => {
             if ((splitID.toInt == 0) == false) {
               System.err.println(s"splitIDInCheckQ&A ${splitID}")
-              val testFinal1 = getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher)
-              val testFinal2 = wholePara(idWoLastSect, index_searcher)
-              testFinal1 + testFinal2 :: featLast1
-              System.err.println(s"getParasOfPrevInCheckQ&A ${testFinal1}")
-              System.err.println(s"wholeParaInCheckQ&A ${testFinal2}")
+//              val temp1 = getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher)
+//              val temp2 = wholePara(idWoLastSect, index_searcher)
+//              System.err.println(s"temp1InCheckQ&A ${temp1}")
+//              System.err.println(s"temp2InCheckQ&A ${temp2}")
+//              temp1 + temp2 :: featLast1
+
+              sectParaNum + getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher) + wholePara(idWoLastSect, index_searcher) :: featLast1
             }
             else 0 :: featLast1
           }
         }
+        val bwLine = (doc \\ "did").text.trim() :: featLast2
+        csvBw.write(bwLine.mkString(",")+"\n")
       }
     }
 
-    def apply(xmlWDocs: Node, indexDir: FSDirectory, csvFile: File) = {
+    def apply(xmlWDocs: Node, indexDir: FSDirectory, csvFile: BufferedWriter) = {
         (xmlWDocs \\ "question") map (checkQuestionAndAnnotation(_, indexDir, csvFile))
       }
     }
@@ -175,7 +179,10 @@ object PrepareTrain {
     }
     val indexDir = FSDirectory.open(new File(args(1)))
     val csvFile = new File(args(2))
-    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),indexDir, csvFile)
+    val csvBw = new BufferedWriter(new FileWriter(csvFile))
+    csvBw.write("id,para from top,para in section,label\n")
+    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),indexDir, csvBw)
+    csvBw.close()
   }
 }
 

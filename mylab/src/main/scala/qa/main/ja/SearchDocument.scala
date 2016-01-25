@@ -141,9 +141,9 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
     //    System.err.println(s"paraid ${id}")
     System.err.println(s"sectid ${sectID}")
     System.err.println(s"pageid ${pageID}")
-    System.err.println(s"secttitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWSectID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString}")
+    System.err.println(s"secttitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString}")
     //    System.err.println(s"pagetitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID,1 ).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("id")}).mkString}")
-    (for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("id") }).mkString
+    (for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString
     //    System.err.println(s"sectTitle ${(for (scoreWDoc <- sectIndex_searcher.search(query,1).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("title")}).mkString}")
   }
 
