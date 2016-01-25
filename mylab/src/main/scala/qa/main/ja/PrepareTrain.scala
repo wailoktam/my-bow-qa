@@ -20,82 +20,162 @@ object PrepareTrainMain {
     (tokens.map { t => normalizer.normalize(t.asInstanceOf[Token].getSurfaceForm())}).mkString
   }
 
-  def sectPara(id: String):(String,Int) =  {
+  def sectPara(id: String):Int =  {
     val paraIDRe = """\/\d+""".r
-    (paraIDRe.replaceAllIn(id, ""),paraIDRe.findFirstIn(id).getOrElse("0").toInt)
+    paraIDRe.findFirstIn(id).getOrElse("0").toInt
   }
 
-  def wholePara(id: String, indexDir: FSDirectory): Int = {
-    val sectIDRe = """(-\d+)$""".r
-    sectIDRe.findFirstIn(id)
-    val index_reader = DirectoryReader.open(indexDir)
-    val index_searcher = new IndexSearcher(index_reader)
-    val paraIDRe = """\/\d+""".r
-    val sectID = paraIDRe.replaceAllIn(id, "")
-    val pageID = sectIDRe.replaceAllIn(sectID, "")
-    val sectTerm = new Term("id", sectID)
-    val pageTerm = new Term("id", pageID)
-
-    val queryWPageID = new TermQuery(pageTerm)
-    val queryWSectID = new TermQuery(sectTerm)
-    //    val query = parser.parse(sectID)
-    //    System.err.println(s"paraid ${id}")
-    System.err.println(s"sectid ${sectID}")
-    System.err.println(s"pageid ${pageID}")
-    System.err.println(s"secttitle ${(for (scoreWDoc <- index_searcher.search(queryWSectID, 1).scoreDocs) yield { index_searcher.doc(scoreWDoc.doc).get("title") }).mkString}")
-    //    System.err.println(s"pagetitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID,1 ).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("id")}).mkString}")
-    (for (scoreWDoc <- index_searcher.search(queryWPageID, 1).scoreDocs) yield { index_searcher.doc(scoreWDoc.doc).get("id") }).mkString.toInt
-  }
-
-
-
-  def checkQuestionAndAnnotation(questionXML: Node, indexDir: FSDirectory): Unit = {
-    for (doc <- (questionXML \\ "doc")) yield {
-
-      val label = {
-        val dtitle = myNormalize((doc \\ "dtitle").text.trim())
-        (questionXML \\ "answers") contains { a:Node => dtitle.contains(myNormalize(a.text.trim()))}
+  def getParasOfNext(idNum: Int, oldID: String, index_searcher: IndexSearcher):Int = {
+    //idNum = 2
+    //oldID = 2:450-4-1-1-4
+    val newID = oldID + "-" + idNum.toString()
+    val term = new Term("id", newID)
+    //newID = 2:450-4-1-1-4-2
+    System.err.println(s"old id + - num ${oldID+"-"+idNum.toString()}")
+    val query = new TermQuery(term)
+    if ((index_searcher.search(query, 1).scoreDocs).length == 0) 0
+    else {
+      val paraSelfCount = for (scoreWDoc <- index_searcher.search(query, 1).scoreDocs) yield {
+        index_searcher.doc(scoreWDoc.doc).get("paras")
       }
+      val paraCount = paraSelfCount.mkString.toInt + getParasOfDesc(idNum, oldID, index_searcher)
+      System.err.println(s"newID in getParasOfNext ${newID}")
+      System.err.println(s"paraSelfCount in getParasOfNext ${paraSelfCount.mkString.toInt }")
+      System.err.println(s"paraCount in getParasOfNext ${paraCount}")
+      paraCount + getParasOfNext(idNum + 1, oldID, index_searcher)
+    }
+  }
 
-      val featLast1 = sectPara((doc \\ "did").text)::List(label.toString())
-//      val featLast2 = wholePara(featLast1(0),indexDir)::featLast1
-//      val featLast3 = sect((doc \\ "did").text)::featLast2
+  def getParasOfDesc(idNum: Int, oldID: String, index_searcher: IndexSearcher):Int = {
+    //idNum = 4
+    //oldID = 2:450-4-1-1
+
+    val newID = oldID + "-" + idNum.toString()
+    //newID = 2:450-4-1-1-4
+    val term = new Term("id", newID + "-" + "1")
+    System.err.println(s"newID plus -1  in getParasOfDesc ${newID +"-"+ "1"}")
+    val query = new TermQuery(term)
+    if ((index_searcher.search(query, 1).scoreDocs).length == 0) 0
+    else {
+      val paraSelfCount = for (scoreWDoc <- index_searcher.search(query, 1).scoreDocs) yield {
+        index_searcher.doc(scoreWDoc.doc).get("paras")
+      }
+      val paraCount = paraSelfCount.mkString.toInt + getParasOfNext(2, newID, index_searcher)
+
+      System.err.println(s"paraSelfCount in getParasOfDesc ${paraSelfCount.mkString.toInt }")
+      System.err.println(s"paraCount in getParasOfDesc ${paraCount}")
+      paraCount + getParasOfDesc(1, newID, index_searcher)
+    }
+  }
+
+
+    def getParasOfPrev(idNum: Int, oldID: String, index_searcher: IndexSearcher): Int = {
+      //idNum = 4
+      //oldID = 2:450-4-1-1
+      if (idNum == 0) 0
+      else {
+        val newID = oldID + "-" + idNum.toString()
+        //newID = 2:450-4-1-1-4
+        val term = new Term("id", newID)
+        System.err.println(s"newID in getParasOfPrev ${newID}")
+        val query = new TermQuery(term)
+        val paraSelfCount = for (scoreWDoc <- index_searcher.search(query, 1).scoreDocs) yield {
+          index_searcher.doc(scoreWDoc.doc).get("paras")
+        }
+        System.err.println(s"paraSelfCount in getParasOfPrev ${paraSelfCount.mkString}")
+        val paraCount = paraSelfCount.mkString.toInt + getParasOfDesc(idNum, oldID, index_searcher)
+
+        System.err.println(s"paraSelfCount in getParasOfPrev ${paraSelfCount.mkString.toInt }")
+        System.err.println(s"paraCount in getParasOfPrev ${paraCount}")
+        paraCount + getParasOfPrev(idNum - 1, oldID, index_searcher)
+      }
     }
 
 
 
-    QuestionAndAnnotation((questionXML \ "@id").text,
-      questionXML \\ "text",
-      questionXML \\ "meta",
-      questionXML \\ "answers",
-      questionXML \\ "annotations")
-  }
 
-  def formatInXML(newQAndA: QuestionAndAnnotation): Elem = {
-    newQAndA match {
-      case QuestionAndAnnotation(id, questionText, meta, answers, newAnnotations) =>
-        <question>
-          { questionText }
-          { meta }
-          { answers }
-          { newAnnotations }
-        </question> % Attribute(None, "id", Text(id), Null)
+
+    def wholePara(id: String, index_searcher: IndexSearcher): Int = {
+      val sectIDRe = """(?<=-)(\d+)(?=[\D]*)$""".r
+      val sectIDwSepRe = """-(\d+)(?=[\D]*)$""".r
+      val splitIDOpt = sectIDRe.findFirstIn(id.trim())
+      val newID = sectIDwSepRe.replaceFirstIn(id.trim(), "")
+      System.err.println(s"newIDInwholePara ${newID}")
+
+      System.err.println(s"id in wholePara ${id}")
+      val term = new Term("id", id.trim())
+      val query = new TermQuery(term)
+
+      System.err.println(s"splitIDOpt in wholePara ${splitIDOpt}")
+      splitIDOpt match {
+        case None => {
+          System.err.println(s"nonecase in wholePara${(for (scoreWDoc <- index_searcher.search(query, 1).scoreDocs) yield index_searcher.doc(scoreWDoc.doc).get("paras")).mkString.toInt}")
+          (for (scoreWDoc <- index_searcher.search(query, 1).scoreDocs) yield index_searcher.doc(scoreWDoc.doc).get("paras")).mkString.toInt
+        }
+        case Some(splitID) => {
+          getParasOfPrev(splitID.toInt-1, newID, index_searcher) + wholePara(newID, index_searcher)
+        }
+      }
     }
-  }
 
-  def apply(xmlWDocs: Node, indexDir: FSDirectory, csvFileName: String) = {
-    (xmlWDocs \\ "question") map (checkQuestionAndAnnotation(_,indexDir))
-  }
-}
+
+
+    def checkQuestionAndAnnotation(questionXML: Node, indexDir: FSDirectory, csvFile: File): Unit = {
+      val index_reader = DirectoryReader.open(indexDir)
+      val index_searcher = new IndexSearcher(index_reader)
+      for (doc <- (questionXML \\ "doc")) yield {
+        val label = {
+          val dtitle = myNormalize((doc \\ "dtitle").text.trim())
+          (questionXML \\ "answers") contains { a: Node => dtitle.contains(myNormalize(a.text.trim())) }
+        }
+        val sectParaNum = sectPara((doc \\ "did").text)
+        //doc\\"did".text = 2:450-4-1-1-5/9
+        val featLast1 = sectParaNum.toString() :: List(label.toString())
+        val paraIDRe = """\/\d+""".r
+        val idWoPara = paraIDRe.replaceAllIn((doc \\ "did").text, "")
+        //idWoPara = 2:450-4-1-1-5
+        val sectIDRe = """(?<=-)(\d+)(?=[\D]*)$""".r
+        val sectIDwSepRe = """-(\d+)(?=[\D]*)$""".r
+        val splitIDOpt = sectIDRe.findFirstIn(idWoPara.trim())
+        //splitIDOpt = Some(5)
+        val idWoLastSect = sectIDwSepRe.replaceFirstIn(idWoPara.trim(), "")
+        System.err.println(s"idWoParaInCheckQ&A ${idWoPara}")
+        System.err.println(s"idWoLastSectInCheckQ&A ${idWoLastSect}")
+        System.err.println(s"splitIDinCheckQ&A ${splitIDOpt}")
+        //idWoLastSect = 2:450-4-1-1
+        val featLast2 = splitIDOpt match {
+          case None => {
+            sectParaNum.toString() :: featLast1
+          }
+          case Some(splitID) => {
+            if ((splitID.toInt == 0) == false) {
+              System.err.println(s"splitIDInCheckQ&A ${splitID}")
+              val testFinal1 = getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher)
+              val testFinal2 = wholePara(idWoLastSect, index_searcher)
+              testFinal1 + testFinal2 :: featLast1
+              System.err.println(s"getParasOfPrevInCheckQ&A ${testFinal1}")
+              System.err.println(s"wholeParaInCheckQ&A ${testFinal2}")
+            }
+            else 0 :: featLast1
+          }
+        }
+      }
+    }
+
+    def apply(xmlWDocs: Node, indexDir: FSDirectory, csvFile: File) = {
+        (xmlWDocs \\ "question") map (checkQuestionAndAnnotation(_, indexDir, csvFile))
+      }
+    }
 
 object PrepareTrain {
   def main(args: Array[String]): Unit = {
     if (args.length < 1) {
-      System.err.println("Usage: scala qa.main.ja.PrepareTrain INPUT_XML WIKIFILE_DIR OUTPUT_CSV")
+      System.err.println("Usage: scala qa.main.ja.PrepareTrain INPUT_XML INDEX_DIR OUTPUT_CSV")
       System.exit(1)
     }
     val indexDir = FSDirectory.open(new File(args(1)))
-    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),indexDir,args(2))
+    val csvFile = new File(args(2))
+    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),indexDir, csvFile)
   }
 }
 
