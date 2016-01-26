@@ -124,10 +124,18 @@ object PrepareTrainMain {
       val index_reader = DirectoryReader.open(indexDir)
       val index_searcher = new IndexSearcher(index_reader)
       for (doc <- (questionXML \\ "doc")) yield {
+        val normalizedText = myNormalize((doc \\ "dtext").text.trim())
+//        for (answer <- questionXML \\ "answer") yield {
+//          if (normalizedText.contains(myNormalize(answer.text.trim()))) println ("get")
+//        }
+//        val label = "false"
         val label = {
-          val dtitle = myNormalize((doc \\ "dtitle").text.trim())
-          (questionXML \\ "answers") contains { a: Node => dtitle.contains(myNormalize(a.text.trim())) }
-        }
+
+  (questionXML \\ "answer") exists { a: Node => normalizedText.contains(myNormalize(a.text.trim())) }
+}
+        System.err.println(s"normalizedText in checkQ&A${normalizedText}")
+        System.err.println(s"test contain in checkQ&A${"[[坊っちゃん]]（1906年、著:[[夏目漱石]]）"contains("坊っちゃん")}")
+        for (answer<-(questionXML \\ "answer")) System.err.println(s"answer in checkQ&A${myNormalize(answer.text.trim())}")
         val sectParaNum = sectPara((doc \\ "did").text)
         //doc\\"did".text = 2:450-4-1-1-5/9
         val featLast1 = sectParaNum.toString() :: List(label.toString())
