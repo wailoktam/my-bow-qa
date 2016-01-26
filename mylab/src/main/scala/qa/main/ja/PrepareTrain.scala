@@ -131,9 +131,8 @@ object PrepareTrainMain {
 //        }
 //        val label = "false"
         val label = {
-
-  (questionXML \\ "answer") exists { a: Node => normalizedText.contains(myNormalize(a.text.trim())) }
-}
+        if ((questionXML \\ "answer") exists { a: Node => normalizedText.contains(myNormalize(a.text.trim())) }) 1 else 0
+        }
         System.err.println(s"normalizedText in checkQ&A${normalizedText}")
         System.err.println(s"test contain in checkQ&A${"[[坊っちゃん]]（1906年、著:[[夏目漱石]]）"contains("坊っちゃん")}")
         for (answer<-(questionXML \\ "answer")) System.err.println(s"answer in checkQ&A${myNormalize(answer.text.trim())}")
