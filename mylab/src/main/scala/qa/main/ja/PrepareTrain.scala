@@ -21,8 +21,9 @@ object PrepareTrainMain {
   }
 
   def sectPara(id: String):Int =  {
-    val paraIDRe = """(?<=\\)\d+""".r
-    paraIDRe.findFirstIn(id).getOrElse("0").toInt
+    System.err.println(s"id in sectPara ${id.trim()}")
+    val paraIDRe = """(?<=\/)\d+$""".r
+    paraIDRe.findFirstIn(id.trim()).getOrElse("0").toInt
   }
 
   def getParasOfNext(idNum: Int, oldID: String, index_searcher: IndexSearcher):Int = {
