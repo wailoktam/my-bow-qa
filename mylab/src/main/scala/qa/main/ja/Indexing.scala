@@ -201,7 +201,7 @@ class SimilarityWithConstantNOM extends DefaultSimilarity {
   //override def lengthNorm(state: FieldInvertState): Float = 1
 }
 
-class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
+class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter) {
   val pageRe = """\[\[(.*?)\]\](?!\'\'\')""".r
   val sect1Re = """==([^=]*)==""".r
   val sect2Re = """===([^=]*)===""".r
@@ -247,7 +247,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     file.write("</" + "text" + ">" + "\n")
   }
 
-  def addPageToDoc(pageWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String): Unit = {
+  def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String): Unit = {
     val file1 = new File("bugInIndexing1")
     val bw1 = new BufferedWriter(new FileWriter(file1))
     val xmlDir = new File("onePagePerFile")
@@ -267,18 +267,23 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     val tableText = new StringBuilder
     tableText.append(etcCollect(pageText).split("\\|\\|")(0))
     val pageTextWoTable = etcCollect(pageText).split("\\|\\|")(1)
+    System.err.println(s"pageTextWoTable: ${pageTextWoTable}")
     val pageParaCount = pageTextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+    val fullText = new StringBuilder
+
     val mainPage = new Document()
     System.err.println(s"id: ${pageID}")
     System.err.println(s"pageParaCount: ${pageParaCount}")
     //    print (pageText)
     //    System.err.println(s"pid: ${pageID}")
     //    System.err.println(s"ptext: ${pageText}")
+
     mainPage.add(new StringField("id", pageID, Store.YES))
     mainPage.add(new TextField("title", pageTitle, Store.YES))
     mainPage.add(new TextField("text", pageTextWoTable, Store.YES))
     mainPage.add(new IntField("paras", pageParaCount, Store.YES))
-    pageWriter.addDocument(mainPage)
+    sectWriter.addDocument(mainPage)
+    fullText.append(pageTextWoTable)
     bw2.write("<" + "page" + ">" + "\n")
     bw2.write("<" + "id" + ">" + "\n")
     bw2.write(pageID + "\n")
@@ -307,7 +312,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
         sect1.add(new TextField("title", sect1Title, Store.YES))
         sect1.add(new TextField("text", sect1TextWoTable, Store.YES))
         sect1.add(new IntField("paras", sect1ParaCount, Store.YES))
-        pageWriter.addDocument(sect1)
+        sectWriter.addDocument(sect1)
+        fullText.append(sect1TextWoTable)
         bw2.write("<" + "sect1" + ">" + "\n")
         bw2.write("<" + "id" + ">" + "\n")
         bw2.write(sect1ID + "\n")
@@ -332,7 +338,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
             sect2.add(new TextField("title", sect2Title, Store.YES))
             sect2.add(new TextField("text", sect2TextWoTable, Store.YES))
             sect2.add(new IntField("paras", sect2ParaCount, Store.YES))
-            pageWriter.addDocument(sect2)
+            sectWriter.addDocument(sect2)
+            fullText.append(sect2TextWoTable)
             bw2.write("<" + "sect2" + ">" + "\n")
             bw2.write("<" + "id" + ">" + "\n")
             bw2.write(sect2ID + "\n")
@@ -359,7 +366,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
                 sect3.add(new TextField("title", sect3Title, Store.YES))
                 sect3.add(new TextField("text", sect3TextWoTable, Store.YES))
                 sect3.add(new IntField("paras", sect3ParaCount, Store.YES))
-                pageWriter.addDocument(sect3)
+                sectWriter.addDocument(sect3)
+                fullText.append(sect3TextWoTable)
                 bw2.write("<" + "sect3" + ">" + "\n")
                 bw2.write("<" + "id" + ">" + "\n")
                 bw2.write(sect3ID + "\n")
@@ -385,7 +393,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
                     sect4.add(new TextField("title", sect4Title, Store.YES))
                     sect4.add(new TextField("text", sect4TextWoTable, Store.YES))
                     sect4.add(new IntField("paras", sect4ParaCount, Store.YES))
-                    pageWriter.addDocument(sect4)
+                    sectWriter.addDocument(sect4)
+                    fullText.append(sect4TextWoTable)
                     bw2.write("<" + "sect4" + ">" + "\n")
                     bw2.write("<" + "id" + ">" + "\n")
                     bw2.write(sect4ID + "\n")
@@ -410,7 +419,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
                         sect5.add(new TextField("title", sect5Title, Store.YES))
                         sect5.add(new TextField("text", sect5TextWoTable, Store.YES))
                         sect5.add(new IntField("paras", sect5ParaCount, Store.YES))
-                        pageWriter.addDocument(sect5)
+                        sectWriter.addDocument(sect5)
+                        fullText.append(sect5TextWoTable)
                         bw2.write("<" + "sect5" + ">" + "\n")
                         bw2.write("<" + "id" + ">" + "\n")
                         bw2.write(sect5ID + "\n")
@@ -442,7 +452,19 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
     tableEtc.add(new StringField("id", pageID.toString() + "-0", Store.YES))
     tableEtc.add(new IntField("paras", 0, Store.YES))
     tableEtc.add(new TextField("text", tableText.result, Store.YES))
-    pageWriter.addDocument(tableEtc)
+    sectWriter.addDocument(tableEtc)
+    fullText.append(tableText.result)
+    val fullPage = new Document()
+//    System.err.println(s"id: ${pageID}")
+//    System.err.println(s"pageParaCount: ${pageParaCount}")
+    //    print (pageText)
+    //    System.err.println(s"pid: ${pageID}")
+    //    System.err.println(s"ptext: ${pageText}")
+
+    fullPage.add(new StringField("id", pageID, Store.YES))
+    fullPage.add(new TextField("title", pageTitle, Store.YES))
+    fullPage.add(new TextField("text", fullText.result(), Store.YES))
+    pageWriter.addDocument(fullPage)
     bw2.write("<" + "table" + ">" + "\n")
     bw2.write(StringEscapeUtils.escapeXml11(tableText.result) + "\n")
     bw2.write("</" + "table" + ">" + "\n")
@@ -524,7 +546,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
             val pageID = pageNumStream.next
             buf += "</" + "page" + ">"
             System.err.println(s"fileID and pageID first: ${fileID + ":" + pageID.toString()}")
-            addPageToDoc(pageWriter, paraWriter, buf, fileID + ":" + pageID.toString())
+            addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + ":" + pageID.toString())
             buf = ArrayBuffer[String]()
           }
           buf += "<" + "page" + " title=" + "\"" + StringEscapeUtils.escapeXml11(pageTitle) + "\"" + ">"
@@ -671,7 +693,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, paraWriter: IndexWriter) {
       buf += "</" + "page" + ">"
       //      bw4.write(pageID+"\n")
       System.err.println(s"fileID And pageID final: ${fileID + ":" + pageID.toString()}")
-      addPageToDoc(pageWriter, paraWriter, buf, fileID + ":" + pageID.toString)
+      addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + ":" + pageID.toString)
       buf = ArrayBuffer[String]()
     }
     //    val titleIdxs = (0 until wholeFile.size).filter {
@@ -798,8 +820,8 @@ class Indexing {
 
   //  private def makeIndexMain(knowledgeFiles: Array[String], indexDir: Directory): Array[(String, Elem)] = {
   private def makeIndexMain(knowledgeFiles: Array[String], indexDirName: String): Unit = {
-
     val pageIndexDir = FSDirectory.open(new File(indexDirName + "/page"))
+    val sectIndexDir = FSDirectory.open(new File(indexDirName + "/sect"))
     val paraIndexDir = FSDirectory.open(new File(indexDirName + "/para"))
     //    val debugList = List("/home/wailoktam/qa/input/knowledge/rite2-ja-textbook.xml","/home/wailoktam/qa/input/knowledge/riteval-ja-textbook2.xml", "/home/wailoktam/qa/input/knowledge/wiki_00")
     val analyzer = new JapaneseAnalyzer()
@@ -809,9 +831,13 @@ class Indexing {
     val config2 = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
     config2.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
     config2.setSimilarity(new SimilarityWithConstantTF)
+    val config3 = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
+    config3.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
+    config3.setSimilarity(new SimilarityWithConstantTF)
     val pageWriter = new IndexWriter(pageIndexDir, config1) // overwrite existing index
-    val paraWriter = new IndexWriter(paraIndexDir, config2) // overwrite existing index
-    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, paraWriter)
+    val sectWriter = new IndexWriter(sectIndexDir, config2) // overwrite existing index
+    val paraWriter = new IndexWriter(paraIndexDir, config3) // overwrite existing index
+    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, sectWriter, paraWriter)
     val fileNumStream = Stream.iterate(1)(_ + 1).iterator
     //    var id = 0
     /**
@@ -828,12 +854,13 @@ class Indexing {
       System.err.println(s"fileID: ${fileID}")
       pullAndAddInstance(knowledgeFile, fileID.toString())
     }
-    //    pullAndAddPageInstance = new pullAndAddPage(pageWriter)
+    //    pullAndAddPageInstance = new pullAndAddPage(sectWriter)
     //    pullAndAddParaInstance = new pullAndAddPara(parawriter)
     //    knowledgeFiles.map(pullAndAddPageInstance(_))
     //    knowledgeFiles.map(pullAndAddParaInstance(_))
     //  val docXmlPairs = knowledgeFiles.map(pullAndAdd(writer,_)).flatten.toArray
     pageWriter.close
+    sectWriter.close
     paraWriter.close
     //    docXmlPairs
 

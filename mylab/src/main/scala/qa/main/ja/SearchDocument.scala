@@ -3,9 +3,9 @@ package qa.main.ja
 import java.io.File
 import collection.JavaConverters._
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer
-import org.apache.lucene.index.{ Term, DirectoryReader }
+import org.apache.lucene.index.{AtomicReaderContext, IndexReader, Term, DirectoryReader}
 import org.apache.lucene.queryparser.classic.{ MultiFieldQueryParser, QueryParser }
-import org.apache.lucene.search.{ TermQuery, Sort, IndexSearcher }
+import org.apache.lucene.search._
 import org.apache.lucene.store.{ Directory, FSDirectory }
 import org.apache.lucene.search.similarities._
 
@@ -16,9 +16,11 @@ import scala.collection.mutable.Set
 import scala.xml._
 import util.matching._
 
+
 class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends SearchDocument(index_dir, maxSearchResults) {
 
   override def annotateWDocs(maxHits: Int, oldQAndA: QuestionAndAnnotation, mustOrShould: Int, boostTopic: java.lang.Float, boostHv: java.lang.Float): QuestionAndAnnotation = {
+
     oldQAndA match {
       case QuestionAndAnnotation(id, questionText, meta, answers, oldAnnotations) => {
 
@@ -46,14 +48,162 @@ class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
           //        System.err.println(s"firstBoost ${firstBoost}")
           finalQueryTxt = doubleBoost.replaceAllIn(newQueryTxt, "")
 
+
         }
         //        val query = parser.parse(finalQueryTxt)
         val query = parser.parse(origQueryTxt)
+        val answerHits  = for (answer <- answers \\"answer") yield {
+          val totalHitCountCollector = new TotalHitCountCollector
+          index_searcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
+          System.err.println(s"answerToPhraseQueriesText ${parser.parse("\""+answer.text+"\"").toString}")
+          totalHitCountCollector.getTotalHits()
+        }
+        val answerToPhraseQueriesText = for (answer <- answers \\"answer") yield {
+          "\""+answer.text+"\""
+        }
+
         //        System.err.println(s"query ${query.toString}")
-        /*
+        /*o
         val bQueries = new org.apache.lucene.search.BooleanQuery()
         val topicQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", topic.getOrElse("")))
-        topicQuery.setBoost(boostTopic)
+        topicQuery.setBoost(boostTopic)o
+        val hvQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", hv.getOrElse("")))
+        hvQuery.setBoost(boostHv)
+        bQueries.add(query, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
+        bQueries.add(topicQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
+        bQueries.add(hvQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
+*/
+
+        //        var setTerm: java.util.Set[org.apache.lucene.index.Term] =  scala.collection.mutable.Set[org.apache.lucene.index.Term]().asJava
+        //        val rQueries = index_searcher.rewrite(queries)
+        //        rQueries.extractTerms(setTerm)
+        //        println(setTerm.asScala.head)
+
+        /**
+         * old code for ref
+         * val searchResult = index_searcher.search(query, maxHits)
+         *
+         * val docs =
+         * for (scoreWDoc <- searchResult.scoreDocs) yield {
+         * val doc = index_searcher.doc(scoreWDoc.doc)
+         * val id = doc.get("id")
+         * val xml = document_map.get(id).get
+         * //print(xml)
+         * val title = (xml \ "title").text
+         * val text = (xml \ "text").text
+         * //println(title)
+         * //println(index_searcher.explain(query, score_doc.doc))
+         * Doc(id, title, text, scoreWDoc.score)
+         * }
+         *
+         * }
+         */
+
+        //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "text").text}
+        //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "title").text}
+        val newAnnotations =
+          <annotations>
+            {
+            for (annotation <- oldAnnotations \\ "annotation") yield { annotation }
+            }
+            <annotation type="doc" annotator="SearchDocument">
+              <ansstats>
+                {for (answerHit <- answerHits) yield {
+                <answerHit>
+                  {answerHit}
+                </answerHit>
+              }
+                }
+              </ansstats>
+              <docs>
+                {
+                for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield <doc>
+                  <did>
+                    { index_searcher.doc(scoreWDoc.doc).get("id") }
+                  </did>
+                  <dtitle>
+                    { index_searcher.doc(scoreWDoc.doc).get("title")}
+                  </dtitle>
+                  <dtext>
+                    { index_searcher.doc(scoreWDoc.doc).get("text") }
+                  </dtext>
+                  <dscore>
+                    { scoreWDoc.score }
+                  </dscore>
+                </doc>
+                }
+              </docs>
+            </annotation>
+          </annotations>
+        QuestionAndAnnotation(id, questionText, meta, answers, newAnnotations)
+      }
+      case _ => oldQAndA
+    }
+  }
+
+}
+
+
+class SearchSect(index_dir: Directory, maxSearchResults: Int = 100) extends SearchDocument(index_dir, maxSearchResults) {
+
+  def searchPageTitleOfSect(id: String): String = {
+    val sectIDRe = """(-\d+)+""".r
+    val pageID = sectIDRe.replaceAllIn(id, "")
+    val pageTerm = new Term("id", pageID)
+    val queryWPageID = new TermQuery(pageTerm)
+    (for (scoreWDoc <- index_searcher.search(queryWPageID, 1).scoreDocs) yield {
+      index_searcher.doc(scoreWDoc.doc).get("title")
+    }).mkString
+  }
+
+  override def annotateWDocs(maxHits: Int, oldQAndA: QuestionAndAnnotation, mustOrShould: Int, boostTopic: java.lang.Float, boostHv: java.lang.Float): QuestionAndAnnotation = {
+
+    oldQAndA match {
+      case QuestionAndAnnotation(id, questionText, meta, answers, oldAnnotations) => {
+
+        val origQueryTxt = orderedUnique(((oldAnnotations \\ "clue" \\ "parse") map (_.text)).toList).mkString
+
+        val topic = (oldAnnotations \\ "clue") collectFirst { case n if ((n \\ "dep").length != 0) => (n \\ "dep").text }
+        val hv = (oldAnnotations \\ "clue") collectFirst { case n if ((n \\ "dep").length != 0) => (n \\ "head").text }
+        var intQueryTxt = origQueryTxt
+        Try {
+          //          System.err.println(s"topic ${topic.get.trim}")
+          intQueryTxt = origQueryTxt.replaceFirst(topic.get.trim, topic.get.trim + "^" + boostTopic.toString)
+        }
+        var newQueryTxt = intQueryTxt
+        Try {
+          //          System.err.println(s"hv ${hv.get.trim}")
+          newQueryTxt = intQueryTxt.replaceAll(hv.get.trim, hv.get.trim + "^" + boostHv.toString)
+        }
+
+        var finalQueryTxt = newQueryTxt
+        Try {
+          //          System.err.println("hello")
+          val digit = """(^10.0)^10.0""".r
+          val doubleBoost = """\^\d+\.\d+(\^\d+\.\d+)""".r
+          //        val digit(firstBoost) = newQueryTxt
+          //        System.err.println(s"firstBoost ${firstBoost}")
+          finalQueryTxt = doubleBoost.replaceAllIn(newQueryTxt, "")
+
+
+        }
+        //        val query = parser.parse(finalQueryTxt)
+        val query = parser.parse(origQueryTxt)
+        val answerHits  = for (answer <- answers \\"answer") yield {
+          val totalHitCountCollector = new TotalHitCountCollector
+          index_searcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
+          System.err.println(s"answerToPhraseQueriesText ${parser.parse("\""+answer.text+"\"").toString}")
+          totalHitCountCollector.getTotalHits()
+        }
+        val answerToPhraseQueriesText = for (answer <- answers \\"answer") yield {
+          "\""+answer.text+"\""
+        }
+
+        //        System.err.println(s"query ${query.toString}")
+        /*o
+        val bQueries = new org.apache.lucene.search.BooleanQuery()
+        val topicQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", topic.getOrElse("")))
+        topicQuery.setBoost(boostTopic)o
         val hvQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", hv.getOrElse("")))
         hvQuery.setBoost(boostHv)
         bQueries.add(query, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
@@ -94,6 +244,14 @@ class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
               for (annotation <- oldAnnotations \\ "annotation") yield { annotation }
             }
             <annotation type="doc" annotator="SearchDocument">
+              <ansstats>
+                {for (answerHit <- answerHits) yield {
+                <answerHit>
+                  {answerHit}
+                </answerHit>
+                }
+               }
+              </ansstats>
               <docs>
                 {
                   for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield <doc>
@@ -101,7 +259,7 @@ class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
                                                                                                { index_searcher.doc(scoreWDoc.doc).get("id") }
                                                                                              </did>
                                                                                              <dtitle>
-                                                                                               { index_searcher.doc(scoreWDoc.doc).get("title") }
+                                                                                               {searchPageTitleOfSect(index_searcher.doc(scoreWDoc.doc).get("id"))}
                                                                                              </dtitle>
                                                                                              <dtext>
                                                                                                { index_searcher.doc(scoreWDoc.doc).get("text") }
@@ -143,7 +301,8 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
     System.err.println(s"pageid ${pageID}")
     System.err.println(s"secttitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString}")
     //    System.err.println(s"pagetitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID,1 ).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("id")}).mkString}")
-    (for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString
+    (for (scoreWDoc <- sectIndex_searcher.search(queryWSectID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString
+//    (for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString
     //    System.err.println(s"sectTitle ${(for (scoreWDoc <- sectIndex_searcher.search(query,1).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("title")}).mkString}")
   }
 
@@ -178,6 +337,15 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
         }
         //        val query = parser.parse(finalQueryTxt)
         val query = parser.parse(origQueryTxt)
+        val answerHits  = for (answer <- answers \\"answer") yield {
+          val totalHitCountCollector = new TotalHitCountCollector
+          index_searcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
+          System.err.println(s"answerToPhraseQueriesText ${parser.parse("\""+answer.text+"\"").toString}")
+          totalHitCountCollector.getTotalHits()
+        }
+        val answerToPhraseQueriesText = for (answer <- answers \\"answer") yield {
+          "\""+answer.text+"\""
+        }
         //        System.err.println(s"query ${query.toString}")
         /*
         val bQueries = new org.apache.lucene.search.BooleanQuery()
@@ -223,6 +391,14 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
               for (annotation <- oldAnnotations \\ "annotation") yield { annotation }
             }
             <annotation type="doc" annotator="SearchDocument">
+              <ansstats>
+                {for (answerHit <- answerHits) yield {
+                <answerHit>
+                  {answerHit}
+                </answerHit>
+              }
+                }
+              </ansstats>
               <docs>
                 {
                   for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield <doc>
@@ -321,12 +497,22 @@ object SearchDocument {
     val indexDir = FSDirectory.open(new File(args(0)))
     val tableRe = """(?<=\{\{)[^\{\}]+(?=\}\})""".r
     val pageIndexRe = """(?<=.*)page(?=.*)""".r
+    val sectIndexRe = """(?<=.*)sect(?=.*)""".r
     val paraIndexRe = """(?<=.*)para(?=.*)""".r
-    val sectIndexDir = paraIndexRe.replaceAllIn(args(0), "page")
-    //    System.err.println(s"sectionIndexDir: ${sectIndexDir}")
+    val sectIndexDir = paraIndexRe.replaceAllIn(args(0), "sect")
+    System.err.println(s"sectionIndexDir: ${sectIndexDir}")
     val sectIndex = FSDirectory.open(new File(sectIndexDir))
     val search = pageIndexRe.findFirstIn(args(0)) match {
       case Some(m) => new SearchPage(indexDir)
+      case None    => sectIndexRe.findFirstIn(args(0)) match {
+        case Some(m) => new SearchSect(indexDir)
+        case None    => new SearchPara(indexDir, sectIndex)
+      }
+    }
+
+
+      sectIndexRe.findFirstIn(args(0)) match {
+      case Some(m) => new SearchSect(indexDir)
       case None    => new SearchPara(indexDir, sectIndex)
     }
 

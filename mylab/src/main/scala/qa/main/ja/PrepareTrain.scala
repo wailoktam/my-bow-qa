@@ -2,10 +2,11 @@ package qa.main.ja
 
 import java.io.{FileWriter, BufferedWriter, File}
 
-import org.apache.lucene.index.{Term, DirectoryReader}
+import org.apache.lucene.index.{IndexReader, Term, DirectoryReader}
 import org.apache.lucene.search.{TermQuery, IndexSearcher}
 import org.apache.lucene.store.FSDirectory
-
+import scala.math._
+import scala.util.matching.Regex
 import scala.xml._
 import org.atilika.kuromoji.Tokenizer
 import org.atilika.kuromoji.Token
@@ -24,6 +25,13 @@ object PrepareTrainMain {
     System.err.println(s"id in sectPara ${id.trim()}")
     val paraIDRe = """(?<=\/)\d+$""".r
     paraIDRe.findFirstIn(id.trim()).getOrElse("0").toInt
+  }
+
+  def sectSect(id: String):Int =  {
+      System.err.println(s"id in sectSect ${id.trim()}")
+      val sectIDRe = """(?<=-)\d+""".r
+      System.err.println(s"output in sectSect ${sectIDRe.findFirstIn(id.trim()).getOrElse("0").toInt}")
+      sectIDRe.findFirstIn(id.trim()).getOrElse("0").toInt
   }
 
   def getParasOfNext(idNum: Int, oldID: String, index_searcher: IndexSearcher):Int = {
@@ -119,10 +127,45 @@ object PrepareTrainMain {
       }
     }
 
+//for (token <- (questionTokens \\ "token")) yield {
+//  token match {
+//    case tokenRe(token) =>
 
 
-    def checkQuestionAndAnnotation(questionXML: Node, indexDir: FSDirectory, csvBw: BufferedWriter): Unit = {
+//  }
+//}
+
+
+    def proximity(sentence:String, question: String, index_reader: IndexReader):Double = {
+      val tokenizer = Tokenizer.builder.mode(Tokenizer.Mode.NORMAL).build
+      val questionTokens = tokenizer.tokenize(question).toArray
+      System.err.println(s"question ${question}")
+      System.err.println(s"sentence ${sentence}")
+      val qInS = questionTokens.map(t => {
+        System.err.println(s"t in qInS ${t.asInstanceOf[Token].getSurfaceForm()}")
+        val surfaceForm = t.asInstanceOf[Token].getSurfaceForm()
+        val term = new Term("text", surfaceForm)
+        val weight = 1 + log10(index_reader.numDocs()/(index_reader.docFreq(term)+1))
+        if (sentence.contains(surfaceForm)) weight else 0
+      }).sum
+      val sentenceTokens = tokenizer.tokenize(sentence).toArray
+      val kNotInQ = sentenceTokens.map(t => {
+        val surfaceForm = t.asInstanceOf[Token].getSurfaceForm()
+        val term = new Term("text", surfaceForm)
+        val weight = 1 + log10(index_reader.numDocs()/(index_reader.docFreq(term)+1))
+        System.err.println(s"t in kNotInQ ${t.asInstanceOf[Token].getSurfaceForm()}")
+        if (question.contains(surfaceForm)) 0 else weight
+      }).sum
+      qInS - kNotInQ
+    }
+
+
+
+
+
+    def checkQuestionAndAnnotationPara(questionXML: Node, indexDir: FSDirectory, csvBw: BufferedWriter, docType: String): Unit = {
       val index_reader = DirectoryReader.open(indexDir)
+
       val index_searcher = new IndexSearcher(index_reader)
       for (doc <- (questionXML \\ "doc")) yield {
         val normalizedText = myNormalize((doc \\ "dtext").text.trim())
@@ -136,7 +179,14 @@ object PrepareTrainMain {
         System.err.println(s"normalizedText in checkQ&A${normalizedText}")
         System.err.println(s"test contain in checkQ&A${"[[坊っちゃん]]（1906年、著:[[夏目漱石]]）"contains("坊っちゃん")}")
         for (answer<-(questionXML \\ "answer")) System.err.println(s"answer in checkQ&A${myNormalize(answer.text.trim())}")
+        val sectSectNum = sectSect((doc \\ "did").text)
         val sectParaNum = sectPara((doc \\ "did").text)
+//        val sectParaNum = if (docType == "para") {
+//          sectPara((doc \\ "did").text)
+//        }
+//         else {
+//         "0"
+//        }
         //doc\\"did".text = 2:450-4-1-1-5/9
         val featLast1 = sectParaNum.toString() :: List(label.toString())
         val paraIDRe = """\/\d+""".r
@@ -154,6 +204,7 @@ object PrepareTrainMain {
         val featLast2 = splitIDOpt match {
           case None => {
             sectParaNum.toString() :: featLast1
+//            sectParaNum.toString() ::  List(label.toString())
           }
           case Some(splitID) => {
             if ((splitID.toInt == 0) == false) {
@@ -163,33 +214,44 @@ object PrepareTrainMain {
 //              System.err.println(s"temp1InCheckQ&A ${temp1}")
 //              System.err.println(s"temp2InCheckQ&A ${temp2}")
 //              temp1 + temp2 :: featLast1
-
+//              sectParaNum + getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher) + wholePara(idWoLastSect, index_searcher) :: List(label.toString())
               sectParaNum + getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher) + wholePara(idWoLastSect, index_searcher) :: featLast1
             }
             else 0 :: featLast1
+//            else 0 :: List(label.toString())
           }
         }
-        val bwLine = (doc \\ "did").text.trim() :: featLast2
+        val featLast3 = (doc \\ "dscore").text.trim() :: featLast2
+        val maxProximitySentence  = ((doc \\ "dtext").text.trim().split("。"))maxBy(proximity(_, (questionXML\"text").text, index_reader))
+        val featLast4 = proximity(maxProximitySentence, (questionXML\"text").text, index_reader)::featLast3
+        val featLast5 = sectSectNum::featLast4
+        System.err.println(s"featLast4 ${featLast5}")
+        val bwLine = (doc \\ "did").text.trim() :: featLast5
         csvBw.write(bwLine.mkString(",")+"\n")
       }
     }
 
-    def apply(xmlWDocs: Node, indexDir: FSDirectory, csvFile: BufferedWriter) = {
-        (xmlWDocs \\ "question") map (checkQuestionAndAnnotation(_, indexDir, csvFile))
+
+
+
+    def apply(xmlWDocs: Node, indexDir: FSDirectory, csvFile: BufferedWriter, docType: String) = {
+        (xmlWDocs \\ "question") map (checkQuestionAndAnnotationPara(_, indexDir, csvFile, docType))
+
       }
     }
 
 object PrepareTrain {
   def main(args: Array[String]): Unit = {
-    if (args.length < 1) {
-      System.err.println("Usage: scala qa.main.ja.PrepareTrain INPUT_XML INDEX_DIR OUTPUT_CSV")
+    if (args.length < 3) {
+      System.err.println("Usage: scala qa.main.ja.PrepareTrain INPUT_XML INDEX_DIR OUTPUT_CSV, DOC_TYPE")
       System.exit(1)
     }
     val indexDir = FSDirectory.open(new File(args(1)))
     val csvFile = new File(args(2))
     val csvBw = new BufferedWriter(new FileWriter(csvFile))
-    csvBw.write("id,para from top,para in section,label\n")
-    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),indexDir, csvBw)
+//    csvBw.write("id,para from top,label\n")
+    csvBw.write("id,section, proximity, ucene score, para from top,para in section,label\n")
+    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),indexDir, csvBw, args(3))
     csvBw.close()
   }
 }

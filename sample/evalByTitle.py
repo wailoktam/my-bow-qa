@@ -27,11 +27,17 @@ bugcheck.write("%s,%s,%s,%s,%s,%s\n" % ("question text", "answer", "found in sen
 
 
 
+
+
+
+
+
+
 def myNormalize(inputStr):
     KuroTokenizer = gateway.jvm.org.atilika.kuromoji.Tokenizer
     tokenizer = KuroTokenizer.builder().build();
     result = tokenizer.tokenize(inputStr)
-    normalized = ""
+    normalized = []
     for token in result:
         try:
             normalizedToken = kanjinums.kanji2num(token.getSurfaceForm())
@@ -73,6 +79,7 @@ by_type_sum_precision = {}
 by_type_sum_recall = {}
 by_type_sum_found = {}
 by_type_sum_found_in_doc = {}
+total_relevant_docs = 0
 type_mem_count = {}
 questionTypes = set()
 zeroTypes = ["いくら","どれくらい","なに＋アルファベット","どのくらい","なに＋カタカナ","なに＋その他","いくつ","いつ","どんな","どの","どれ","どちら","どう"]
@@ -95,6 +102,7 @@ for question in questions:
         questionTypes.add(questionType)
     type_mem_count[questionType] = type_mem_count[questionType] + 1
     answers = map(lambda a: a.text, question.findall(".//answer"))
+    ansstats = map(lambda a: a.text, question.findall(".//answerHit"))
     responses = map(lambda r: r.text, question.findall(".//response"))
     docs = question.findall(".//doc")
     if title in answers: same_count =  same_count+1
@@ -105,6 +113,11 @@ for question in questions:
     answers = filter(partial(is_not, None), answers)
     responses = filter(partial(is_not, None), responses)
     #if len(responses) == 0: print ("no response %s" % (question_id))
+
+    for ansstat in ansstats:
+        print ("ansstat %s"%(ansstat))
+        total_relevant_docs = total_relevant_docs + int(ansstat)
+
     num_correct_answers = float(len(set(map(lambda a: myNormalize(a), answers)) & set(map(lambda a: myNormalize(a), responses))))
     precision = float(num_correct_answers / len(responses))
     recall = float(num_correct_answers / len(answers))
@@ -154,10 +167,12 @@ for question in questions:
 
 print("-----")
 print("questions: %d" % len(questions))
-print("precision: %f" % (sum_precision / len(questions)))
-print("recall: %f" % (sum_recall / len(questions)))
 print("found in titles: %f" % (sum_found))
+print("precision of titles: %f" % (sum_precision / len(questions)))
+print("recall of titles: %f" % (sum_recall / len(questions)))
 print("found in docs: %f" % (sum_found_in_doc))
+print("precision of docs: %f" % (float(float(sum_found_in_doc) / float(len(questions)*10))))
+print("recall of docs: %f" % (float(float(sum_found_in_doc) / float(total_relevant_docs))))
 print("total_answers: %f" % total_answers)
 print("average answers per question: %f" % (float(total_answers)/800))
 print("non-zero type questions: %d" % questions_nz)
