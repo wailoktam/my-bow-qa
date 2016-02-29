@@ -201,7 +201,7 @@ class SimilarityWithConstantNOM extends DefaultSimilarity {
   //override def lengthNorm(state: FieldInvertState): Float = 1
 }
 
-class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter) {
+class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, sentWriter: IndexWriter) {
   val pageRe = """\[\[(.*?)\]\](?!\'\'\')""".r
   val sect1Re = """==([^=]*)==""".r
   val sect2Re = """===([^=]*)===""".r
@@ -229,6 +229,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
       if ((p == "") == false) {
         val para = new Document()
         val paraID = id + "/" + paraNumStream.next().toString()
+        addSentToDoc(sentWriter, p, paraID)
         //    print (pageText)
         //    System.err.println(s"pid: ${pageID}")
         //    System.err.println(s"ptext: ${pageText}")
@@ -245,7 +246,27 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     }
     )
     file.write("</" + "text" + ">" + "\n")
+
   }
+
+  def addSentToDoc(sentWriter: IndexWriter, paraTextWoTable: String, id: String) = {
+    val sentNumStream = Stream.iterate(1)(_ + 1).iterator
+    paraTextWoTable.split("。").map(s => {
+      if ((s == "") == false) {
+        val sentence = new Document()
+        val sentenceID = id + "^" + sentNumStream.next().toString()
+        //    print (pageText)
+        //    System.err.println(s"pid: ${pageID}")
+        //    System.err.println(s"ptext: ${pageText}")
+        sentence.add(new StringField("id", sentenceID, Store.YES))
+        sentence.add(new TextField("text", s, Store.YES))
+        sentWriter.addDocument(sentence)
+      }
+    }
+    )
+  }
+
+
 
   def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String): Unit = {
     val file1 = new File("bugInIndexing1")
@@ -823,6 +844,7 @@ class Indexing {
     val pageIndexDir = FSDirectory.open(new File(indexDirName + "/page"))
     val sectIndexDir = FSDirectory.open(new File(indexDirName + "/sect"))
     val paraIndexDir = FSDirectory.open(new File(indexDirName + "/para"))
+    val sentIndexDir = FSDirectory.open(new File(indexDirName + "/sent"))
     //    val debugList = List("/home/wailoktam/qa/input/knowledge/rite2-ja-textbook.xml","/home/wailoktam/qa/input/knowledge/riteval-ja-textbook2.xml", "/home/wailoktam/qa/input/knowledge/wiki_00")
     val analyzer = new JapaneseAnalyzer()
     val config1 = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
@@ -834,10 +856,14 @@ class Indexing {
     val config3 = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
     config3.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
     config3.setSimilarity(new SimilarityWithConstantTF)
+    val config4 = new IndexWriterConfig(Version.LUCENE_4_10_0, analyzer)
+    config4.setOpenMode(IndexWriterConfig.OpenMode.CREATE)
+    config4.setSimilarity(new SimilarityWithConstantTF)
     val pageWriter = new IndexWriter(pageIndexDir, config1) // overwrite existing index
     val sectWriter = new IndexWriter(sectIndexDir, config2) // overwrite existing index
     val paraWriter = new IndexWriter(paraIndexDir, config3) // overwrite existing index
-    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, sectWriter, paraWriter)
+    val sentWriter = new IndexWriter(sentIndexDir, config4)
+    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, sectWriter, paraWriter, sentWriter)
     val fileNumStream = Stream.iterate(1)(_ + 1).iterator
     //    var id = 0
     /**
@@ -862,6 +888,7 @@ class Indexing {
     pageWriter.close
     sectWriter.close
     paraWriter.close
+    sentWriter.close
     //    docXmlPairs
 
   }
