@@ -222,7 +222,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
       }
     }
 
-  def addParaToDoc(paraWriter: IndexWriter, textWoTable: String, id: String, file: BufferedWriter) = {
+  def addParaNSentToDoc(paraWriter: IndexWriter, sentWriter: IndexWriter, textWoTable: String, id: String, file: BufferedWriter) = {
     val paraNumStream = Stream.iterate(1)(_ + 1).iterator
     file.write("<" + "text" + ">" + "\n")
     textWoTable.split("\n").map(p => {
@@ -313,7 +313,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     bw2.write(StringEscapeUtils.escapeXml11(pageTitle) + "\n")
     bw2.write("</" + "title" + ">" + "\n")
 
-    addParaToDoc(paraWriter, pageTextWoTable, pageID, bw2)
+    addParaNSentToDoc(paraWriter,sentWriter, pageTextWoTable, pageID, bw2)
 
     if ((x \\ "section1") != "") {
       val sect1NumStream = Stream.iterate(1)(_ + 1).iterator
