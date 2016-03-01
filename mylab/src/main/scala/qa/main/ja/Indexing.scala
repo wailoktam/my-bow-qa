@@ -342,7 +342,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         bw2.write("<" + "title" + ">" + "\n")
         bw2.write(StringEscapeUtils.escapeXml11(sect1Title) + "\n")
         bw2.write("</" + "title" + ">" + "\n")
-        addParaToDoc(paraWriter, sect1TextWoTable, sect1ID, bw2)
+        addParaNSentToDoc(paraWriter, sentWriter, sect1TextWoTable, sect1ID, bw2)
         if ((section1 \ "section2") != "") {
           val sect2NumStream = Stream.iterate(1)(_ + 1).iterator
           for (section2 <- (section1 \ "section2")) {
@@ -368,7 +368,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
             bw2.write("<" + "title" + ">" + "\n")
             bw2.write(StringEscapeUtils.escapeXml11(sect2Title) + "\n")
             bw2.write("</" + "title" + ">" + "\n")
-            addParaToDoc(paraWriter, sect2TextWoTable, sect2ID, bw2)
+            addParaNSentToDoc(paraWriter, sentWriter, sect2TextWoTable, sect2ID, bw2)
             //            print("sect2"+sect2ID+"\n")
             //            print("sect2"+sect2Text+"\n")
             if ((section2 \ "section3") != "") {
@@ -396,7 +396,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                 bw2.write("<" + "title" + ">" + "\n")
                 bw2.write(StringEscapeUtils.escapeXml11(sect3Title) + "\n")
                 bw2.write("</" + "title" + ">" + "\n")
-                addParaToDoc(paraWriter, sect3TextWoTable, sect3ID, bw2)
+                addParaNSentToDoc(paraWriter, sentWriter, sect3TextWoTable, sect3ID, bw2)
                 if ((section3 \ "section4") != "") {
                   val sect4NumStream = Stream.iterate(1)(_ + 1).iterator
                   for (section4 <- (section3 \ "section4")) {
@@ -423,7 +423,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                     bw2.write("<" + "title" + ">" + "\n")
                     bw2.write(StringEscapeUtils.escapeXml11(sect4Title) + "\n")
                     bw2.write("</" + "title" + ">" + "\n")
-                    addParaToDoc(paraWriter, sect4TextWoTable, sect4ID, bw2)
+                    addParaNSentToDoc(paraWriter, sentWriter, sect4TextWoTable, sect4ID, bw2)
                     if ((section4 \ "section5") != "") {
                       val sect5NumStream = Stream.iterate(1)(_ + 1).iterator
                       for (section5 <- (section4 \ "section5")) {
@@ -449,7 +449,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                         bw2.write("<" + "title" + ">" + "\n")
                         bw2.write(StringEscapeUtils.escapeXml11(sect5Title) + "\n")
                         bw2.write("</" + "title" + ">" + "\n")
-                        addParaToDoc(paraWriter, sect5TextWoTable, sect5ID, bw2)
+                        addParaNSentToDoc(paraWriter, sentWriter, sect5TextWoTable, sect5ID, bw2)
                         bw2.write("</" + "sect5" + ">" + "\n")
                       }
                     }
