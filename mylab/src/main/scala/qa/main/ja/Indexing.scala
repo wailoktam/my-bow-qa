@@ -228,7 +228,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     textWoTable.split("\n").map(p => {
       if ((p == "") == false) {
         val para = new Document()
-        val paraID = id + "/" + paraNumStream.next().toString()
+        val paraID = id + "r" + paraNumStream.next().toString()
         addSentToDoc(sentWriter, p, paraID)
         //    print (pageText)
         //    System.err.println(s"pid: ${pageID}")
@@ -254,7 +254,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     paraTextWoTable.split("。").map(s => {
       if ((s == "") == false) {
         val sentence = new Document()
-        val sentenceID = id + "^" + sentNumStream.next().toString()
+        val sentenceID = id + "t" + sentNumStream.next().toString()
         //    print (pageText)
         //    System.err.println(s"pid: ${pageID}")
         //    System.err.println(s"ptext: ${pageText}")
@@ -318,7 +318,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     if ((x \\ "section1") != "") {
       val sect1NumStream = Stream.iterate(1)(_ + 1).iterator
       for (section1 <- (x \\ "section1")) {
-        val sect1ID = pageID + "-" + sect1NumStream.next().toString()
+        val sect1ID = pageID + "s" + sect1NumStream.next().toString()
 
         val sect1 = new Document()
         //space killed?
@@ -346,7 +346,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         if ((section1 \ "section2") != "") {
           val sect2NumStream = Stream.iterate(1)(_ + 1).iterator
           for (section2 <- (section1 \ "section2")) {
-            val sect2ID = sect1ID + "-" + sect2NumStream.next().toString()
+            val sect2ID = sect1ID + "s" + sect2NumStream.next().toString()
             val sect2 = new Document()
             val sect2Title = (section2 \ "@title").text
             val sect2Text = section2.child.collect { case Text(t) => t }.mkString("\n")
@@ -374,7 +374,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
             if ((section2 \ "section3") != "") {
               val sect3NumStream = Stream.iterate(1)(_ + 1).iterator
               for (section3 <- (section2 \ "section3")) {
-                val sect3ID = sect2ID + "-" + sect3NumStream.next().toString()
+                val sect3ID = sect2ID + "s" + sect3NumStream.next().toString()
                 val sect3 = new Document()
                 val sect3Title = (section3 \ "@title").text
                 val sect3Text = section3.child.collect { case Text(t) => t }.mkString("\n")
@@ -400,7 +400,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                 if ((section3 \ "section4") != "") {
                   val sect4NumStream = Stream.iterate(1)(_ + 1).iterator
                   for (section4 <- (section3 \ "section4")) {
-                    val sect4ID = sect3ID + "-" + sect4NumStream.next().toString()
+                    val sect4ID = sect3ID + "s" + sect4NumStream.next().toString()
                     val sect4 = new Document()
                     val sect4Title = (section4 \ "@title").text
                     val sect4Text = section4.child.collect { case Text(t) => t }.mkString("\n")
@@ -427,7 +427,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                     if ((section4 \ "section5") != "") {
                       val sect5NumStream = Stream.iterate(1)(_ + 1).iterator
                       for (section5 <- (section4 \ "section5")) {
-                        val sect5ID = sect4ID + "-" + sect5NumStream.next().toString()
+                        val sect5ID = sect4ID + "s" + sect5NumStream.next().toString()
                         val sect5 = new Document()
                         val sect5Title = (section5 \ "@title").text
                         val sect5Text = section5.child.collect { case Text(t) => t }.mkString("\n")
@@ -566,8 +566,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
           if (pageFound == 1) {
             val pageID = pageNumStream.next
             buf += "</" + "page" + ">"
-            System.err.println(s"fileID and pageID first: ${fileID + ":" + pageID.toString()}")
-            addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + ":" + pageID.toString())
+            System.err.println(s"fileID and pageID first: ${fileID + "f" + pageID.toString()}")
+            addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString())
             buf = ArrayBuffer[String]()
           }
           buf += "<" + "page" + " title=" + "\"" + StringEscapeUtils.escapeXml11(pageTitle) + "\"" + ">"
@@ -713,8 +713,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
       val pageID = pageNumStream.next
       buf += "</" + "page" + ">"
       //      bw4.write(pageID+"\n")
-      System.err.println(s"fileID And pageID final: ${fileID + ":" + pageID.toString()}")
-      addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + ":" + pageID.toString)
+      System.err.println(s"fileID And pageID final: ${fileID + "f" + pageID.toString()}")
+      addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString)
       buf = ArrayBuffer[String]()
     }
     //    val titleIdxs = (0 until wholeFile.size).filter {
