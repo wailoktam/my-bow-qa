@@ -5,7 +5,7 @@ name := "qa"
 
 version := "1.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.8"
 
 sbtVersion := "0.13.8"
 
@@ -28,7 +28,11 @@ libraryDependencies ++= Seq(
   "com.ibm.icu" % "icu4j" % "56.1",
   "org.apache.commons" % "commons-lang3" % "3.4",
   "net.sf.py4j" % "py4j" % "0.9",
-  "org.atilika.kuromoji" % "kuromoji" % "0.7.7"
+  "org.atilika.kuromoji" % "kuromoji" % "0.7.7",
+  "org.apache.spark" % "spark-core_2.11" % "1.6.0",
+  "org.apache.spark" % "spark-mllib_2.11" % "1.6.0",
+  "org.apache.spark" % "spark-sql_2.11" % "1.6.0",
+  "com.databricks" % "spark-csv_2.11" % "1.4.0"
 )
 
 

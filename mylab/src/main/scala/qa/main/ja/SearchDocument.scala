@@ -8,6 +8,7 @@ import org.apache.lucene.queryparser.classic.{ MultiFieldQueryParser, QueryParse
 import org.apache.lucene.search._
 import org.apache.lucene.store.{ Directory, FSDirectory }
 import org.apache.lucene.search.similarities._
+import org.apache.commons.lang3.StringUtils
 
 import scala.util.Try
 
@@ -17,7 +18,7 @@ import scala.xml._
 import util.matching._
 
 
-class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends SearchDocument(index_dir, maxSearchResults) {
+class SearchPage(indexDir: Directory, sentIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(indexDir, maxSearchResults) {
 
   override def annotateWDocs(maxHits: Int, oldQAndA: QuestionAndAnnotation, mustOrShould: Int, boostTopic: java.lang.Float, boostHv: java.lang.Float): QuestionAndAnnotation = {
 
@@ -54,7 +55,7 @@ class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
         val query = parser.parse(origQueryTxt)
         val answerHits  = for (answer <- answers \\"answer") yield {
           val totalHitCountCollector = new TotalHitCountCollector
-          index_searcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
+          indexSearcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
           System.err.println(s"answerToPhraseQueriesText ${parser.parse("\""+answer.text+"\"").toString}")
           totalHitCountCollector.getTotalHits()
         }
@@ -117,15 +118,24 @@ class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
               </ansstats>
               <docs>
                 {
-                for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield <doc>
+                for (scoreWDoc <- indexSearcher.search(query, maxHits).scoreDocs) yield <doc>
                   <did>
-                    { index_searcher.doc(scoreWDoc.doc).get("id") }
+                    { indexSearcher.doc(scoreWDoc.doc).get("id") }
                   </did>
                   <dtitle>
-                    { index_searcher.doc(scoreWDoc.doc).get("title")}
+                    { indexSearcher.doc(scoreWDoc.doc).get("title")}
                   </dtitle>
                   <dtext>
-                    { index_searcher.doc(scoreWDoc.doc).get("text") }
+                    {val sentNumStream = Stream.iterate(1)(_ + 1).iterator
+                  for (sent <- indexSearcher.doc(scoreWDoc.doc).get("text").split("。")) yield {
+
+
+                    <sent>
+                      <stext>{sent}</stext>
+                      <sscore>{searchScoreOfSent(sent, query, sentIndexDir)}</sscore>
+                      <scount>{sentNumStream.next}</scount>
+                    </sent>
+                  }}
                   </dtext>
                   <dscore>
                     { scoreWDoc.score }
@@ -144,15 +154,15 @@ class SearchPage(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
 }
 
 
-class SearchSect(index_dir: Directory, maxSearchResults: Int = 100) extends SearchDocument(index_dir, maxSearchResults) {
+class SearchSect(indexDir: Directory, sentIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(indexDir, maxSearchResults) {
 
   def searchPageTitleOfSect(id: String): String = {
-    val sectIDRe = """(-\d+)+""".r
+    val sectIDRe = """(s\d+)+""".r
     val pageID = sectIDRe.replaceAllIn(id, "")
     val pageTerm = new Term("id", pageID)
     val queryWPageID = new TermQuery(pageTerm)
-    (for (scoreWDoc <- index_searcher.search(queryWPageID, 1).scoreDocs) yield {
-      index_searcher.doc(scoreWDoc.doc).get("title")
+    (for (scoreWDoc <- indexSearcher.search(queryWPageID, 1).scoreDocs) yield {
+      indexSearcher.doc(scoreWDoc.doc).get("title")
     }).mkString
   }
 
@@ -191,7 +201,7 @@ class SearchSect(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
         val query = parser.parse(origQueryTxt)
         val answerHits  = for (answer <- answers \\"answer") yield {
           val totalHitCountCollector = new TotalHitCountCollector
-          index_searcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
+          indexSearcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
           System.err.println(s"answerToPhraseQueriesText ${parser.parse("\""+answer.text+"\"").toString}")
           totalHitCountCollector.getTotalHits()
         }
@@ -254,16 +264,24 @@ class SearchSect(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
               </ansstats>
               <docs>
                 {
-                  for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield <doc>
+                  for (scoreWDoc <- indexSearcher.search(query, maxHits).scoreDocs) yield <doc>
                                                                                              <did>
-                                                                                               { index_searcher.doc(scoreWDoc.doc).get("id") }
+                                                                                               { indexSearcher.doc(scoreWDoc.doc).get("id") }
                                                                                              </did>
                                                                                              <dtitle>
-                                                                                               {searchPageTitleOfSect(index_searcher.doc(scoreWDoc.doc).get("id"))}
+                                                                                               {searchPageTitleOfSect(indexSearcher.doc(scoreWDoc.doc).get("id"))}
                                                                                              </dtitle>
                                                                                              <dtext>
-                                                                                               { index_searcher.doc(scoreWDoc.doc).get("text") }
-                                                                                             </dtext>
+                                                                                               {val sentNumStream = Stream.iterate(1)(_ + 1).iterator
+                                                                                             val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s=>(PrepareTrainNTestMain.myNormalize(s).trim() != ""))
+                                                                                             for (noEmptySent <-  noEmptySents) yield {
+                                                                                                                                                                                           <sent>
+                                                                                                 <stext>{noEmptySent}</stext>
+                                                                                                 <sscore>{searchScoreOfSent(noEmptySent, query, sentIndexDir)}</sscore>
+                                                                                                 <scount>{sentNumStream.next}</scount>
+                                                                                               </sent>
+                                                                                             }}
+s                                                                                             </dtext>
                                                                                              <dscore>
                                                                                                { scoreWDoc.score }
                                                                                              </dscore>
@@ -280,14 +298,18 @@ class SearchSect(index_dir: Directory, maxSearchResults: Int = 100) extends Sear
 
 }
 
-class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(index_dir, maxSearchResults) {
+class SearchPara(indexDir: Directory, sectIndexDir: Directory, sentIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(indexDir, maxSearchResults) {
+
+
+
+
 
   def searchSectTitleOfPara(id: String): String = {
 
-    val sectIndex_reader = DirectoryReader.open(sectIndexDir)
-    val sectIndex_searcher = new IndexSearcher(sectIndex_reader)
-    val paraIDRe = """\/\d+""".r
-    val sectIDRe = """(-\d+)+""".r
+    val sectIndexReader = DirectoryReader.open(sectIndexDir)
+    val sectIndexSearcher = new IndexSearcher(sectIndexReader)
+    val paraIDRe = """r\d+""".r
+    val sectIDRe = """(s\d+)+""".r
     val sectID = paraIDRe.replaceAllIn(id, "")
     val pageID = sectIDRe.replaceAllIn(sectID, "")
     val sectTerm = new Term("id", sectID)
@@ -299,9 +321,9 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
     //    System.err.println(s"paraid ${id}")
     System.err.println(s"sectid ${sectID}")
     System.err.println(s"pageid ${pageID}")
-    System.err.println(s"secttitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString}")
+    System.err.println(s"secttitle ${(for (scoreWDoc <- sectIndexSearcher.search(queryWPageID, 1).scoreDocs) yield { sectIndexSearcher.doc(scoreWDoc.doc).get("title") }).mkString}")
     //    System.err.println(s"pagetitle ${(for (scoreWDoc <- sectIndex_searcher.search(queryWPageID,1 ).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("id")}).mkString}")
-    (for (scoreWDoc <- sectIndex_searcher.search(queryWSectID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString
+    (for (scoreWDoc <- sectIndexSearcher.search(queryWSectID, 1).scoreDocs) yield { sectIndexSearcher.doc(scoreWDoc.doc).get("title") }).mkString
 //    (for (scoreWDoc <- sectIndex_searcher.search(queryWPageID, 1).scoreDocs) yield { sectIndex_searcher.doc(scoreWDoc.doc).get("title") }).mkString
     //    System.err.println(s"sectTitle ${(for (scoreWDoc <- sectIndex_searcher.search(query,1).scoreDocs) yield {sectIndex_searcher.doc(scoreWDoc.doc).get("title")}).mkString}")
   }
@@ -339,7 +361,7 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
         val query = parser.parse(origQueryTxt)
         val answerHits  = for (answer <- answers \\"answer") yield {
           val totalHitCountCollector = new TotalHitCountCollector
-          index_searcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
+          indexSearcher.search(parser.parse("\""+answer.text+"\""),totalHitCountCollector)
           System.err.println(s"answerToPhraseQueriesText ${parser.parse("\""+answer.text+"\"").toString}")
           totalHitCountCollector.getTotalHits()
         }
@@ -381,7 +403,17 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
          * }
          *
          * }
+         * val sentNumStream = Stream.iterate(1)(_ + 1).iterator
+                                                                                                val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s => (PrepareTrainMain.myNormalize(s.trim()) == "") == 0)
+                                                                                                for (noEmptySent <-  noEmptySents) yield {
+                                                                                                 <check>hello</check>
+                                                                                                 <sent>
+                                                                                                    <stext>{noEmptySent}</stext>
+                                                                                                    <sscore>{searchScoreOfSent(noEmptySent, query, sentIndexDir)}</sscore>
+                                                                                                    <scount>{sentNumStream.next}</scount>
+                                                                                                  </sent>
          */
+
 
         //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "text").text}
         //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "title").text}
@@ -401,15 +433,25 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
               </ansstats>
               <docs>
                 {
-                  for (scoreWDoc <- index_searcher.search(query, maxHits).scoreDocs) yield <doc>
+                  for (scoreWDoc <- indexSearcher.search(query, maxHits).scoreDocs) yield <doc>
                                                                                              <did>
-                                                                                               { index_searcher.doc(scoreWDoc.doc).get("id") }
+                                                                                               { indexSearcher.doc(scoreWDoc.doc).get("id") }
                                                                                              </did>
                                                                                              <dtitle>
-                                                                                               { searchSectTitleOfPara(index_searcher.doc(scoreWDoc.doc).get("id")) }
+                                                                                               { searchSectTitleOfPara(indexSearcher.doc(scoreWDoc.doc).get("id")) }
                                                                                              </dtitle>
                                                                                              <dtext>
-                                                                                               { index_searcher.doc(scoreWDoc.doc).get("text") }
+                                                                                               {val sentNumStream = Stream.iterate(1)(_ + 1).iterator
+                                                                                                val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s=>(PrepareTrainNTestMain.myNormalize(s).trim() != ""))
+                                                                                                for (noEmptySent <-  noEmptySents) yield {
+
+                                                                                                 <sent>
+                                                                                                   <stext>{noEmptySent}</stext>
+                                                                                                   <sscore>{searchScoreOfSent(noEmptySent, query, sentIndexDir)}</sscore>
+                                                                                                   <scount>{sentNumStream.next}</scount>
+                                                                                                 </sent>}
+
+                                                                                               }
                                                                                              </dtext>
                                                                                              <dscore>
                                                                                                { scoreWDoc.score }
@@ -426,22 +468,46 @@ class SearchPara(index_dir: Directory, sectIndexDir: Directory, maxSearchResults
   }
 }
 
-abstract class SearchDocument(val index_dir: Directory, val maxSearchResults: Int = 100) {
+
+
+
+abstract class SearchDocument(val indexDir: Directory, val maxSearchResults: Int = 100) {
   val analyzer = new JapaneseAnalyzer
   val parser = new QueryParser("text", analyzer)
   //  val parser = new MultiFieldQueryParser(Array("text","title","firstpara"), analyzer)
-  val index_reader = DirectoryReader.open(index_dir)
-  val index_searcher = new IndexSearcher(index_reader)
+  val indexReader = DirectoryReader.open(indexDir)
+  val indexSearcher = new IndexSearcher(indexReader)
 
   // set the similarity function to return tf=1
   //  index_searcher.setSimilarity(new SimilarityWithConstantNOM) // NOM を常に1にする
-  index_searcher.setSimilarity(new DefaultSimilarity)
+  indexSearcher.setSimilarity(new DefaultSimilarity)
   def extractQuestionAndAnnotation(questionXML: Node): QuestionAndAnnotation = {
     QuestionAndAnnotation((questionXML \ "@id").text,
       questionXML \\ "text",
       questionXML \\ "meta",
       questionXML \\ "answers",
       questionXML \\ "annotations")
+  }
+
+  def powerTrim(text: String): String = {
+    val fullSpaceRe = """　""".r
+    fullSpaceRe.replaceAllIn(text.trim(), "")
+  }
+
+
+
+
+  def searchScoreOfSent(sentText:String, realQuery: Query, sentIndexDir: Directory): Float = {
+    val sentIndexReader = DirectoryReader.open(sentIndexDir)
+    val sentIndexSearcher = new IndexSearcher(sentIndexReader)
+    val escapedText = PrepareTrainNTestMain.myNormalize(org.apache.lucene.queryparser.classic.QueryParserBase.escape(powerTrim(sentText)))
+    if ( StringUtils.isEmpty((escapedText)) == false)  {
+      val toBeFilterQuery = parser.parse(escapedText)
+      val filter = new QueryWrapperFilter(toBeFilterQuery)
+      if (sentIndexSearcher.search(realQuery,filter,1).scoreDocs.length != 0) sentIndexSearcher.search(realQuery,filter,1).scoreDocs(0).score
+      else 0
+    }
+    else 0
   }
 
   def orderedUnique[A](ls: List[A]) = {
@@ -499,22 +565,23 @@ object SearchDocument {
     val pageIndexRe = """(?<=.*)page(?=.*)""".r
     val sectIndexRe = """(?<=.*)sect(?=.*)""".r
     val paraIndexRe = """(?<=.*)para(?=.*)""".r
-    val sectIndexDir = paraIndexRe.replaceAllIn(args(0), "sect")
-    System.err.println(s"sectionIndexDir: ${sectIndexDir}")
-    val sectIndex = FSDirectory.open(new File(sectIndexDir))
+    val otherThanSentIndexRe = """(?<=.*)page|sect|para(?=.*)""".r
+    val sectIndexName = paraIndexRe.replaceAllIn(args(0), "sect")
+    val sentIndexName = otherThanSentIndexRe.replaceAllIn(args(0),"sent")
+    System.err.println(s"sentenceIndexDir: ${sentIndexName}")
+    System.err.println(s"sectionIndexDir: ${sectIndexName}")
+    val sectIndexDir = FSDirectory.open(new File(sectIndexName))
+    val sentIndexDir = FSDirectory.open(new File(sentIndexName))
     val search = pageIndexRe.findFirstIn(args(0)) match {
-      case Some(m) => new SearchPage(indexDir)
+      case Some(m) => new SearchPage(indexDir,sentIndexDir)
       case None    => sectIndexRe.findFirstIn(args(0)) match {
-        case Some(m) => new SearchSect(indexDir)
-        case None    => new SearchPara(indexDir, sectIndex)
+        case Some(m) => new SearchSect(indexDir, sentIndexDir)
+        case None    => new SearchPara(indexDir, sectIndexDir, sentIndexDir)
       }
     }
 
 
-      sectIndexRe.findFirstIn(args(0)) match {
-      case Some(m) => new SearchSect(indexDir)
-      case None    => new SearchPara(indexDir, sectIndex)
-    }
+
 
     //    val boost:java.util.Map[String,java.lang.Float] = collection.mutable.Map("title"->args(3).toFloat.asInstanceOf[java.lang.Float], "text"->(args(4).toFloat.asInstanceOf[java.lang.Float])).asJava
 

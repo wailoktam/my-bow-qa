@@ -3,7 +3,7 @@ package qa.main.ja
 import java.io.File
 
 import org.apache.lucene.index.{DirectoryReader, IndexReader}
-import PrepareTrain._
+import PrepareTrainNTestMain._
 import org.apache.lucene.store.FSDirectory
 import scala.xml._
 
@@ -25,7 +25,7 @@ object RealAnswering {
             <annotation type="sentence" annotator="AnswerSentence">
               <sentences>
                 {
-                  for (doc <- oldAnnotations \\ "doc") yield <sentence>{ ((doc \\ "dtext").text.trim().split("。")).maxBy(PrepareTrainMain.proximity(_, questionText.text, index_reader)) }</sentence>
+                  for (doc <- oldAnnotations \\ "doc") yield <sentence>{ ((doc \\ "dtext").text.trim().split("。")).maxBy(PrepareTrainNTestMain.proximity(_, questionText.text, index_reader)) }</sentence>
                 }
               </sentences>
             </annotation>

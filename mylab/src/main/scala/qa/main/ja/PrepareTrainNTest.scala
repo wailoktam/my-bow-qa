@@ -12,7 +12,7 @@ import org.atilika.kuromoji.Tokenizer
 import org.atilika.kuromoji.Token
 import com.ibm.icu.text.Normalizer2
 
-object PrepareTrainMain {
+object PrepareTrainNTestMain {
 
   def myNormalize(input: String): String = {
     val tokenizer = Tokenizer.builder.mode(Tokenizer.Mode.NORMAL).build
@@ -23,7 +23,7 @@ object PrepareTrainMain {
 
   def sectPara(id: String): Int = {
     System.err.println(s"id in sectPara ${id.trim()}")
-    val paraIDRe = """(?<=\/)\d+$""".r
+    val paraIDRe = """(?<=r)\d+$""".r
     paraIDRe.findFirstIn(id.trim()).getOrElse("0").toInt
   }
 
@@ -253,7 +253,7 @@ object PrepareTrainMain {
   }
 */
 
-def checkQuestionAndAnnotationPara(questionXML: Node, indexDirName: String, csvBw: BufferedWriter): Unit = {
+def prepareTrain(questionXML: Node, indexDirName: String, trainBw: BufferedWriter): Unit = {
   val sectIndexDir = FSDirectory.open(new File(indexDirName + "/sect"))
   val paraIndexDir = FSDirectory.open(new File(indexDirName + "/para"))
   val sentIndexDir = FSDirectory.open(new File(indexDirName + "/sent"))
@@ -328,18 +328,21 @@ def checkQuestionAndAnnotationPara(questionXML: Node, indexDirName: String, csvB
 
 
       val sentenceNum = (sentence \\ "scount").text.trim()
-      val featLast1 = "1:"::List(sectParaNum.toString())
+      val featLast1 = "7:" :: List(sectParaNum.toString())
 
       //idWoLastSect = 2:450-4-1-1
-      val featLast2 = "2:" :: paraFrTop :: " " :: featLast1
+      val featLast2 = "6:" :: paraFrTop :: " " :: featLast1
       //            else 0 :: List(label.toString())
-      val featLast3 = "3:" ::(doc \\ "dscore").text.trim()  :: " " :: featLast2
+      val featLast3 = "5:" :: (doc \\ "dscore").text.trim() :: " " :: featLast2
       val featLast4 = "4:" :: sentenceProximity :: " " :: featLast3
-      val featLast5 = "5:" :: sectSectNum :: " " :: featLast4
-      val featLast6 = "6:" :: (sentence \\ "sscore").text.trim() :: " " :: featLast5
-      val featLast7 = "7:" :: sentenceNum :: " " :: featLast6
+      val featLast5 = "3:" :: sectSectNum :: " " :: featLast4
+      val featLast6 = "2:" :: (sentence \\ "sscore").text.trim() :: " " :: featLast5
+      val featLast7 = "1:" :: sentenceNum :: " " :: featLast6
       val allFeats = featLast7.mkString
-      csvBw.write(label.toString()+" "+allFeats +  " # " + (doc \\ "did").text.trim()+"t"+sentenceNum + "\n")
+      trainBw.write(label.toString() + " " + allFeats + "\n")
+    }
+  }
+}
 /**
       val featLast1 = "1"::List(sectParaNum.toString())
 
@@ -354,17 +357,122 @@ def checkQuestionAndAnnotationPara(questionXML: Node, indexDirName: String, csvB
       val allFeats = featLast7.mkString(":")
       csvBw.write(label.toString()+" "+allFeats + "\n")
 */
-    }
 
-  }
+
+    def prepareTest(questionXML: Node, indexDirName: String, testBw: BufferedWriter): Unit = {
+      val sectIndexDir = FSDirectory.open(new File(indexDirName + "/sect"))
+      val paraIndexDir = FSDirectory.open(new File(indexDirName + "/para"))
+      val sentIndexDir = FSDirectory.open(new File(indexDirName + "/sent"))
+      val sectIndexReader = DirectoryReader.open(sectIndexDir)
+      val sectIndexSearcher = new IndexSearcher(sectIndexReader)
+      val paraIndexReader = DirectoryReader.open(paraIndexDir)
+      val paraIndexSearcher = new IndexSearcher(paraIndexReader)
+      val sentIndexReader = DirectoryReader.open(sentIndexDir)
+      val sentIndexSearcher = new IndexSearcher(sentIndexReader)
+      for (doc <- (questionXML \\ "doc")) yield {
+        val sectSectNum = sectSect((doc \\ "did").text)
+        val sectParaNum = sectPara((doc \\ "did").text)
+        System.err.println(s"sectParaOut ${sectParaNum}")
+
+
+        //        val sectParaNum = if (docType == "para") {
+        //          sectPara((doc \\ "did").text)
+        //        }
+        //         else {
+        //         "0"
+        //        }
+        //doc\\"did".text = 2:450-4-1-1-5/9
+        val paraIDRe = """r\d+""".r
+        val idWoPara = paraIDRe.replaceAllIn((doc \\ "did").text, "")
+        //idWoPara = 2:450-4-1-1-5
+        val sectIDRe = """(?<=s)(\d+)(?=[\D]*)$""".r
+        val sectIDwSepRe = """s(\d+)(?=[\D]*)$""".r
+        val splitIDOpt = sectIDRe.findFirstIn(idWoPara.trim())
+        //splitIDOpt = Some(5)
+        val idWoLastSect = sectIDwSepRe.replaceFirstIn(idWoPara.trim(), "")
+        val paraFrTop = splitIDOpt match {
+          case None => {
+            sectParaNum.toString()
+            //            sectParaNum.toString() ::  List(label.toString())
+          }
+          case Some(splitID) => {
+            if ((splitID.toInt == 0) == false) {
+              System.err.println(s"splitIDInCheckQ&A ${splitID}")
+              //              val temp1 = getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher)
+              //              val temp2 = wholePara(idWoLastSect, index_searcher)
+              //              System.err.println(s"temp1InCheckQ&A ${temp1}")
+              //              System.err.println(s"temp2InCheckQ&A ${temp2}")
+              //              temp1 + temp2 :: featLast1
+              //              sectParaNum + getParasOfPrev(splitID.toInt - 1, idWoLastSect, index_searcher) + wholePara(idWoLastSect, index_searcher) :: List(label.toString())
+              sectParaNum + getParasOfPrev(splitID.toInt - 1, idWoLastSect, sectIndexSearcher) + wholePara(idWoLastSect, sectIndexSearcher)
+            }
+            else 0
+          }
+        }
+        System.err.println(s"idWoParaInCheckQ&A ${idWoPara}")
+        System.err.println(s"idWoLastSectInCheckQ&A ${idWoLastSect}")
+        System.err.println(s"splitIDinCheckQ&A ${splitIDOpt}")
+        //        for (answer <- questionXML \\ "answer") yield {
+        //          if (normalizedText.contains(myNormalize(answer.text.trim()))) println ("get")
+        //        }
+        //        val label = "false"
+        val sentenceCounterStream = Stream.iterate(1)(_ + 1).iterator
+        for (sentence <- (doc \\ "sent")) yield {
+          //          System.err.println(s"doc ${doc}")
+          val sentText = myNormalize((sentence \\ "stext").text)
+          val sentenceCounter = sentenceCounterStream.next
+          //          val sentenceID = (doc \\ "did").text+"^"+sentenceCounter
+          //          System.err.println(s"sentenceCounter ${sentenceCounter}")
+
+          val label = {
+            if ((questionXML \\ "answer") exists { a: Node => sentText.contains(myNormalize(a.text.trim())) }) 1 else 0
+          }
+          System.err.println(s"sentence in checkQ&A${sentence}")
+          //          for (answer<-(questionXML \\ "answer")) System.err.println(s"answer in checkQ&A${myNormalize(answer.text.trim())}")
+          //          val maxProximitySentence  = ((doc \\ "dtext").text.trim().split("。"))maxBy(proximity(_, (questionXML\"text").text, index_reader))
+          val sentenceProximity = proximity(sentText, (questionXML \ "text").text, sentIndexReader)
+
+
+
+          val sentenceNum = (sentence \\ "scount").text.trim()
+          val featLast1 = sectParaNum.toString() :: List(label)
+
+          //idWoLastSect = 2:450-4-1-1
+          val featLast2 = paraFrTop :: featLast1
+          //            else 0 :: List(label.toString())
+          val featLast3 = (doc \\ "dscore").text.trim()  :: featLast2
+          val featLast4 = sentenceProximity :: featLast3
+          val featLast5 = sectSectNum :: featLast4
+          val featLast6 = (sentence \\ "sscore").text.trim() :: featLast5
+          val featLast7 = sentenceNum :: featLast6
+          val testLine = (questionXML \ "@id").text.trim() :: (doc \\ "did").text.trim()+"t" + sentenceCounter :: featLast7
+          testBw.write(testLine.mkString(",") +  "\n")
+          /**
+          val featLast1 = "1"::List(sectParaNum.toString())
+
+      //idWoLastSect = 2:450-4-1-1
+      val featLast2 = "2" :: paraFrTop :: featLast1
+      //            else 0 :: List(label.toString())
+      val featLast3 = "3" ::(doc \\ "dscore").text.trim() :: featLast2
+      val featLast4 = "4" :: sentenceProximity :: featLast3
+      val featLast5 = "5" :: sectSectNum :: featLast4
+      val featLast6 = "6" :: (sentence \\ "sscore").text.trim() :: featLast5
+      val featLast7 = "7" :: sentenceNum :: featLast6
+      val allFeats = featLast7.mkString(":")
+      csvBw.write(label.toString()+" "+allFeats + "\n")
+            */
+        }
+    }
 }
 
-  def apply(xmlWDocs: Node, indexDirName: String, csvFile: BufferedWriter, docType: String) = {
+  def apply(xmlWDocs: Node, indexDirName: String, trainFile: BufferedWriter, testFile: BufferedWriter, docType: String, trainOverTest: Int) = {
     docType match {
       case "paragraph" => {
-//        for libsvm
+      val trainTestPair =  (xmlWDocs \\ "question").splitAt(800/(trainOverTest+1)*trainOverTest-1)
+        //        for libsvm
 //        csvFile.write("id, sent num in para, sent lucene score, section, proximity, doc lucene score, para from top, para in section,label\n")
-        (xmlWDocs \\ "question") map (checkQuestionAndAnnotationPara(_, indexDirName, csvFile))
+        trainTestPair._1 map (prepareTrain(_, indexDirName, trainFile))
+        trainTestPair._2 map (prepareTest(_, indexDirName, testFile))
       }
 
 
@@ -378,13 +486,13 @@ object PrepareTrainNTest {
       System.exit(1)
     }
 
-    val trainFile = new File("training.csv")
+    val trainFile = new File("training.libsvm")
     val trainBw = new BufferedWriter(new FileWriter(trainFile))
     val testFile = new File("test.csv")
     val testBw = new BufferedWriter(new FileWriter(testFile))
 //    csvBw.write("id,para from top,label\n")
 
-    PrepareTrainMain(XMLLoaderIgnoringDTD.loadFile(args(0)),args(1), trainBw, testBw, args(2), args(3))
+    PrepareTrainNTestMain(XMLLoaderIgnoringDTD.loadFile(args(0)),args(1), trainBw, testBw, args(2), args(3).toInt)
     trainBw.close()
     testBw.close()
   }
