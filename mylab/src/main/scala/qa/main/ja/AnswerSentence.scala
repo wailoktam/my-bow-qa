@@ -2,16 +2,12 @@ package qa.main.ja
 
 import java.io.File
 
-import org.apache.lucene.index.{DirectoryReader, IndexReader}
+import org.apache.lucene.index.{ DirectoryReader, IndexReader }
 import PrepareTrainNTestMain._
 import org.apache.lucene.store.FSDirectory
 import scala.xml._
 
 object RealAnswering {
-
-
-
-
 
   def annotateWSentences(oldQAndA: QuestionAndAnnotation, indexDir: FSDirectory): QuestionAndAnnotation = {
     val index_reader = DirectoryReader.open(indexDir)
@@ -57,7 +53,7 @@ object RealAnswering {
   }
 
   def apply(xmlWDocs: Node, indexDir: FSDirectory): Seq[Elem] = {
-    (xmlWDocs \\ "question") map (extractQuestionAndAnnotation) map (annotateWSentences(_,indexDir)) map (formatInXML)
+    (xmlWDocs \\ "question") map (extractQuestionAndAnnotation) map (annotateWSentences(_, indexDir)) map (formatInXML)
   }
 }
 
@@ -68,7 +64,7 @@ object AnswerSentence {
       System.exit(1)
     }
 
-    val elems = RealAnswering(XMLLoaderIgnoringDTD.loadFile(args(0)),FSDirectory.open(new File(args(2))))
+    val elems = RealAnswering(XMLLoaderIgnoringDTD.loadFile(args(0)), FSDirectory.open(new File(args(2))))
     XML.save(args(1), <questions>
                         {
                           for (elem <- elems) yield {
@@ -78,5 +74,4 @@ object AnswerSentence {
                       </questions>, "UTF-8")
   }
 }
-
 

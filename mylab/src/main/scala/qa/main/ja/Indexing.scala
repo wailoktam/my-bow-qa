@@ -266,8 +266,6 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     )
   }
 
-
-
   def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String): Unit = {
     val file1 = new File("bugInIndexing1")
     val bw1 = new BufferedWriter(new FileWriter(file1))
@@ -289,7 +287,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     tableText.append(etcCollect(pageText).split("\\|\\|")(0))
     val pageTextWoTable = etcCollect(pageText).split("\\|\\|")(1)
     System.err.println(s"pageTextWoTable: ${pageTextWoTable}")
-    val pageParaCount = pageTextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+    val pageParaCount = pageTextWoTable.split("\n").filter { p => ((p == "") == false) }.length
     val fullText = new StringBuilder
 
     val mainPage = new Document()
@@ -313,7 +311,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     bw2.write(StringEscapeUtils.escapeXml11(pageTitle) + "\n")
     bw2.write("</" + "title" + ">" + "\n")
 
-    addParaNSentToDoc(paraWriter,sentWriter, pageTextWoTable, pageID, bw2)
+    addParaNSentToDoc(paraWriter, sentWriter, pageTextWoTable, pageID, bw2)
 
     if ((x \\ "section1") != "") {
       val sect1NumStream = Stream.iterate(1)(_ + 1).iterator
@@ -326,7 +324,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         val sect1Text = section1.child.collect { case Text(t) => t }.mkString("\n")
         val sect1TextWoTable = etcCollect(sect1Text).split("\\|\\|")(1)
         tableText.append(etcCollect(sect1Text).split("\\|\\|")(0))
-        val sect1ParaCount = sect1TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+        val sect1ParaCount = sect1TextWoTable.split("\n").filter { p => ((p == "") == false) }.length
         System.err.println(s"id: ${sect1ID}")
         System.err.println(s"sect1ParaCount: ${sect1ParaCount}")
         sect1.add(new StringField("id", sect1ID, Store.YES))
@@ -352,7 +350,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
             val sect2Text = section2.child.collect { case Text(t) => t }.mkString("\n")
             val sect2TextWoTable = etcCollect(sect2Text).split("\\|\\|")(1)
             tableText.append(etcCollect(sect2Text).split("\\|\\|")(0))
-            val sect2ParaCount = sect2TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+            val sect2ParaCount = sect2TextWoTable.split("\n").filter { p => ((p == "") == false) }.length
             System.err.println(s"id: ${sect2ID}")
             System.err.println(s"sect2ParaCount: ${sect2ParaCount}")
             sect2.add(new StringField("id", sect2ID, Store.YES))
@@ -380,7 +378,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                 val sect3Text = section3.child.collect { case Text(t) => t }.mkString("\n")
                 val sect3TextWoTable = etcCollect(sect3Text).split("\\|\\|")(1)
                 tableText.append(etcCollect(sect3Text).split("\\|\\|")(0))
-                val sect3ParaCount = sect3TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+                val sect3ParaCount = sect3TextWoTable.split("\n").filter { p => ((p == "") == false) }.length
                 System.err.println(s"id: ${sect3ID}")
                 System.err.println(s"sect3ParaCount: ${sect3ParaCount}")
                 sect3.add(new StringField("id", sect3ID, Store.YES))
@@ -406,7 +404,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                     val sect4Text = section4.child.collect { case Text(t) => t }.mkString("\n")
                     val sect4TextWoTable = etcCollect(sect4Text).split("\\|\\|")(1)
                     tableText.append(etcCollect(sect4Text).split("\\|\\|")(0))
-                    val sect4ParaCount = sect4TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+                    val sect4ParaCount = sect4TextWoTable.split("\n").filter { p => ((p == "") == false) }.length
                     //                    print(sect4Text)
                     System.err.println(s"id: ${sect4ID}")
                     System.err.println(s"sect4ParaCount: ${sect4ParaCount}")
@@ -433,7 +431,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
                         val sect5Text = section5.child.collect { case Text(t) => t }.mkString("\n")
                         val sect5TextWoTable = etcCollect(sect5Text).split("\\|\\|")(1)
                         tableText.append(etcCollect(sect5Text).split("\\|\\|")(0))
-                        val sect5ParaCount = sect5TextWoTable.split("\n").filter{p => ((p == "") == false)}.length
+                        val sect5ParaCount = sect5TextWoTable.split("\n").filter { p => ((p == "") == false) }.length
                         System.err.println(s"id: ${sect5ID}")
                         System.err.println(s"sect5ParaCount: ${sect5ParaCount}")
                         sect5.add(new StringField("id", sect5ID, Store.YES))
@@ -476,8 +474,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     sectWriter.addDocument(tableEtc)
     fullText.append(tableText.result)
     val fullPage = new Document()
-//    System.err.println(s"id: ${pageID}")
-//    System.err.println(s"pageParaCount: ${pageParaCount}")
+    //    System.err.println(s"id: ${pageID}")
+    //    System.err.println(s"pageParaCount: ${pageParaCount}")
     //    print (pageText)
     //    System.err.println(s"pid: ${pageID}")
     //    System.err.println(s"ptext: ${pageText}")
@@ -840,7 +838,7 @@ class Indexing {
   }
 
   //  private def makeIndexMain(knowledgeFiles: Array[String], indexDir: Directory): Array[(String, Elem)] = {
-  private def makeIndexMain(knowledgeFiles: Array[String], indexDirName: String): Unit = {
+  def makeIndexMain(knowledgeFiles: Array[String], indexDirName: String): Unit = {
     val pageIndexDir = FSDirectory.open(new File(indexDirName + "/page"))
     val sectIndexDir = FSDirectory.open(new File(indexDirName + "/sect"))
     val paraIndexDir = FSDirectory.open(new File(indexDirName + "/para"))
@@ -893,14 +891,6 @@ class Indexing {
 
   }
 
-  def recursiveListFiles(f: File): Array[File] = {
-    val these = f.listFiles
-    these ++ these.filter(_.isDirectory).flatMap(recursiveListFiles)
-  }
-
-  def makeFileList(dirName: String): Array[String] = {
-    recursiveListFiles(new File(dirName)).filter(_.isFile).map(_.getAbsolutePath)
-  }
 
   /**
    * def makeIndexOnFile(target_file_names: Array[String], index_dir_name: String, document_cdb_name: String): Directory = {
@@ -916,7 +906,7 @@ class Indexing {
 
   def apply(knowDirName: String, indexDirName: String): Unit = {
 
-    makeIndexMain(makeFileList(knowDirName), indexDirName)
+    makeIndexMain(SharedFunctions.makeFileList(knowDirName), indexDirName)
     //    (indexDir, documents.toMap)
   }
 }

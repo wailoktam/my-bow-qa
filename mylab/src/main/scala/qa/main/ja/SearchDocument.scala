@@ -273,7 +273,7 @@ class SearchSect(indexDir: Directory, sentIndexDir: Directory, maxSearchResults:
                                                                                             <dtext>
                                                                                               {
                                                                                                 val sentNumStream = Stream.iterate(1)(_ + 1).iterator
-                                                                                                val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s => (PrepareTrainNTestMain.myNormalize(s).trim() != ""))
+                                                                                                val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s => (SharedFunctions.myNormalize(s).trim() != ""))
                                                                                                 for (noEmptySent <- noEmptySents) yield {
                                                                                                   <sent>
                                                                                                     <stext>{ noEmptySent }</stext>
@@ -441,7 +441,7 @@ class SearchPara(indexDir: Directory, sectIndexDir: Directory, sentIndexDir: Dir
                                                                                             <dtext>
                                                                                               {
                                                                                                 val sentNumStream = Stream.iterate(1)(_ + 1).iterator
-                                                                                                val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s => (PrepareTrainNTestMain.myNormalize(s).trim() != ""))
+                                                                                                val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s => (SharedFunctions.myNormalize(s).trim() != ""))
                                                                                                 for (noEmptySent <- noEmptySents) yield {
 
                                                                                                   <sent>
@@ -486,15 +486,12 @@ abstract class SearchDocument(val indexDir: Directory, val maxSearchResults: Int
       questionXML \\ "annotations")
   }
 
-  def powerTrim(text: String): String = {
-    val fullSpaceRe = """　""".r
-    fullSpaceRe.replaceAllIn(text.trim(), "")
-  }
+
 
   def searchScoreOfSent(sentText: String, realQuery: Query, sentIndexDir: Directory): Float = {
     val sentIndexReader = DirectoryReader.open(sentIndexDir)
     val sentIndexSearcher = new IndexSearcher(sentIndexReader)
-    val escapedText = PrepareTrainNTestMain.myNormalize(org.apache.lucene.queryparser.classic.QueryParserBase.escape(powerTrim(sentText)))
+    val escapedText = SharedFunctions.myNormalize(org.apache.lucene.queryparser.classic.QueryParserBase.escape(SharedFunctions.powerTrim(sentText)))
     if (StringUtils.isEmpty((escapedText)) == false) {
       val toBeFilterQuery = parser.parse(escapedText)
       val filter = new QueryWrapperFilter(toBeFilterQuery)
