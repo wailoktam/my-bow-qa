@@ -8,45 +8,55 @@ import org.apache.spark.streaming.api.java._
 import org.apache.spark.{SparkConf, SparkContext}
 import org.atilika.kuromoji.Tokenizer
 import org.atilika.kuromoji.Token
+import java.io.{ FileWriter, BufferedWriter, File }
 
 
 // Load training data in LIBSVM format.
 
 object TrainW2V {
 
-  def extractSent(fileName:String):List[String] = {
+  def extractSent(xmlFileName:String, bw: java.io.BufferedWriter):Unit= {
     val tokenizer = Tokenizer.builder.mode(Tokenizer.Mode.NORMAL).build
 
-    val root = XMLLoaderIgnoringDTD.loadFile(fileName)
+    val root = XMLLoaderIgnoringDTD.loadFile(xmlFileName)
     val paraSeq = for (para <- root \\ "para") yield {
       (para.child.collect{ case Text(t) => t }).mkString.trim()
     }
     val tokens = tokenizer.tokenize(paraSeq.mkString).toArray
-    (tokens.map { t => (t.asInstanceOf[Token].getSurfaceForm()) }).mkString(" ").split("。").toList
+    val sentenceLines = (tokens.map { t => (t.asInstanceOf[Token].getSurfaceForm()) }).mkString(" ").split("。").toList
+    sentenceLines.map(bw.write(_))
   }
 
-  def makeSentenceList(fileNames:Array[String]): List[String] = {
-//    def sum3(xs: List[Int]): Int = {
-//      if (xs.isEmpty) 0
-//    else xs.head + sum3(xs.tail)
+  def makeSentenceList(fileNames:Array[String]): String = {
+    //    def sum3(xs: List[Int]): Int = {
+    //      if (xs.isEmpty) 0
+    //    else xs.head + sum3(xs.tail)
+    val xml2TxtFile = "segmentedSentenceList.txt"
+    val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(xml2TxtFile)))
+    fileNames.map(extractSent(_,bw))
+    bw.close()
+    xml2TxtFile
+    }
 
+
+/**
+ * recursive version
+  def makeSentenceList(fileNames:Array[String]): List[String] = {
       if (fileNames.isEmpty) List()
       else extractSent(fileNames.head) ++ makeSentenceList(fileNames.tail)
   }
-
+*/
 //  def train(): Unit =
-  def train(sentList: List[String], modelPath: String): Unit = {
+  def train(sentTxtFile: String, modelPath: String): Unit = {
     val conf = new SparkConf().setAppName("Simple Application").setMaster("local")
     val sc = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
-    System.err.println("sentList"+sentList)
-    val input = sentList.map(s => s.split(" ").toSeq)
-//      val test = sc.textFile("/home/wailoktam/qa/mylab/input/text8").map(line => line.split(" ").toSeq)
+    val input = sc.textFile(sentTxtFile).map(line => line.split(" ").toSeq)
 //    System.err.println("class of textfile"+sc.textFile("/home/wailoktam/qa/mylab/input/text8").getClass())
 //    System.err.println("class of test"+test.getClass())
 //    System.err.println("class of input"+input.getClass())
     val word2vec = new Word2Vec()
-    val model = word2vec.fit(sc.parallelize(input))
+    val model = word2vec.fit(input)
 //    val vectors = model.getVectors("中国").mkString
 //    val synonyms = model.findSynonyms("中国", 40)
 
@@ -68,9 +78,6 @@ object TrainW2V {
 
     System.err.println("fileNameList"+fileNameList.mkString)
     train(makeSentenceList(fileNameList),args(1))
-
-
-
   }
 
 }
