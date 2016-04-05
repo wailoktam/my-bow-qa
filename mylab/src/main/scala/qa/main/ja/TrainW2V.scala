@@ -47,8 +47,8 @@ object TrainW2V {
   }
 */
 //  def train(): Unit =
-  def train(sentTxtFile: String, modelPath: String): Unit = {
-    val conf = new SparkConf().setAppName("Simple Application").setMaster("local")
+  def trainFirst(sentTxtFile: String, modelPath: String): Unit = {
+    val conf = new SparkConf().setAppName("Simple Application").setMaster("local").set( "spark.driver.memory", "80g" )
     val sc = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
     sc.textFile(sentTxtFile, 12).count()
@@ -67,6 +67,25 @@ object TrainW2V {
     model.save(sc, modelPath)
   }
 
+  def trainSecond(modelPath: String): Unit = {
+    val conf = new SparkConf().setAppName("Simple Application").setMaster("local")
+    val sc = new SparkContext(conf)
+    val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+    System.err.println("die 1")
+    val input = sc.textFile("segmentedSentenceList.txt",12).map(line => line.split(" ").toSeq)
+    System.err.println("die 2")
+    val word2vec = new Word2Vec()
+    System.err.println("die 3")
+    val model = word2vec.fit(input)
+    //    val vectors = model.getVectors("中国").mkString
+    //    val synonyms = model.findSynonyms("中国", 40)
+
+    //    for((synonym, cosineSimilarity) <- synonyms) {
+    //      println(s"vectors $vectors")
+    //    }
+    model.save(sc, modelPath)
+  }
+
   def main(args: Array[String]): Unit = {
 
 
@@ -78,7 +97,8 @@ object TrainW2V {
     val fileNameList = SharedFunctions.makeFileList(args(0))
 
     System.err.println("fileNameList"+fileNameList.mkString)
-    train(makeSentenceList(fileNameList),args(1))
+//    trainFirst(makeSentenceList(fileNameList),args(1))
+    trainSecond(args(1))
   }
 
 }
