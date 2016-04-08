@@ -12,7 +12,7 @@ class MySentences(object):
         for fname in os.listdir(self.dirname):
              for line in open(os.path.join(self.dirname, fname)):
                 lineCounter = lineCounter + 1
-                print(lineCounter+":"+line.split().length+":"+line+"\n")
+                print(str(lineCounter)+":"+str(line.split().length)+":"+line+"\n")
                 yield line.split()
 sentences = MySentences('/home/wailoktam/qa/mylab/trainingSentences') # a memory-friendly iterator
 model = gensim.models.Word2Vec(sentences)
