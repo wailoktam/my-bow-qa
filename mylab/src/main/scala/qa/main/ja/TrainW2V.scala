@@ -24,14 +24,14 @@ object TrainW2V {
     }
     val tokens = tokenizer.tokenize(paraSeq.mkString).toArray
     val sentenceLines = (tokens.map { t => (t.asInstanceOf[Token].getSurfaceForm()) }).mkString(" ").split("。").toList
-    sentenceLines.map(bw.write(_))
+    sentenceLines.map(s=>bw.write(s+"\n"))
   }
 
   def makeSentenceList(fileNames:Array[String]): String = {
     //    def sum3(xs: List[Int]): Int = {
     //      if (xs.isEmpty) 0
     //    else xs.head + sum3(xs.tail)
-    val xml2TxtFile = "segmentedSentenceList.txt"
+    val xml2TxtFile = "/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt"
     val bw = new java.io.BufferedWriter(new java.io.FileWriter(new File(xml2TxtFile)))
     fileNames.map(extractSent(_,bw))
     bw.close()
@@ -71,11 +71,8 @@ object TrainW2V {
     val conf = new SparkConf().setAppName("Simple Application").setMaster("local")
     val sc = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
-    System.err.println("die 1")
-    val input = sc.textFile("segmentedSentenceList.txt",12).map(line => line.split(" ").toSeq)
-    System.err.println("die 2")
+    val input = sc.textFile("/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt",12).map(line => line.split(" ").toSeq)
     val word2vec = new Word2Vec()
-    System.err.println("die 3")
     val model = word2vec.fit(input)
     //    val vectors = model.getVectors("中国").mkString
     //    val synonyms = model.findSynonyms("中国", 40)
@@ -97,8 +94,8 @@ object TrainW2V {
     val fileNameList = SharedFunctions.makeFileList(args(0))
 
     System.err.println("fileNameList"+fileNameList.mkString)
-//    trainFirst(makeSentenceList(fileNameList),args(1))
-    trainSecond(args(1))
+    trainFirst(makeSentenceList(fileNameList),args(1))
+//    trainSecond(args(1))
   }
 
 }
