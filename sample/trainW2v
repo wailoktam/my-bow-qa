@@ -14,6 +14,6 @@ class MySentences(object):
                 lineCounter = lineCounter + 1
                 print(str(lineCounter)+":"+str(len(line.split()))+":"+line+"\n")
                 yield line.split()
-sentences = MySentences('/home/wailoktam/qa/mylab/trainingSentences') # a memory-friendly iterator
+sentences = MySentences('/mnt/Works/wailoktam/trainingSentences') # a memory-friendly iterator
 model = gensim.models.Word2Vec(sentences)
 model.save('/home/wailoktam/model')
