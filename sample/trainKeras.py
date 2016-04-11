@@ -109,7 +109,6 @@ def train_model(model, X_train, Y_train, X_test, Y_test):
 
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='categorical_crossentropy', optimizer=sgd)
-
    model.fit(X_train, Y_train, nb_epoch=5, batch_size=32,
              validation_split=0.1, show_accuracy=True, verbose=1)
 
@@ -138,7 +137,7 @@ def load_and_scale_imgs():
    return np.array(imgs) / 255
 
 if __name__ == '__main__':
-   Word2Vec.load_word2vec_format('/home/wailoktam/model')
+   Word2Vec.load_word2vec_format('/home/wailoktam/model', binary=True)
    print("hi")
    train_model(make_network(),load_dataset()[0],load_dataset()[1],load_dataset()[2],load_dataset()[3])
    imgs = load_and_scale_imgs()
