@@ -30,5 +30,7 @@ model = word2vec.Word2Vec(sentences)
 model.save('/home/wailoktam/model')
 #model = Word2Vec.load_word2vec_format('/home/wailoktam/model', unicode_errors='ignore')
 out = model.most_similar(positive=[u'冒険'])
+vector = model[u'冒険']
 
 print(pp(out[1]))
+print (vector)
