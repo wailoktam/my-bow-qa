@@ -54,7 +54,7 @@ def load_dataset():
    # convert class vectors to binary class matrices
    Y_train = np_utils.to_categorical(y_train, nb_classes)
    Y_test = np_utils.to_categorical(y_test, nb_classes)
-
+   print ('Y test', Y_test)
    X_train = X_train.astype('float32')
    X_test = X_test.astype('float32')
    X_train /= 255
