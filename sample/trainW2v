@@ -14,11 +14,11 @@ import string
 import codecs
 import kanjinums
 #from pyknp import Juman
-from py4j.java_gateway import JavaGateway
+#from py4j.java_gateway import JavaGateway
 from operator import is_not
 from functools import partial
 
-gateway = JavaGateway()
+#gateway = JavaGateway()
 
 from xml.etree import ElementTree as etree
 
