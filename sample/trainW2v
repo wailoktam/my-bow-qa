@@ -3,8 +3,7 @@
 import gensim
 import os
 import re, pprint
-from gensim.models import Word2Vec
-
+from gensim.models import word2vec
 class MySentences(object):
 
   def pp(obj):
@@ -22,8 +21,9 @@ class MySentences(object):
                 lineCounter = lineCounter + 1
                 print(str(lineCounter)+":"+str(len(line.split()))+":"+line+"\n")
                 yield line.split()
-sentences = MySentences('/mnt/Works/wailoktam/trainingSentences') # a memory-friendly iterator
-model = gensim.models.Word2Vec(sentences)
+#sentences = MySentences('/mnt/Works/wailoktam/trainingSentences') # a memory-friendly iterator
+sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
+model = word2vec.Word2Vec(sentences)
 model.save('/home/wailoktam/model')
 #model = Word2Vec.load_word2vec_format('/home/wailoktam/model', unicode_errors='ignore')
 out = model.most_similar(positive=[u'ドラゴン'])
