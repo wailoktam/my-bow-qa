@@ -137,7 +137,7 @@ def load_and_scale_imgs():
    return np.array(imgs) / 255
 
 if __name__ == '__main__':
-   Word2Vec.load_word2vec_format('/home/wailoktam/model', binary=True)
+   Word2Vec.load_word2vec_format('/home/wailoktam/model', binary=True, unicode_errors='ignore')
    print("hi")
    train_model(make_network(),load_dataset()[0],load_dataset()[1],load_dataset()[2],load_dataset()[3])
    imgs = load_and_scale_imgs()
