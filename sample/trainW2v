@@ -1,13 +1,21 @@
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
 import gensim
 import os
-from gensim.models import word2vec
+import re, pprint
+from gensim.models import Word2Vec
 
 class MySentences(object):
 
-   def __init__(self, dirname):
+  def pp(obj):
+    pp = pprint.PrettyPrinter(indent=4, width=160)
+    str = pp.pformat(obj)
+    return re.sub(r"\\u([0-9a-f]{4})", lambda x: unichr(int("0x"+x.group(1), 16)), str)
+
+  def __init__(self, dirname):
         self.dirname = dirname
 
-   def __iter__(self):
+  def __iter__(self):
         lineCounter = 0
         for fname in os.listdir(self.dirname):
              for line in open(os.path.join(self.dirname, fname)):
@@ -17,3 +25,7 @@ class MySentences(object):
 sentences = MySentences('/mnt/Works/wailoktam/trainingSentences') # a memory-friendly iterator
 model = gensim.models.Word2Vec(sentences)
 model.save('/home/wailoktam/model')
+model = Word2Vec.load_word2vec_format('/home/wailoktam/model', binary=True, unicode_errors='ignore')
+out = model.most_similar(positive=[u'苦労'])
+
+print(pp(out[1]))
