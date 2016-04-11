@@ -4,12 +4,15 @@ import gensim
 import os
 import re, pprint
 from gensim.models import word2vec
-class MySentences(object):
 
-  def pp(obj):
+def pp(obj):
     pp = pprint.PrettyPrinter(indent=4, width=160)
     str = pp.pformat(obj)
     return re.sub(r"\\u([0-9a-f]{4})", lambda x: unichr(int("0x"+x.group(1), 16)), str)
+
+class MySentences(object):
+
+
 
   def __init__(self, dirname):
         self.dirname = dirname
