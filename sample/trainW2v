@@ -3,6 +3,25 @@
 import gensim
 import os
 import re, pprint
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+import site
+
+import unicodedata
+import re
+import string
+import codecs
+import kanjinums
+#from pyknp import Juman
+from py4j.java_gateway import JavaGateway
+from operator import is_not
+from functools import partial
+
+gateway = JavaGateway()
+
+from xml.etree import ElementTree as etree
+
 from gensim.models import word2vec
 
 def pp(obj):
@@ -28,8 +47,9 @@ class MySentences(object):
 sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
 model = word2vec.Word2Vec(sentences)
 model.save('/home/wailoktam/model')
+savedModel = word2vec.Word2Vec.load('/home/wailoktam/model')
 #model = Word2Vec.load_word2vec_format('/home/wailoktam/model', unicode_errors='ignore')
-out = model.most_similar(positive=[u'冒険'])
+out = savedModel.most_similar(positive=[u'冒険'])
 vector = model[u'冒険']
 
 print(pp(out[1]))
