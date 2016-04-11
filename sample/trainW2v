@@ -25,7 +25,7 @@ class MySentences(object):
 sentences = MySentences('/mnt/Works/wailoktam/trainingSentences') # a memory-friendly iterator
 model = gensim.models.Word2Vec(sentences)
 model.save('/home/wailoktam/model')
-model = Word2Vec.load_word2vec_format('/home/wailoktam/model', binary=True, unicode_errors='ignore')
+model = Word2Vec.load_word2vec_format('/home/wailoktam/model', unicode_errors='ignore')
 out = model.most_similar(positive=[u'苦労'])
 
 print(pp(out[1]))
