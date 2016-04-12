@@ -7,50 +7,108 @@ import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 import site
-
+import numpy
 import unicodedata
 import re
 import string
 import codecs
 import kanjinums
-#from pyknp import Juman
-#from py4j.java_gateway import JavaGateway
+from pyknp import Juman
+from py4j.java_gateway import JavaGateway
 from operator import is_not
 from functools import partial
 
-#gateway = JavaGateway()
+gateway = JavaGateway()
 
 from xml.etree import ElementTree as etree
 
 from gensim.models import word2vec
+
+def myNormalize(inputStr):
+    KuroTokenizer = gateway.jvm.org.atilika.kuromoji.Tokenizer
+    tokenizer = KuroTokenizer.builder().build();
+    result = tokenizer.tokenize(inputStr)
+    normalized = []
+    for token in result:
+        try:
+            normalizedToken = kanjinums.kanji2num(token.getSurfaceForm())
+        except KeyError:
+            normalizedToken = token.getSurfaceForm()
+        try:
+            normalized += normalizedToken
+        except Exception:
+            normalized += str(normalizedToken)
+    normalized = unicodedata.normalize('NFKC',unicode(normalized))
+    return(normalized)
 
 def pp(obj):
     pp = pprint.PrettyPrinter(indent=4, width=160)
     str = pp.pformat(obj)
     return re.sub(r"\\u([0-9a-f]{4})", lambda x: unichr(int("0x"+x.group(1), 16)), str)
 
-class MySentences(object):
 
 
 
-  def __init__(self, dirname):
-        self.dirname = dirname
+if __name__ == '__main__':
+    window = sys.argv[1]
+    sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
+    model = word2vec.Word2Vec(sentences)
+    model.save('/home/wailoktam/model')
+    xml = etree.parse("qa-sampleSearchByPageAnsweredByPageTitle.xml")
+    questions = xml.findall(".//question")
+    labels = numpy.array([])
+    lengthsQ = numpy.array([])
+    lengthsA = numpy.array([])
+    for question in questions:
+        questionText = question.find(".//text").text
+        numpy.append(lengthsQ,len(myNormalize(questionText)))
+        answers = map(lambda a: a.text, question.findall(".//answer"))
+        docs = question.findall(".//doc")
+        for doc in docs:
+            doc_txt = doc.find(".//dtext").text
+            for sentence in doc_txt.split("。"):
+                answerFoundFlag = False
+                numpy.append(lengthsA,len(myNormalize(sentence)))
+                for answer in map(lambda a: myNormalize(a), answers):
+                    if answer in doc_txt:
+                        answerFoundFlag = True
+                if answerFoundFlag:
+                    numpy.append(labels,1)
+                else:
+                    numpy.append(labels,0)
+    print ("maximum q"+numpy.amax(lengthsQ))
+    print ("minimum q"+numpy.amin(lengthsQ))
+    print ("maximum a"+numpy.amax(lengthsA))
+    print ("minimum a"+numpy.amin(lengthsA))
 
-  def __iter__(self):
-        lineCounter = 0
-        for fname in os.listdir(self.dirname):
-             for line in open(os.path.join(self.dirname, fname)):
-                lineCounter = lineCounter + 1
-                print(str(lineCounter)+":"+str(len(line.split()))+":"+line+"\n")
-                yield line.split()
-#sentences = MySentences('/mnt/Works/wailoktam/trainingSentences') # a memory-friendly iterator
-sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
-model = word2vec.Word2Vec(sentences)
-model.save('/home/wailoktam/model')
-savedModel = word2vec.Word2Vec.load('/home/wailoktam/model')
+    # TODO: question のタイプによって、スコアの計算方法を変える
+    # ここではとりあえず precision/recall を計算
+        question_id = question.get("id")
+        answers = filter(partial(is_not, None), answers)
+
+#           doc_txt = doc.find(".//dtext").text
+
+
+#    responses = filter(partial(is_not, None), responses)
+    #if len(responses) == 0: print ("no response %s" % (question_id))
+
+
+
+#    num_correct_answers = float(len(set(map(lambda a: myNormalize(a), answers)) & set(map(lambda a: myNormalize(a), responses))))
+#    precision = float(num_correct_answers / len(responses))
+#    recall = float(num_correct_answers / len(answers))
+##    if num_correct_answers:
+ #       print ("found in title: questionId %s docTitle %s" % (question_id,doc_title.strip()))
+#        sum_found = sum_found + 1
+#        by_type_sum_found[questionType] = by_type_sum_found[questionType]+1
+#    for answer in answers:
+#        found_once = 0
+
+
+
+    savedModel = word2vec.Word2Vec.load('/home/wailoktam/model')
 #model = Word2Vec.load_word2vec_format('/home/wailoktam/model', unicode_errors='ignore')
-out = savedModel.most_similar(positive=[u'冒険'])
-vector = model[u'冒険']
-
-print(pp(out[1]))
-print (vector)
+    out = savedModel.most_similar(positive=[u'冒険'])
+    vector = model[u'冒険']
+    print(pp(out[1]))
+    print (vector)
