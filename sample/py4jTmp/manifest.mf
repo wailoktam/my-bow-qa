@@ -1,0 +1,2 @@
+Main-Class: J4Py
+Class-Path: py4j0.8.2.1.jar kuromoji-0.7.7.jar
