@@ -54,7 +54,7 @@ if __name__ == '__main__':
     sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
     model = word2vec.Word2Vec(sentences)
     model.save('/home/wailoktam/model')
-    xml = etree.parse("qa-sampleSearchByPageAnsweredByPageTitle.xml")
+    xml = etree.parse("/home/wailoktam/qa/mylab/input/questions/qa-sampleSearchByPageAnsweredByPageTitle.xml")
     questions = xml.findall(".//question")
     labels = numpy.array([])
     lengthsQ = numpy.array([])
