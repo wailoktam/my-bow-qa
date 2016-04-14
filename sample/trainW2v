@@ -83,8 +83,8 @@ if __name__ == '__main__':
 
     # TODO: question のタイプによって、スコアの計算方法を変える
     # ここではとりあえず precision/recall を計算
-        question_id = question.get("id")
-        answers = filter(partial(is_not, None), answers)
+#        question_id = question.get("id")
+#        answers = filter(partial(is_not, None), answers)
 
 #           doc_txt = doc.find(".//dtext").text
 
