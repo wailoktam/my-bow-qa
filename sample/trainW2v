@@ -50,7 +50,7 @@ def pp(obj):
 
 
 if __name__ == '__main__':
-    window = sys.argv[1]
+#    window = sys.argv[1]
     sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
     model = word2vec.Word2Vec(sentences)
     model.save('/home/wailoktam/model')
