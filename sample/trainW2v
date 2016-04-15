@@ -13,10 +13,11 @@ import re
 import string
 import codecs
 import kanjinums
-import matplotlib.pyplot as plt
+
 import matplotlib
 matplotlib.use("Agg")
 import pylab
+from matplotlib import pyplot
 from pyknp import Juman
 from py4j.java_gateway import JavaGateway
 from operator import is_not
@@ -94,10 +95,10 @@ if __name__ == '__main__':
 #    print ("numby array containing lengthS of questionText"+"\n")
 #    print (lengthsQ)
 
-    plt.plot(lengthsQ)
-    plt.savefig("questionLength")
-    plt.plot(lengthsA)
-    plt.savefig("answerLength")
+    pyplot.plot(lengthsQ)
+    pyplot.savefig("questionLength")
+    pyplot.plot(lengthsA)
+    pyplot.savefig("answerLength")
     print ("maximum q"+str(numpy.amax(lengthsQ))+"\n")
 #    print ("minimum q"+numpy.amin(lengthsQ))
     print ("maximum a"+numpy.amax(lengthsA))
