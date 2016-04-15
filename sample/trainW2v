@@ -65,7 +65,7 @@ if __name__ == '__main__':
         questionText = question.find(".//text").text
         print ("questionText"+"["+ "/".join(myNormalize(questionText))+"]"+"\n")
         print ("length of questionText"+str(len(myNormalize(questionText)))+"\n")
-        numpy.append(lengthsQ,len(myNormalize(questionText)))
+        numpy.append(lengthsQ,len(myNormalize(questionText.strip())))
         print ("length of questionText"+"/".join(lengthsQ)+"\n")
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
@@ -75,10 +75,10 @@ if __name__ == '__main__':
             for sentence in doc_txt.split("。"):
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sentence)
-                numpy.append(lengthsA,len(normalizedSentence))
+                numpy.append(lengthsA,len(normalizedSentence.strip()))
                 for answer in map(lambda a: myNormalize(a), answers):
-                    joinedAnswer = "".join(answer.strip())
-                    joinedSentence = "".join(normalizedSentence.strip())
+                    joinedAnswer = "".join(answer).strip()
+                    joinedSentence = "".join(normalizedSentence).strip()
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if answerFoundFlag:
