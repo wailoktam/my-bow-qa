@@ -77,8 +77,8 @@ if __name__ == '__main__':
                 normalizedSentence = myNormalize(sentence)
                 numpy.append(lengthsA,len(normalizedSentence))
                 for answer in map(lambda a: myNormalize(a), answers):
-                    joinedAnswer = "".join(answer)
-                    joinedSentence = "".join(normalizedSentence)
+                    joinedAnswer = "".join(answer.strip())
+                    joinedSentence = "".join(normalizedSentence.strip())
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if answerFoundFlag:
