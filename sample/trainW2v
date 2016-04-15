@@ -63,7 +63,7 @@ if __name__ == '__main__':
     lengthsA = numpy.array([])
     for question in questions:
         questionText = question.find(".//text").text
-        print ("questionText"+"["+ "/".join(questionText)+"]"+"\n")
+        print ("questionText"+"["+ "/".join(myNormalize(questionText))+"]"+"\n")
         print ("length of questionText"+str(len(myNormalize(questionText)))+"\n")
         numpy.append(lengthsQ,len(myNormalize(questionText)))
         answers = map(lambda a: a.text, question.findall(".//answer"))
