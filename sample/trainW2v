@@ -73,10 +73,13 @@ if __name__ == '__main__':
             doc_txt = doc.find(".//dtext").text
             for sentence in doc_txt.split("。"):
                 answerFoundFlag = False
-                numpy.append(lengthsA,len(myNormalize(sentence)))
+                normalizedSentence = myNormalize(sentence)
+                numpy.append(lengthsA,len(normalizedSentence))
+                normalizedAnswer = "".join(answer)
                 for answer in map(lambda a: myNormalize(a), answers):
-                    print ("answer"+"/".join(answer)+"\n")
-                    if answer in doc_txt:
+                    joinedAnswer = "".join(answer)
+                    joinedSentence = "".join(normalizedSentence)
+                    if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if answerFoundFlag:
                     numpy.append(labels,1)
