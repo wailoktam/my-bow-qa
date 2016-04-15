@@ -89,10 +89,10 @@ if __name__ == '__main__':
 #    print ("length of questionText2"+"/".join(lengthsQ)+"\n")
     print ("numby array containing lengthS of questionText"+"\n")
     print (lengthsQ)
-    print ("maximum q"+numpy.amax(lengthsQ))
-    print ("minimum q"+numpy.amin(lengthsQ))
-    print ("maximum a"+numpy.amax(lengthsA))
-    print ("minimum a"+numpy.amin(lengthsA))
+    print ("maximum q"+str(numpy.amax(lengthsQ))+"\n")
+#    print ("minimum q"+numpy.amin(lengthsQ))
+#    print ("maximum a"+numpy.amax(lengthsA))
+#    print ("minimum a"+numpy.amin(lengthsA))
 
     # TODO: question のタイプによって、スコアの計算方法を変える
     # ここではとりあえず precision/recall を計算
