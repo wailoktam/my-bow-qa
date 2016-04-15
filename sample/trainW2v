@@ -66,6 +66,7 @@ if __name__ == '__main__':
         print ("questionText"+"["+ "/".join(myNormalize(questionText))+"]"+"\n")
         print ("length of questionText"+str(len(myNormalize(questionText)))+"\n")
         numpy.append(lengthsQ,len(myNormalize(questionText)))
+        print ("length of questionText"+"/".join(lengthsQ)+"\n")
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
         docs = question.findall(".//doc")
