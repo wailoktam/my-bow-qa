@@ -74,6 +74,7 @@ if __name__ == '__main__':
                 answerFoundFlag = False
                 numpy.append(lengthsA,len(myNormalize(sentence)))
                 for answer in map(lambda a: myNormalize(a), answers):
+                    print ("answer"+answer+"\n")
                     if answer in doc_txt:
                         answerFoundFlag = True
                 if answerFoundFlag:
