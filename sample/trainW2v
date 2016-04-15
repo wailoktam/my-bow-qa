@@ -65,7 +65,7 @@ if __name__ == '__main__':
         questionText = question.find(".//text").text
         print ("questionText"+"["+ "/".join(myNormalize(questionText))+"]"+"\n")
         print ("length of questionText"+str(len(myNormalize(questionText)))+"\n")
-        numpy.append(lengthsQ,len(myNormalize(questionText.strip())))
+        lenghtsQ = numpy.append(lengthsQ,len(myNormalize(questionText.strip())))
         print ("numby array containing lengthS of questionText"+"\n")
         print (lengthsQ)
         answers = map(lambda a: a.text, question.findall(".//answer"))
