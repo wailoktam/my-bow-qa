@@ -14,7 +14,9 @@ import string
 import codecs
 import kanjinums
 import matplotlib.pyplot as plt
-
+import matplotlib
+matplotlib.use("Agg")
+import pylab
 from pyknp import Juman
 from py4j.java_gateway import JavaGateway
 from operator import is_not
