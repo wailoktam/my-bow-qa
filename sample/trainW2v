@@ -74,8 +74,8 @@ if __name__ == '__main__':
             doc_txt = doc.find(".//dtext").text
             for sentence in doc_txt.split("。"):
                 answerFoundFlag = False
-                normalizedSentence = myNormalize(sentence)
-                numpy.append(lengthsA,len(normalizedSentence.strip()))
+                normalizedSentence = myNormalize(sentence.strip())
+                numpy.append(lengthsA,len(normalizedSentence))
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
                     joinedSentence = "".join(normalizedSentence).strip()
