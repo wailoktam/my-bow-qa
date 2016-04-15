@@ -39,7 +39,7 @@ def myNormalize(inputStr):
             normalized += normalizedToken
         except Exception:
             normalized += str(normalizedToken)
-    normalized = unicodedata.normalize('NFKC',unicode(normalized))
+#    normalized = unicodedata.normalize('NFKC',unicode(normalized))
     return(normalized)
 
 def pp(obj):
