@@ -13,6 +13,8 @@ import re
 import string
 import codecs
 import kanjinums
+import matplotlib.pyplot as plt
+
 from pyknp import Juman
 from py4j.java_gateway import JavaGateway
 from operator import is_not
@@ -87,11 +89,16 @@ if __name__ == '__main__':
                 else:
                     numpy.append(labels,0)
 #    print ("length of questionText2"+"/".join(lengthsQ)+"\n")
-    print ("numby array containing lengthS of questionText"+"\n")
-    print (lengthsQ)
+#    print ("numby array containing lengthS of questionText"+"\n")
+#    print (lengthsQ)
+
+    plt.plot(lengthsQ)
+    plt.savefig("questionLength")
+    plt.plot(lengthsA)
+    plt.savefig("answerLength")
     print ("maximum q"+str(numpy.amax(lengthsQ))+"\n")
 #    print ("minimum q"+numpy.amin(lengthsQ))
-#    print ("maximum a"+numpy.amax(lengthsA))
+    print ("maximum a"+numpy.amax(lengthsA))
 #    print ("minimum a"+numpy.amin(lengthsA))
 
     # TODO: question のタイプによって、スコアの計算方法を変える
