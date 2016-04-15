@@ -85,6 +85,7 @@ if __name__ == '__main__':
                     numpy.append(labels,1)
                 else:
                     numpy.append(labels,0)
+    print ("length of questionText2"+"/".join(lengthsQ)+"\n")
     print ("maximum q"+numpy.amax(lengthsQ))
     print ("minimum q"+numpy.amin(lengthsQ))
     print ("maximum a"+numpy.amax(lengthsA))
