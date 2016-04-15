@@ -13,7 +13,7 @@ import re
 import string
 import codecs
 import kanjinums
-
+import pandas
 import matplotlib
 matplotlib.use("Agg")
 import pylab
@@ -91,17 +91,24 @@ if __name__ == '__main__':
                     numpy.append(labels,1)
                 else:
                     numpy.append(labels,0)
-#    print ("length of questionText2"+"/".join(lengthsQ)+"\n")
+
+
+
+    lengthsQData =pandas.Series(lengthsQ)
+    lengthsQData.describe()
+    lengthsAData =pandas.Series(lengthsA)
+    lengthsAData.describe()
+
+#  print ("length of questionText2"+"/".join(lengthsQ)+"\n")
 #    print ("numby array containing lengthS of questionText"+"\n")
 #    print (lengthsQ)
-
-    pyplot.plot(lengthsQ)
-    pyplot.savefig("questionLength")
-    pyplot.plot(lengthsA)
-    pyplot.savefig("answerLength")
-    print ("maximum q"+str(numpy.amax(lengthsQ))+"\n")
+#    pyplot.plot(lengthsQ)
+#    pyplot.savefig("questionLength")
+#    pyplot.plot(lengthsA)
+#    pyplot.savefig("answerLength")
+#    print ("maximum q"+str(numpy.amax(lengthsQ))+"\n")
 #    print ("minimum q"+numpy.amin(lengthsQ))
-    print ("maximum a"+numpy.amax(lengthsA))
+#    print ("maximum a"+numpy.amax(lengthsA))
 #    print ("minimum a"+numpy.amin(lengthsA))
 
     # TODO: question のタイプによって、スコアの計算方法を変える
