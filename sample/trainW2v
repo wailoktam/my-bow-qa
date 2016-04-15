@@ -37,9 +37,9 @@ def myNormalize(inputStr):
         except KeyError:
             normalizedToken = token.getSurfaceForm()
         try:
-            normalized.append(normalizedToken)
-        except Exception:
             normalized.append(str(normalizedToken))
+        except Exception:
+            normalized.append(normalizedToken)
 #    normalized = unicodedata.normalize('NFKC',unicode(normalized))
     return(normalized)
 
