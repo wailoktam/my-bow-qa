@@ -68,16 +68,16 @@ if __name__ == '__main__':
     lengthsA = numpy.array([])
     for question in questions:
         questionText = question.find(".//text").text
-        print ("questionText"+"["+ "/".join(myNormalize(questionText))+"]"+"\n")
-        print ("length of questionText"+str(len(myNormalize(questionText)))+"\n")
         lengthsQ = numpy.append(lengthsQ,len(myNormalize(questionText.strip())))
 #        print ("numby array containing lengthS of questionText"+"\n")
 #        print (lengthsQ)
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
         for doc in question.findall(".//doc"):
-            for sent in doc.find(".//stext"):
+            for sent in doc.findall(".//stext"):
                 answerFoundFlag = False
+                print ("answerText"+"["+ "/".join(myNormalize(sent.text))+"]"+"\n")
+                print ("length of answerText"+str(len(myNormalize(sent.text)))+"\n")
                 normalizedSentence = myNormalize(sent.text.strip())
                 lengthsA =numpy.append(lengthsA,len(normalizedSentence))
                 for answer in map(lambda a: myNormalize(a), answers):
