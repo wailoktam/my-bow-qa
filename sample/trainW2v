@@ -79,6 +79,7 @@ if __name__ == '__main__':
         for doc in docs:
             doc_txt = doc.find(".//dtext").text
             for sentence in doc_txt.split("。"):
+                print ("wtf")
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sentence.strip())
                 numpy.append(lengthsA,len(normalizedSentence))
