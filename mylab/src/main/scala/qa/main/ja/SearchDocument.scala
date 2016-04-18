@@ -282,7 +282,7 @@ class SearchSect(indexDir: Directory, sentIndexDir: Directory, maxSearchResults:
                                                                                                   </sent>
                                                                                                 }
                                                                                               }
-                                                                                              s
+
                                                                                             </dtext>
                                                                                             <dscore>
                                                                                               { scoreWDoc.score }
