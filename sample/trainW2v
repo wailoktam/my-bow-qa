@@ -75,14 +75,10 @@ if __name__ == '__main__':
 #        print (lengthsQ)
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
-        docs = question.findall(".//doc")
-        for doc in docs:
-            doc_txt = doc.find(".//dtext").text
-            print ("doc_txt"+doc_txt+"/n")
-            for sentence in doc_txt.split("。"):
-                print ("sentence"+sentence+"/n")
+        for doc in question.findall(".//doc"):
+            for sent in doc.find(".//stext"):
                 answerFoundFlag = False
-                normalizedSentence = myNormalize(sentence.strip())
+                normalizedSentence = myNormalize(sent.text.strip())
                 lengthsA =numpy.append(lengthsA,len(normalizedSentence))
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
