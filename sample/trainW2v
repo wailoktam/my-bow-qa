@@ -95,9 +95,9 @@ if __name__ == '__main__':
 
 
     lengthsQData =pandas.Series(lengthsQ)
-    lengthsQData.describe()
+    print lengthsQData.describe()
     lengthsAData =pandas.Series(lengthsA)
-    lengthsAData.describe()
+    print lengthsAData.describe()
 
 #  print ("length of questionText2"+"/".join(lengthsQ)+"\n")
 #    print ("numby array containing lengthS of questionText"+"\n")
