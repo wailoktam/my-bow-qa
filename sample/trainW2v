@@ -78,7 +78,9 @@ if __name__ == '__main__':
         docs = question.findall(".//doc")
         for doc in docs:
             doc_txt = doc.find(".//dtext").text
+            print ("doc_txt"+doc_txt+"/n")
             for sentence in doc_txt.split("。"):
+                print ("sentence"+sentence+"/n")
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sentence.strip())
                 lengthsA =numpy.append(lengthsA,len(normalizedSentence))
