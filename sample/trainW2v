@@ -86,9 +86,9 @@ if __name__ == '__main__':
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if answerFoundFlag:
-                    numpy.append(labels,1)
+                    labels = numpy.append(labels,1)
                 else:
-                    numpy.append(labels,0)
+                    labels = numpy.append(labels,0)
 
 
 
