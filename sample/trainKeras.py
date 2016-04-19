@@ -3,22 +3,51 @@ from keras.models import Sequential
 from keras.datasets import cifar10
 from keras.utils import np_utils
 from keras.models import model_from_json
+from keras.layers import Merge
+from scipy import linalg, mat, dot
 from keras.layers.core import Dense, Dropout, Activation, Flatten
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
+from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D
 from keras.optimizers import SGD
 import numpy as np
 import scipy.misc
+import numpy
 import theano
 import theano.tensor as T
+import kanjinums
 import gensim
 import os
+from xml.etree import ElementTree as etree
 from gensim.models import Word2Vec
+from py4j.java_gateway import JavaGateway
+from operator import is_not
+from functools import partial
 
+gateway = JavaGateway()
 
 
 
 #model.add_node(Similarity(1, activation='sigmoid', input_shapes=[model.nodes['input1'].output_shape, model.nodes['input2'].output_shape]), name='sim', inputs=['input1','input2'], merge_mode='join')
 #model.add_node(Similarity(), name='similarity',  input=['inp1repr', 'inp2repr'], merge_mode='join')
+
+def myNormalize(inputStr):
+    KuroTokenizer = gateway.jvm.org.atilika.kuromoji.Tokenizer
+    tokenizer = KuroTokenizer.builder().build();
+#    print ("inputStr"+inputStr+"\n")
+    result = tokenizer.tokenize(inputStr)
+    normalized = []
+    for token in result:
+        print ("token"+"["+token.getSurfaceForm()+"]"+"\n")
+        try:
+            normalizedToken = kanjinums.kanji2num(token.getSurfaceForm())
+        except KeyError:
+            normalizedToken = token.getSurfaceForm()
+        try:
+            normalized.append(str(normalizedToken))
+        except Exception:
+            normalized.append(normalizedToken)
+#    normalized = unicodedata.normalize('NFKC',unicode(normalized))
+    return(normalized)
+
 
 def get_output(self, train):
     X = self.get_input() # returns OrderedDict {'inp1repr': tensor1, 'inp2repr': tensor2}
@@ -36,97 +65,50 @@ def compile_cos_sim_theano():
 
 cos_sim_theano_fn = compile_cos_sim_theano()
 
-
-epsilon = 1.0e-9
 def custom_objective(y_true, y_pred):
-    '''Just another crossentropy'''
-    y_pred = T.clip(y_pred, epsilon, 1.0 - epsilon)
-    y_pred /= y_pred.sum(axis=-1, keepdims=True)
-    cce = T.nnet.categorical_crossentropy(y_pred, y_true)
-    return cce
+    if (y_true == 1):
+        result = T.maximum(0.09 - y_pred, 0.)
+    else:
+        result = T.maximum(0.09 + y_pred, 0.)
+    return result
 
-
-img_channels = 3
-img_rows = 32
-img_cols = 32
-
-def load_and_scale_imgs():
-   img_names = ['standing-cat.jpg', 'dog-face.jpg']
-
-   imgs = [np.transpose(scipy.misc.imresize(scipy.misc.imread(img_name), (32, 32)),
-                        (2, 0, 1)).astype('float32')
-           for img_name in img_names]
-   return np.array(imgs) / 255
-
-nb_classes = 10
-
-def load_dataset():
-   # the data, shuffled and split between train and test sets
-   (X_train, y_train), (X_test, y_test) = cifar10.load_data()
-   print('X_train shape:', X_train.shape)
-   print(X_train.shape[0], 'train samples')
-   print(X_test.shape[0], 'test samples')
-
-   # convert class vectors to binary class matrices
-   Y_train = np_utils.to_categorical(y_train, nb_classes)
-   Y_test = np_utils.to_categorical(y_test, nb_classes)
-
-   X_train = X_train.astype('float32')
-   X_test = X_test.astype('float32')
-   X_train /= 255
-   X_test /= 255
-
-   return X_train, Y_train, X_test, Y_test
 
 def make_network():
-   model = Sequential()
+   leftKerasModel = Sequential()
+   leftKerasModel.add(Convolution2D(1000, 3, 3, border_mode='same',
+                           input_shape=(36, 36)))
+   leftKerasModel.add(Activation('relu'))
+   leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
-   model.add(Convolution2D(32, 3, 3, border_mode='same',
-                           input_shape=(img_channels, img_rows, img_cols)))
-   model.add(Activation('relu'))
-   model.add(Convolution2D(32, 3, 3))
-   model.add(Activation('relu'))
-   model.add(MaxPooling2D(pool_size=(2, 2)))
-   model.add(Dropout(0.25))
+   rightKerasModel = Sequential()
+   rightKerasModel.add(Convolution2D(1000, 3, 3, border_mode='same',
+                           input_shape=(36, 36)))
+   rightKerasModel.add(Activation('relu'))
+   rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
-   model.add(Convolution2D(64, 3, 3, border_mode='same'))
-   model.add(Activation('relu'))
-   model.add(Convolution2D(64, 3, 3))
-   model.add(Activation('relu'))
-   model.add(MaxPooling2D(pool_size=(2, 2)))
-   model.add(Dropout(0.25))
+   mergedKerasModel = Sequential()
+   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l,r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
 
-   model.add(Flatten())
-   model.add(Dense(512))
-   model.add(Activation('relu'))
-   model.add(Dropout(0.5))
-   model.add(Dense(nb_classes))
-   model.add(Activation('softmax'))
+   mergedKerasModel.add(Dense(1000),activation='softmax')
+   return mergedKerasModel
 
-   return model
-
-def train_model(model, X_train, Y_train, X_test, Y_test):
+def train_model(model, leftData, rightData, labels):
 
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-   model.compile(loss='categorical_crossentropy', optimizer=sgd)
-   model.fit(X_train, Y_train, nb_epoch=5, batch_size=32,
-             validation_split=0.1, show_accuracy=True, verbose=1)
+   model.compile(loss='custom_objectivity', optimizer=sgd)
+   model.fit([rightData, leftData], labels, nb_epoch=10, batch_size=32)
 
-   print('Testing...')
-   res = model.evaluate(X_test, Y_test,
-                        batch_size=32, verbose=1, show_accuracy=True)
-   print('Test accuracy: {0}'.format(res[1]))
+#   print('Testing...')
+#   res = model.evaluate(X_test, Y_test,
+#                        batch_size=32, verbose=1, show_accuracy=True)
+#   print('Test accuracy: {0}'.format(res[1]))
 
 def save_model(model):
 
    model_json = model.to_json()
-   open('cifar10_architecture.json', 'w').write(model_json)
-   model.save_weights('cifar10_weights.h5', overwrite=True)
+   open('trainKeras', 'w').write(model_json)
+   model.save_weights('trainKeras_weights.h5', overwrite=True)
 
-def load_model(model_def_fname, model_weight_fname):
-   model = model_from_json(open(model_def_fname).read())
-   model.load_weights(model_weight_fname)
-   return model
 
 def load_and_scale_imgs():
    img_names = ['standing-cat.jpg', 'dog-face.jpg']
@@ -136,13 +118,56 @@ def load_and_scale_imgs():
            for img_name in img_names]
    return np.array(imgs) / 255
 
+
 if __name__ == '__main__':
-   Word2Vec.load_word2vec_format('/home/wailoktam/model', binary=True, unicode_errors='ignore')
-   print("hi")
-   train_model(make_network(),load_dataset()[0],load_dataset()[1],load_dataset()[2],load_dataset()[3])
-   imgs = load_and_scale_imgs()
-   model = load_model('cifar10_architecture.json', 'cifar10_weights.h5')
-   predictions = model.predict_classes(imgs)
-   print(predictions)
+   w2vModel= Word2Vec.load('/home/wailoktam/model')
+   xml = etree.parse("/home/wailoktam/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
+   questions = xml.findall(".//question")
+   labels = numpy.array([])
+   qMatrix = numpy.array([])
+   zeroFilledVector = numpy.array([])
+   for question in questions:
+        questionText = question.find(".//text").text
+        qCounter = 0
+        aCounter = 0
+
+
+        answers = map(lambda a: a.text, question.findall(".//answer"))
+        answers = filter(partial(is_not, None), answers)
+        for doc in question.findall(".//doc"):
+            for sent in doc.findall(".//stext"):
+                answerFoundFlag = False
+                normalizedSentence = myNormalize(sent.text.strip())
+#max question length is 33. Loop thru each word. If lenght less than 36, add all-zeroes vectors to the result matrix
+                for word in myNormalize(questionText.strip()):
+                    qCounter = qCounter + 1
+                    wvLength = len(w2vModel)
+                    qMatrix = numpy.append(w2vModel[word])
+                for i in range (1, wvLength):
+                    zeroFilledVector = numpy.append(zeroFilledVector,0)
+                for i in range (qCounter, 36):
+                    qCounter = qCounter + 1
+                    qMatrix = numpy.append(qMatrix, zeroFilledVector)
+
+                for answer in map(lambda a: myNormalize(a), answers):
+                    joinedAnswer = "".join(answer).strip()
+                    joinedSentence = "".join(normalizedSentence).strip()
+                    if joinedAnswer in joinedSentence:
+                        answerFoundFlag = True
+                if answerFoundFlag:
+                    labels = numpy.append(labels,1)
+                else:
+                    labels = numpy.append(labels,0)
+
+                for word in normalizedSentence[:36]:
+                    aCounter = aCounter + 1
+                    wvLength = len(w2vModel)
+                    aMatrix = numpy.append(w2vModel[word])
+                for i in range (aCounter, 36):
+                    aCounter = aCounter + 1
+                    aMatrix = numpy.append(aMatrix, zeroFilledVector)
+
+   train_model(make_network(),qMatrix, aMatrix,labels)
+
 
 
