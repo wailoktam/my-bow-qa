@@ -142,7 +142,7 @@ if __name__ == '__main__':
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
                     wvLength = len(w2vModel[word])
-                    qMatrix = numpy.append(w2vModel[word])
+                    qMatrix = numpy.append(qMatrix, w2vModel[word])
                 for i in range (1, wvLength):
                     zeroFilledVector = numpy.append(zeroFilledVector,0)
                 for i in range (qCounter, 36):
@@ -162,7 +162,7 @@ if __name__ == '__main__':
                 for word in normalizedSentence[:36]:
                     aCounter = aCounter + 1
                     wvLength = len(w2vModel[word])
-                    aMatrix = numpy.append(w2vModel[word])
+                    aMatrix = numpy.append(aMatrix, w2vModel[word])
                 for i in range (aCounter, 36):
                     aCounter = aCounter + 1
                     aMatrix = numpy.append(aMatrix, zeroFilledVector)
