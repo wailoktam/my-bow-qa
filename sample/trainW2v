@@ -58,89 +58,28 @@ def pp(obj):
 
 if __name__ == '__main__':
 #    window = sys.argv[1]
+    wikiOnePPPath = "/home/wailokta/qa/mylab/onePagePerFile"
+    sentenceList = []
+    corpusFileName = '/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt'
+    corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
+    for subPath in os.listdir(wikiOnePPPath):
+        fullPath = os.path.join(wikiOnePPPath,subPath)
+        if os.path.isfile(fullPath):
+            xml = etree.parse(fullPath)
+            paras = xml.findall(".//paras")
+            for para in paras:
+                for sent in para.text.strip().split("。"):
+                    corpusFile.writeln(sent)
+    corpusFile.close()
     sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
     model = word2vec.Word2Vec(sentences)
-    print model['IFK']
     model.save('/home/wailoktam/model')
-    xml = etree.parse("/home/wailoktam/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
-    questions = xml.findall(".//question")
-    labels = numpy.array([])
-    lengthsQ = numpy.array([])
-    lengthsA = numpy.array([])
-    for question in questions:
-        questionText = question.find(".//text").text
-        lengthsQ = numpy.append(lengthsQ,len(myNormalize(questionText.strip())))
-#        print ("numby array containing lengthS of questionText"+"\n")
-#        print (lengthsQ)
-        answers = map(lambda a: a.text, question.findall(".//answer"))
-        answers = filter(partial(is_not, None), answers)
-        for doc in question.findall(".//doc"):
-            for sent in doc.findall(".//stext"):
-                answerFoundFlag = False
-                print ("answerText"+"["+ "/".join(myNormalize(sent.text))+"]"+"\n")
-                print ("length of answerText"+str(len(myNormalize(sent.text)))+"\n")
-                normalizedSentence = myNormalize(sent.text.strip())
-                lengthsA =numpy.append(lengthsA,len(normalizedSentence))
-                for answer in map(lambda a: myNormalize(a), answers):
-                    joinedAnswer = "".join(answer).strip()
-                    joinedSentence = "".join(normalizedSentence).strip()
-                    if joinedAnswer in joinedSentence:
-                        answerFoundFlag = True
-                if answerFoundFlag:
-                    labels = numpy.append(labels,1)
-                else:
-                    labels = numpy.append(labels,0)
-
-
-
-    lengthsQData =pandas.Series(lengthsQ)
-    print lengthsQData.describe()
-    lengthsAData =pandas.Series(lengthsA)
-    print lengthsAData.describe()
-    print ("labels"+str(len(labels))+"\n")
-    print ("lengthsA"+str(len(lengthsA))+"\n")
-
-
-#  print ("length of questionText2"+"/".join(lengthsQ)+"\n")
-#    print ("numby array containing lengthS of questionText"+"\n")
-#    print (lengthsQ)
-#    pyplot.plot(lengthsQ)
-#    pyplot.savefig("questionLength")
-#    pyplot.plot(lengthsA)
-#    pyplot.savefig("answerLength")
-#    print ("maximum q"+str(numpy.amax(lengthsQ))+"\n")
-#    print ("minimum q"+numpy.amin(lengthsQ))
-#    print ("maximum a"+numpy.amax(lengthsA))
-#    print ("minimum a"+numpy.amin(lengthsA))
-
-    # TODO: question のタイプによって、スコアの計算方法を変える
-    # ここではとりあえず precision/recall を計算
-#        question_id = question.get("id")
-#        answers = filter(partial(is_not, None), answers)
-
-#           doc_txt = doc.find(".//dtext").text
-
-
-#    responses = filter(partial(is_not, None), responses)
-    #if len(responses) == 0: print ("no response %s" % (question_id))
-
-
-
-#    num_correct_answers = float(len(set(map(lambda a: myNormalize(a), answers)) & set(map(lambda a: myNormalize(a), responses))))
-#    precision = float(num_correct_answers / len(responses))
-#    recall = float(num_correct_answers / len(answers))
-##    if num_correct_answers:
- #       print ("found in title: questionId %s docTitle %s" % (question_id,doc_title.strip()))
-#        sum_found = sum_found + 1
-#        by_type_sum_found[questionType] = by_type_sum_found[questionType]+1
-#    for answer in answers:
-#        found_once = 0
 
 
 
     savedModel = word2vec.Word2Vec.load('/home/wailoktam/model')
 #model = Word2Vec.load_word2vec_format('/home/wailoktam/model', unicode_errors='ignore')
     out = savedModel.most_similar(positive=[u'冒険'])
-    vector = model[u'冒険']
+    vector = savedModel[u'冒険']
     print(pp(out[1]))
     print (vector)
