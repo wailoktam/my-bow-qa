@@ -58,7 +58,7 @@ def pp(obj):
 
 if __name__ == '__main__':
 #    window = sys.argv[1]
-    wikiOnePPPath = "/home/wailokta/qa/mylab/onePagePerFile"
+    wikiOnePPPath = "/home/wailoktam/qa/mylab/onePagePerFile"
     sentenceList = []
     corpusFileName = '/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt'
     corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
