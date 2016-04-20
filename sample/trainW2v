@@ -69,9 +69,10 @@ if __name__ == '__main__':
             paras = xml.findall(".//paras")
             for para in paras:
                 for sent in para.text.strip().split("。"):
+                    print ("sent",sent+"\n")
                     corpusFile.writeln(sent)
     corpusFile.close()
-    sentences = word2vec.Text8Corpus('/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt')
+    sentences = word2vec.Text8Corpus(corpusFileName)
     model = word2vec.Word2Vec(sentences)
     model.save('/home/wailoktam/model')
 
