@@ -68,7 +68,7 @@ if __name__ == '__main__':
             xml = etree.parse(fullPath)
             paras = xml.findall(".//para")
             for para in paras:
-                print ("para:"+para+"\n")
+                print ("para:"+para.text+"\n")
                 for sent in para.text.strip().split("。"):
                     print ("sent",sent+"\n")
                     corpusFile.writeln(sent)
