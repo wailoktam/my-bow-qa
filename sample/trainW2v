@@ -69,7 +69,7 @@ if __name__ == '__main__':
             parsedXml = etree.parse(fullPath)
             print(parsedXml.getroot().tag)
             print(parsedXml.getroot().text)
-            pageText = parsedXml.find("./page").text
+            pageText = parsedXml.find("./id").text
             print ("pageText"+pageText+"\n")
             paras = parsedXml.findall(".//para")
             for para in paras:
