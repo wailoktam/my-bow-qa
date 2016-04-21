@@ -66,8 +66,9 @@ if __name__ == '__main__':
         fullPath = os.path.join(wikiOnePPPath,subPath)
         if os.path.isfile(fullPath):
             xml = etree.parse(fullPath)
-            paras = xml.findall(".//paras")
+            paras = xml.findall(".//para")
             for para in paras:
+                print ("para",para+"\n")
                 for sent in para.text.strip().split("。"):
                     print ("sent",sent+"\n")
                     corpusFile.writeln(sent)
