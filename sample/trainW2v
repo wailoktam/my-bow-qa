@@ -67,7 +67,8 @@ if __name__ == '__main__':
         print ("path"+fullPath+"\n")
         if os.path.isfile(fullPath):
             parsedXml = etree.parse(fullPath)
-            print(parsedXml.getroot().tag) 
+            print(parsedXml.getroot().tag)
+            print(parsedXml.getroot().text)
             pageText = parsedXml.find("./page").text
             print ("pageText"+pageText+"\n")
             paras = parsedXml.findall(".//para")
