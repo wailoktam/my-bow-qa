@@ -64,8 +64,10 @@ if __name__ == '__main__':
     corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
     for subPath in os.listdir(wikiOnePPPath):
         fullPath = os.path.join(wikiOnePPPath,subPath)
+        print ("path"+fullPath+"\n")
         if os.path.isfile(fullPath):
             xml = etree.parse(fullPath)
+            print ("xml"+xml.text+"\n")
             paras = xml.findall(".//para")
             for para in paras:
                 print ("para:"+para.text+"\n")
