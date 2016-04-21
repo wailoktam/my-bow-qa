@@ -66,9 +66,8 @@ if __name__ == '__main__':
         fullPath = os.path.join(wikiOnePPPath,subPath)
         print ("path"+fullPath+"\n")
         if os.path.isfile(fullPath):
-            xml = etree.parse(fullPath)
-            print ("xml"+etree.ElementTree.toString(xml)+"\n")
-            paras = xml.findall(".//para")
+            parsedXml = etree.parse(fullPath)
+            paras = parsedXml.findall(".//para")
             for para in paras:
                 print ("para:"+para.text+"\n")
                 for sent in para.text.strip().split("。"):
