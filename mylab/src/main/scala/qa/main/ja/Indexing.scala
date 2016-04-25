@@ -265,11 +265,11 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         sentence.add(new StringField("id", sentenceID, Store.YES))
         sentence.add(new TextField("text", s, Store.YES))
         ssw.write(s+"\n")
-        ssw.close()
         sentWriter.addDocument(sentence)
       }
     }
     )
+    ssw.close()
   }
 
   def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String): Unit = {
@@ -281,9 +281,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     val bw2 = new BufferedWriter(new FileWriter(file2))
     val file3 = new File("bugInIndexing3")
     val bw3 = new BufferedWriter(new FileWriter(file3))
-    bw1.write(buf.mkString("\n"))
+    bw1.write(s"bufb4error: ${buf.mkString("\n")}")
     bw1.close()
-    System.err.println(s"bufb4error: ${buf.mkString("\n")}")
     val x = XML.loadString(buf.mkString("\n"))
 
     val pageTitle = (x \\ "page" \ "@title").text
