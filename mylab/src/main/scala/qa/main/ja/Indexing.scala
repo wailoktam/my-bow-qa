@@ -240,7 +240,9 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         file.write("<" + "id" + ">" + "\n")
         file.write(paraID + "\n")
         file.write("</" + "id" + ">" + "\n")
+        file.write("<" + "text" + ">" + "\n")
         file.write(StringEscapeUtils.escapeXml11(p) + "\n")
+        file.write("</" + "text" + ">" + "\n")
         file.write("</" + "para" + ">" + "\n")
       }
     }
@@ -251,6 +253,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
 
   def addSentToDoc(sentWriter: IndexWriter, paraTextWoTable: String, id: String) = {
     val sentNumStream = Stream.iterate(1)(_ + 1).iterator
+    val segmentedS = new File("/mnt/Works")
+    val ssw = new BufferedWriter(new FileWriter(segmentedS))
     paraTextWoTable.split("。").map(s => {
       if ((s == "") == false) {
         val sentence = new Document()
@@ -260,6 +264,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         //    System.err.println(s"ptext: ${pageText}")
         sentence.add(new StringField("id", sentenceID, Store.YES))
         sentence.add(new TextField("text", s, Store.YES))
+        ssw.write(s+"\n")
+        ssw.close()
         sentWriter.addDocument(sentence)
       }
     }
