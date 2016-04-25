@@ -253,7 +253,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
 
   def addSentToDoc(sentWriter: IndexWriter, paraTextWoTable: String, id: String) = {
     val sentNumStream = Stream.iterate(1)(_ + 1).iterator
-    val segmentedS = new File("/mnt/Works")
+    val segmentedS = new File("/mnt/Works/wailoktam/segmentedS")
     val ssw = new BufferedWriter(new FileWriter(segmentedS))
     paraTextWoTable.split("。").map(s => {
       if ((s == "") == false) {
