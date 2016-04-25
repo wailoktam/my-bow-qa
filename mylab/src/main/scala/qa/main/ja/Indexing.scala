@@ -283,6 +283,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     val bw3 = new BufferedWriter(new FileWriter(file3))
     bw1.write(buf.mkString("\n"))
     bw1.close()
+    System.err.println(s"bufb4error: ${buf.mkString("\n")}")
     val x = XML.loadString(buf.mkString("\n"))
 
     val pageTitle = (x \\ "page" \ "@title").text
