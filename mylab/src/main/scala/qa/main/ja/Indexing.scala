@@ -201,7 +201,7 @@ class SimilarityWithConstantNOM extends DefaultSimilarity {
   //override def lengthNorm(state: FieldInvertState): Float = 1
 }
 
-class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, sentWriter: IndexWriter) {
+class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, sentWriter: IndexWriter, ssw:BufferedWriter) {
   val pageRe = """\[\[(.*?)\]\](?!\'\'\')""".r
   val sect1Re = """==([^=]*)==""".r
   val sect2Re = """===([^=]*)===""".r
@@ -270,13 +270,11 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     )
   }
 
-  def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String): Unit = {
+  def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String, ssw: BufferedWriter): Unit = {
     val file1 = new File("bugInIndexing1")
     val bw1 = new BufferedWriter(new FileWriter(file1))
     val xmlDir = new File("onePagePerFile")
     xmlDir.mkdir()
-    val segmentedS = new File("/mnt/Works/wailoktam/segmentedS")
-    val ssw = new BufferedWriter(new FileWriter(segmentedS))
     val file2 = new File("onePagePerFile/" + pageID + ".xml")
     val bw2 = new BufferedWriter(new FileWriter(file2))
     val file3 = new File("bugInIndexing3")
@@ -499,7 +497,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     //    print("page"+pageTextWoTable+"\n")
     //    print("table"+tableText+"\n")
     bw2.close()
-    ssw.close()
+
     XML.loadFile(file2)
   }
   /**
@@ -572,7 +570,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
             val pageID = pageNumStream.next
             buf += "</" + "page" + ">"
 //            System.err.println(s"fileID and pageID first: ${fileID + "f" + pageID.toString()}")
-            addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString())
+            addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString, ssw)
             buf = ArrayBuffer[String]()
           }
           buf += "<" + "page" + " title=" + "\"" + StringEscapeUtils.escapeXml11(pageTitle) + "\"" + ">"
@@ -719,7 +717,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
       buf += "</" + "page" + ">"
       //      bw4.write(pageID+"\n")
 //      System.err.println(s"fileID And pageID final: ${fileID + "f" + pageID.toString()}")
-      addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString)
+      addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString, ssw)
       buf = ArrayBuffer[String]()
     }
     //    val titleIdxs = (0 until wholeFile.size).filter {
@@ -868,7 +866,9 @@ class Indexing {
     val sectWriter = new IndexWriter(sectIndexDir, config2) // overwrite existing index
     val paraWriter = new IndexWriter(paraIndexDir, config3) // overwrite existing index
     val sentWriter = new IndexWriter(sentIndexDir, config4)
-    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, sectWriter, paraWriter, sentWriter)
+    val segmentedS = new File("/mnt/Works/wailoktam/segmentedS")
+    val ssw = new BufferedWriter(new FileWriter(segmentedS))
+    val pullAndAddInstance = new PullFrTxtAndAdd(pageWriter, sectWriter, paraWriter, sentWriter, ssw)
     val fileNumStream = Stream.iterate(1)(_ + 1).iterator
     //    var id = 0
     /**
@@ -894,6 +894,7 @@ class Indexing {
     sectWriter.close
     paraWriter.close
     sentWriter.close
+    ssw.close
     //    docXmlPairs
 
   }
