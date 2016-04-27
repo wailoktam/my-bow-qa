@@ -58,26 +58,26 @@ def pp(obj):
 
 if __name__ == '__main__':
 #    window = sys.argv[1]
-    wikiOnePPPath = "/home/wailoktam/qa/mylab/onePagePerFile"
-    sentenceList = []
-    corpusFileName = '/mnt/Works/wailoktam/trainingSentences/segmentedS'
-    corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
-    for subPath in os.listdir(wikiOnePPPath):
-        fullPath = os.path.join(wikiOnePPPath,subPath)
-        print ("path"+fullPath+"\n")
-        if os.path.isfile(fullPath):
-            parsedXml = etree.parse(fullPath)
-            print(parsedXml.getroot().tag)
-            print(parsedXml.getroot().text)
-            pageText = parsedXml.find("./id").text
-            print ("pageText"+pageText+"\n")
-            paras = parsedXml.findall(".//para")
-            for para in paras:
-                print ("para:"+para.text+"\n")
-                for sent in para.text.strip().split("。"):
-                    print ("sent",sent+"\n")
-                    corpusFile.writeln(sent)
-    corpusFile.close()
+#    wikiOnePPPath = "/home/wailoktam/qa/mylab/onePagePerFile"
+#    sentenceList = []
+    corpusFileName = '/mnt/Works/wailoktam/segmentedS'
+#    corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
+#    for subPath in os.listdir(wikiOnePPPath):
+#        fullPath = os.path.join(wikiOnePPPath,subPath)
+#        print ("path"+fullPath+"\n")
+#        if os.path.isfile(fullPath):
+#            parsedXml = etree.parse(fullPath)
+#            print(parsedXml.getroot().tag)
+#            print(parsedXml.getroot().text)
+#            pageText = parsedXml.find("./id").text
+#            print ("pageText"+pageText+"\n")
+#            paras = parsedXml.findall(".//para")
+#            for para in paras:
+#                print ("para:"+para.text+"\n")
+#                for sent in para.text.strip().split("。"):
+#                    print ("sent",sent+"\n")
+#                    corpusFile.writeln(sent)
+#    corpusFile.close()
     sentences = word2vec.Text8Corpus(corpusFileName)
     model = word2vec.Word2Vec(sentences)
     model.save('/home/wailoktam/model')
