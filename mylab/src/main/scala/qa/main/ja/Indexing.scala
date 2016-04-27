@@ -14,6 +14,9 @@ import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.xml.pull._
 import scala.xml.{ Document => _, XML, _ }
+import org.atilika.kuromoji.Tokenizer
+import org.atilika.kuromoji.Token
+import com.ibm.icu.text.Normalizer2
 
 //case class Doc(id: String, title: String, text: String, score: Double)
 
@@ -257,13 +260,18 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
       if ((s == "") == false) {
         val sentence = new Document()
         val sentenceID = id + "t" + sentNumStream.next().toString()
+        val tokenizer = Tokenizer.builder.mode(Tokenizer.Mode.NORMAL).build
+        val normalizer = Normalizer2.getNFCInstance()
+
         //    print (pageText)
         //    System.err.println(s"pid: ${pageID}")
         //    System.err.println(s"ptext: ${pageText}")
         sentence.add(new StringField("id", sentenceID, Store.YES))
         sentence.add(new TextField("text", s, Store.YES))
-        System.err.println(s"s: [${s}]")
-        ssw.write(s+"\n")
+        val tokens = tokenizer.tokenize(s).toArray
+        val segmentedS = (tokens.map { t => normalizer.normalize(t.asInstanceOf[Token].getSurfaceForm()) }).mkString(" ")
+        System.err.println(s"s: [${segmentedS}]")
+        ssw.write(segmentedS+"\n")
         sentWriter.addDocument(sentence)
       }
     }
