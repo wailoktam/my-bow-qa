@@ -60,7 +60,7 @@ if __name__ == '__main__':
 #    window = sys.argv[1]
     wikiOnePPPath = "/home/wailoktam/qa/mylab/onePagePerFile"
     sentenceList = []
-    corpusFileName = '/mnt/Works/wailoktam/trainingSentences/segmentedSentenceList.txt'
+    corpusFileName = '/mnt/Works/wailoktam/trainingSentences/segmentedS'
     corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
     for subPath in os.listdir(wikiOnePPPath):
         fullPath = os.path.join(wikiOnePPPath,subPath)
