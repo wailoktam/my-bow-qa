@@ -125,6 +125,7 @@ if __name__ == '__main__':
    questions = xml.findall(".//question")
    labels = numpy.array([])
    qMatrix = numpy.array([])
+   aMatrix = numpy.array([])
    zeroFilledVector = numpy.array([])
    for question in questions:
         questionText = question.find(".//text").text
