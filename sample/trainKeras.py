@@ -134,6 +134,7 @@ if __name__ == '__main__':
    labels = numpy.array([])
    qMatrix = numpy.array([])
    aMatrix = numpy.array([])
+
    zeroFilledVector = numpy.array([])
    for question in questions:
         questionText = question.find(".//text").text
@@ -144,6 +145,7 @@ if __name__ == '__main__':
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
         for doc in question.findall(".//doc"):
+
             for sent in doc.findall(".//stext"):
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
@@ -159,25 +161,36 @@ if __name__ == '__main__':
                     qCounter = qCounter + 1
                     qMatrix = numpy.append(qMatrix, zeroFilledVector)
 
+                aSkip = False
+                for word in sentenceWoSc[:36]:
+                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
+                    print ("word in normalizedSentence %s\n"%(word))
+                    aCounter = aCounter + 1
+                    print("acounter in 1st loop %s/n"%aCounter)
+#                    wvLength = len(w2vModel[word])
+                    try:
+                        aMatrix = numpy.append(aMatrix, w2vModel[word])
+                    except KeyError:
+                        aSkip = True
+                        aMatrix = numpy.append(aMatrix,zeroFilledVector)
+                for i in range (aCounter, 36):
+                    aCounter = aCounter + 1
+                    print("acounter in 2nd loop %s/n"%aCounter)
+                    aMatrix = numpy.append(aMatrix, zeroFilledVector)
+
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
                     joinedSentence = "".join(sentenceWoSc).strip()
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
-                if answerFoundFlag:
-                    labels = numpy.append(labels,1)
-                else:
-                    labels = numpy.append(labels,0)
+                if aSkip==False:
+                    if answerFoundFlag:
+                        labels = numpy.append(labels,1)
+                    else:
+                        labels = numpy.append(labels,0)
 
-                for word in sentenceWoSc[:36]:
-                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
-                    print ("word in normalizedSentence %s\n"%(word))
-                    aCounter = aCounter + 1
-                    wvLength = len(w2vModel[word])
-                    aMatrix = numpy.append(aMatrix, w2vModel[word])
-                for i in range (aCounter, 36):
-                    aCounter = aCounter + 1
-                    aMatrix = numpy.append(aMatrix, zeroFilledVector)
+
+
 
    train_model(make_network(),qMatrix, aMatrix,labels)
 
