@@ -60,7 +60,7 @@ if __name__ == '__main__':
 #    window = sys.argv[1]
 #    wikiOnePPPath = "/home/wailoktam/qa/mylab/onePagePerFile"
 #    sentenceList = []
-#    corpusFileName = '/mnt/Works/wailoktam/segmentedS'
+    corpusFileName = '/mnt/Works/wailoktam/segmentedS'
 
 
 #    corpusFile  = codecs.open(corpusFileName, 'w', 'utf-8')
@@ -82,9 +82,9 @@ if __name__ == '__main__':
 #    corpusFile.close()
 
 
-#    sentences = word2vec.Text8Corpus(corpusFileName)
-#    model = word2vec.Word2Vec(sentences)
-#    model.save('/home/wailoktam/model')
+    sentences = word2vec.Text8Corpus(corpusFileName)
+    model = word2vec.Word2Vec(sentences)
+    model.save('/home/wailoktam/model')
 
 
 
