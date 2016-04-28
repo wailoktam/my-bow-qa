@@ -14,6 +14,7 @@ import numpy
 import theano
 import theano.tensor as T
 import kanjinums
+import re
 import gensim
 import os
 from xml.etree import ElementTree as etree
@@ -47,6 +48,13 @@ def myNormalize(inputStr):
             normalized.append(normalizedToken)
 #    normalized = unicodedata.normalize('NFKC',unicode(normalized))
     return(normalized)
+
+def rmvSpecChar(inputLst):
+    specCharRe = re.compile('[*\s]')
+    outputLst = []
+    for inputEle in inputLst:
+        if not re.match(specCharRe,inputEle):outputLst.append(inputEle)
+    return(outputLst)
 
 
 def get_output(self, train):
@@ -139,6 +147,7 @@ if __name__ == '__main__':
             for sent in doc.findall(".//stext"):
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
+                sentenceWoSc = rmvSpecChar(myNormalize())
 #max question length is 33. Loop thru each word. If lenght less than 36, add all-zeroes vectors to the result matrix
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
@@ -152,7 +161,7 @@ if __name__ == '__main__':
 
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
-                    joinedSentence = "".join(normalizedSentence).strip()
+                    joinedSentence = "".join(sentenceWoSc).strip()
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if answerFoundFlag:
@@ -160,7 +169,7 @@ if __name__ == '__main__':
                 else:
                     labels = numpy.append(labels,0)
 
-                for word in normalizedSentence[:36]:
+                for word in sentenceWoSc[:36]:
                     print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
                     print ("word in normalizedSentence %s\n"%(word))
                     aCounter = aCounter + 1
