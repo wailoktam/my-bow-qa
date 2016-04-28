@@ -147,7 +147,7 @@ if __name__ == '__main__':
             for sent in doc.findall(".//stext"):
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
-                sentenceWoSc = rmvSpecChar(myNormalize())
+                sentenceWoSc = rmvSpecChar(normalizedSentence)
 #max question length is 33. Loop thru each word. If lenght less than 36, add all-zeroes vectors to the result matrix
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
