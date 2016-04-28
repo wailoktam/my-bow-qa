@@ -161,6 +161,7 @@ if __name__ == '__main__':
                     labels = numpy.append(labels,0)
 
                 for word in normalizedSentence[:36]:
+                    print ("normalizedSentence %s\n"%("".join(normalizedSentence)))
                     print ("word in normalizedSentence %s\n"%(word))
                     aCounter = aCounter + 1
                     wvLength = len(w2vModel[word])
