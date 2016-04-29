@@ -141,7 +141,7 @@ if __name__ == '__main__':
         qCounter = 0
         aCounter = 0
 
-
+        qSkip = False
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
         for doc in question.findall(".//doc"):
@@ -154,9 +154,13 @@ if __name__ == '__main__':
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
                     wvLength = len(w2vModel[word])
-                    print("wvLength %s/n"%wvLength)
-                    qMatrix = numpy.append(qMatrix, w2vModel[word])
-                for i in range (1, wvLength):
+#                    print("wvLength %s/n"%wvLength)
+                    try:
+                        qMatrix = numpy.append(qMatrix, w2vModel[word])
+                    except KeyError:
+                        qSkip = True
+                        qMatrix = numpy.append(qMatrix,zeroFilledVector)
+                for i in range (1, 100):
                     zeroFilledVector = numpy.append(zeroFilledVector,0)
                 for i in range (qCounter, 36):
                     qCounter = qCounter + 1
@@ -169,6 +173,7 @@ if __name__ == '__main__':
                     aCounter = aCounter + 1
                     print("acounter in 1st loop %s/n"%aCounter)
 #                    wvLength = len(w2vModel[word])
+                    if qSkip: aSkip = True
                     try:
                         aMatrix = numpy.append(aMatrix, w2vModel[word])
                     except KeyError:
