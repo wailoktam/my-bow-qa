@@ -154,6 +154,7 @@ if __name__ == '__main__':
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
                     wvLength = len(w2vModel[word])
+                    print("wvLength %s/n"%wvLength)
                     qMatrix = numpy.append(qMatrix, w2vModel[word])
                 for i in range (1, wvLength):
                     zeroFilledVector = numpy.append(zeroFilledVector,0)
