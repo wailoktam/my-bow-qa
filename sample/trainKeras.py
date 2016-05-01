@@ -83,13 +83,13 @@ def custom_objective(y_true, y_pred):
 
 def make_network():
    leftKerasModel = Sequential()
-   leftKerasModel.add(Convolution2D(1000, 3, 3, border_mode='same',
+   leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same',
                            input_shape=(36, 36)))
    leftKerasModel.add(Activation('relu'))
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    rightKerasModel = Sequential()
-   rightKerasModel.add(Convolution2D(1000, 3, 3, border_mode='same',
+   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same',
                            input_shape=(36, 36)))
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
@@ -97,7 +97,7 @@ def make_network():
    mergedKerasModel = Sequential()
    mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l,r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
 
-   mergedKerasModel.add(Dense(1000),activation='softmax')
+   mergedKerasModel.add(Dense(10),activation='softmax')
    return mergedKerasModel
 
 def train_model(model, leftData, rightData, labels):
@@ -134,6 +134,9 @@ if __name__ == '__main__':
    labels = numpy.array([])
    qMatrix = numpy.array([])
    aMatrix = numpy.array([])
+   qFile = open('qFile', 'w')
+   aFile = open('aFile', 'w')
+   lFile = open('lFile', 'w')
 
    zeroFilledVector = numpy.array([])
    for question in questions:
@@ -196,9 +199,13 @@ if __name__ == '__main__':
                         labels = numpy.append(labels,0)
 
 
-
-
-   train_model(make_network(),qMatrix, aMatrix,labels)
+   numpy.save(qFile,qMatrix)
+   numpy.save(aFile,aMatrix)
+   numpy.save(lFile,labels)
+   train_model(make_network(),numpy.load(qFile), numpy.load(aFile),numpy.load(lFile))
+   qFile.close()
+   aFile.close()
+   lFile.close()
 
 
 
