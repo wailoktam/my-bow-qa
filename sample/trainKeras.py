@@ -138,6 +138,7 @@ if __name__ == '__main__':
    aFile = open('aFile', 'w')
    lFile = open('lFile', 'w')
 
+
    zeroFilledVector = numpy.array([])
    for question in questions:
         questionText = question.find(".//text").text
@@ -202,10 +203,13 @@ if __name__ == '__main__':
    numpy.save(qFile,qMatrix)
    numpy.save(aFile,aMatrix)
    numpy.save(lFile,labels)
-   train_model(make_network(),numpy.load(qFile), numpy.load(aFile),numpy.load(lFile))
+   km = make_network()
+   train_model(km,numpy.load(qFile), numpy.load(aFile),numpy.load(lFile))
+   save_model(km)
    qFile.close()
    aFile.close()
    lFile.close()
+   os.system('sudo shutdown now -P')
 
 
 
