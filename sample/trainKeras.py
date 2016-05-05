@@ -128,8 +128,8 @@ def load_and_scale_imgs():
 
 
 if __name__ == '__main__':
-   w2vModel= Word2Vec.load('/home/wailoktam/model')
-   xml = etree.parse("/home/wailoktam/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
+   w2vModel= Word2Vec.load('/home/ubuntu/model')
+   xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
    questions = xml.findall(".//question")
    labels = numpy.array([])
    qMatrix = numpy.array([])
