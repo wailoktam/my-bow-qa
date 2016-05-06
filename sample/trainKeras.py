@@ -84,13 +84,13 @@ def custom_objective(y_true, y_pred):
 def make_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same',
-                           input_shape=(100, 100)))
+                           input_shape=(100, 100,8)))
    leftKerasModel.add(Activation('relu'))
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    rightKerasModel = Sequential()
    rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same',
-                           input_shape=(100, 100)))
+                           input_shape=(100, 100,8)))
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
