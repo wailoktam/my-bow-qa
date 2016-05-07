@@ -8,6 +8,7 @@ from scipy import linalg, mat, dot
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D
 from keras.optimizers import SGD
+from contruct import edis
 import numpy as np
 import scipy.misc
 import numpy
@@ -25,6 +26,17 @@ from functools import partial
 
 gateway = JavaGateway()
 
+
+def edis(inputs):
+    s = inputs[0] -inputs[1]
+    output = K.sqrt(K.batch_dot(s, s, -1))
+    return output
+
+def edis_outputshape(input_shape):
+    shape = list(input_shape)
+    assert len(shape)==2
+    outshape = (shape[0][0],1)
+    return tuple(outshape)   
 
 
 #model.add_node(Similarity(1, activation='sigmoid', input_shapes=[model.nodes['input1'].output_shape, model.nodes['input2'].output_shape]), name='sim', inputs=['input1','input2'], merge_mode='join')
@@ -96,7 +108,7 @@ def make_network():
 
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
-   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x, y: x - y)
+   merged = Merge([leftKerasModel, rightKerasModel], mode=edis, output_shape=edis_output_shape)
    mergedKerasModel.add(merged)
    mergedKerasModel.add(Dense(10),activation='softmax')
    return mergedKerasModel
