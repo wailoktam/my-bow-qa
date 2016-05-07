@@ -101,7 +101,7 @@ def make_network():
    merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
 #  merge([a, b], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
    mergedKerasModel.add(merged)
-   mergedKerasModel.add(Dense(10),activation='softmax')
+   mergedKerasModel.add(Activation('softmax'))
    return mergedKerasModel
 
 def train_model(model, leftData, rightData, labels):
