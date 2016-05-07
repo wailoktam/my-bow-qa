@@ -161,8 +161,8 @@ if __name__ == '__main__':
 
 #                    wvLength = len(w2vModel[word])
 #                    print("w2vModel type %s/n"%w2vModel[word])
-                    print('qMatrix shape: %s/n', qMatrix.shape)
-                    print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
+#                    print('qMatrix shape: %s/n', qMatrix.shape)
+#                    print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
 #                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
                     print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
                     try:
