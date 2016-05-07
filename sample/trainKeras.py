@@ -161,14 +161,14 @@ if __name__ == '__main__':
 #                    wvLength = len(w2vModel[word])
                     print("w2vModel type %s/n"%w2vModel[word])
                     try:
-                        qMatrix = numpy.concatenate((qMatrix, w2vModel[word]), axis=0)
+                        qMatrix = numpy.concatenate((qMatrix, [w2vModel[word]]), axis=0)
                     except KeyError:
                         qSkip = True
-                        qMatrix = numpy.concatenate((qMatrix,zeroFilledVector), axis= 0)
+                        qMatrix = numpy.concatenate((qMatrix,[zeroFilledVector]), axis= 0)
 
                 for i in range (qCounter, 36):
                     qCounter = qCounter + 1
-                    qMatrix = numpy.concatenate((qMatrix, zeroFilledVector), axis=0)
+                    qMatrix = numpy.concatenate((qMatrix, [zeroFilledVector]), axis=0)
 
                 aSkip = False
                 for word in sentenceWoSc[:36]:
@@ -179,14 +179,14 @@ if __name__ == '__main__':
 #                    wvLength = len(w2vModel[word])
                     if qSkip: aSkip = True
                     try:
-                        aMatrix = numpy.concatenate((aMatrix, w2vModel[word]), axis=0)
+                        aMatrix = numpy.concatenate((aMatrix, [w2vModel[word]]), axis=0)
                     except KeyError:
                         aSkip = True
-                        aMatrix = numpy.concatenate((aMatrix,zeroFilledVector), axis=0)
+                        aMatrix = numpy.concatenate((aMatrix,[zeroFilledVector]), axis=0)
                 for i in range (aCounter, 36):
                     aCounter = aCounter + 1
 #                    print("acounter in 2nd loop %s/n"%aCounter)
-                    aMatrix = numpy.concatenate((aMatrix, zeroFilledVector), axis=0)
+                    aMatrix = numpy.concatenate((aMatrix, [zeroFilledVector]), axis=0)
 
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
