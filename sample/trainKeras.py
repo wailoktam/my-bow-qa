@@ -105,7 +105,9 @@ def make_network():
    return mergedKerasModel
 
 def train_model(model, leftData, rightData, labels):
-
+   print('\nleft shape:', leftData.shape)
+   print('\nright shape:', rightData.shape)
+   print('\nlabels shape:', labels.shape)
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='custom_objectivity', optimizer=sgd)
    model.fit([rightData, leftData], labels, nb_epoch=10, batch_size=32)
@@ -121,14 +123,6 @@ def save_model(model):
    open('trainKeras', 'w').write(model_json)
    model.save_weights('trainKeras_weights.h5', overwrite=True)
 
-
-def load_and_scale_imgs():
-   img_names = ['standing-cat.jpg', 'dog-face.jpg']
-
-   imgs = [np.transpose(scipy.misc.imresize(scipy.misc.imread(img_name), (32, 32)),
-                        (2, 0, 1)).astype('float32')
-           for img_name in img_names]
-   return np.array(imgs) / 255
 
 
 if __name__ == '__main__':
