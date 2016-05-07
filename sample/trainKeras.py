@@ -8,7 +8,7 @@ from scipy import linalg, mat, dot
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D
 from keras.optimizers import SGD
-from contruct import edis
+from construct import edis
 import numpy as np
 import scipy.misc
 import numpy
@@ -36,7 +36,7 @@ def edis_outputshape(input_shape):
     shape = list(input_shape)
     assert len(shape)==2
     outshape = (shape[0][0],1)
-    return tuple(outshape)   
+    return tuple(outshape)
 
 
 #model.add_node(Similarity(1, activation='sigmoid', input_shapes=[model.nodes['input1'].output_shape, model.nodes['input2'].output_shape]), name='sim', inputs=['input1','input2'], merge_mode='join')
