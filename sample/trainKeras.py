@@ -144,14 +144,14 @@ if __name__ == '__main__':
         questionText = question.find(".//text").text
         qCounter = 0
         aCounter = 0
-        qMatrix = numpy.array([[]])
+        qMatrixInit = False
         qSkip = False
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
         for doc in question.findall(".//doc"):
 
             for sent in doc.findall(".//stext"):
-                aMatrix = numpy.array([[]])
+                aMatrixInit = False
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
                 sentenceWoSc = rmvSpecChar(normalizedSentence)
@@ -166,8 +166,9 @@ if __name__ == '__main__':
 #                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
                     print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
                     try:
-                        if qMatrix.shape == (1,0):
+                        if qMatrixInit == False:
                             qMatrix = numpy.array([w2vModel[word]])
+                            qMatrixInit = True
                         else:
 #                        qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
                             qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
@@ -178,7 +179,6 @@ if __name__ == '__main__':
                 for i in range (qCounter, 36):
                     qCounter = qCounter + 1
                     qMatrix = numpy.concatenate((qMatrix, [zeroFilledVector]), axis=0)
-
                 aSkip = False
                 for word in sentenceWoSc[:36]:
 #                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
@@ -188,7 +188,11 @@ if __name__ == '__main__':
 #                    wvLength = len(w2vModel[word])
                     if qSkip: aSkip = True
                     try:
-                        aMatrix = numpy.concatenate((aMatrix, numpy.array([w2vModel[word]])), axis=0)
+                        if aMatrixInit == False:
+                            aMatrix = numpy.array([w2vModel[word]])
+                            aMatrixInit = True
+                        else:
+                            aMatrix = numpy.concatenate((aMatrix, numpy.array([w2vModel[word]])), axis=0)
                     except KeyError:
                         aSkip = True
                         aMatrix = numpy.concatenate((aMatrix,[zeroFilledVector]), axis=0)
