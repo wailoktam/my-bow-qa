@@ -163,10 +163,14 @@ if __name__ == '__main__':
 #                    print("w2vModel type %s/n"%w2vModel[word])
                     print('qMatrix shape: %s/n', qMatrix.shape)
                     print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
+                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
                     print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
                     try:
+                        if qMatrix.shape == (1,0):
+                            qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])))
+                        else:
 #                        qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
-                        qMatrix = numpy.concatenate((qMatrix, numpy.array([[1,2,3,4,5]])), axis=0)
+                            qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
                     except KeyError:
                         qSkip = True
                         qMatrix = numpy.concatenate((qMatrix,numpy.array([zeroFilledVector])), axis= 0)
