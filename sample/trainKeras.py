@@ -39,7 +39,7 @@ def myNormalize(inputStr):
     result = tokenizer.tokenize(inputStr)
     normalized = []
     for token in result:
-        print ("token"+"["+token.getSurfaceForm()+"]"+"\n")
+#        print ("token"+"["+token.getSurfaceForm()+"]"+"\n")
         try:
             normalizedToken = kanjinums.kanji2num(token.getSurfaceForm())
         except KeyError:
@@ -170,10 +170,10 @@ if __name__ == '__main__':
 
                 aSkip = False
                 for word in sentenceWoSc[:36]:
-                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
-                    print ("word in normalizedSentence %s\n"%(word))
+#                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
+#                    print ("word in normalizedSentence %s\n"%(word))
                     aCounter = aCounter + 1
-                    print("acounter in 1st loop %s/n"%aCounter)
+#                    print("acounter in 1st loop %s/n"%aCounter)
 #                    wvLength = len(w2vModel[word])
                     if qSkip: aSkip = True
                     try:
@@ -183,7 +183,7 @@ if __name__ == '__main__':
                         aMatrix = numpy.append(aMatrix,zeroFilledVector)
                 for i in range (aCounter, 36):
                     aCounter = aCounter + 1
-                    print("acounter in 2nd loop %s/n"%aCounter)
+#                    print("acounter in 2nd loop %s/n"%aCounter)
                     aMatrix = numpy.append(aMatrix, zeroFilledVector)
 
                 for answer in map(lambda a: myNormalize(a), answers):
