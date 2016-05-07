@@ -156,7 +156,7 @@ if __name__ == '__main__':
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
 #                    wvLength = len(w2vModel[word])
-#                    print("wvLength %s/n"%wvLength)
+                    print("w2vModel type %s/n"%w2vModel[word])
                     try:
                         qMatrix = numpy.append(qMatrix, w2vModel[word])
                     except KeyError:
