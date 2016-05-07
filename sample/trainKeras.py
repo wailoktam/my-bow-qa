@@ -130,25 +130,28 @@ if __name__ == '__main__':
    xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
    questions = xml.findall(".//question")
    labels = numpy.array([])
-   qMatrix = numpy.array([])
-   aMatrix = numpy.array([])
+   q3dArray = numpy.array([[[]]])
+   a3dArray = numpy.array([[[]]])
    qFile = open('qFile', 'w')
    aFile = open('aFile', 'w')
    lFile = open('lFile', 'w')
 
 
    zeroFilledVector = numpy.array([])
+   for i in range (1, 100):
+                    zeroFilledVector = numpy.append(zeroFilledVector,0)
    for question in questions:
         questionText = question.find(".//text").text
         qCounter = 0
         aCounter = 0
-
+        qMatrix = numpy.array([[]])
         qSkip = False
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
         for doc in question.findall(".//doc"):
 
             for sent in doc.findall(".//stext"):
+                aMatrix = numpy.array([[]])
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
                 sentenceWoSc = rmvSpecChar(normalizedSentence)
@@ -158,15 +161,14 @@ if __name__ == '__main__':
 #                    wvLength = len(w2vModel[word])
                     print("w2vModel type %s/n"%w2vModel[word])
                     try:
-                        qMatrix = numpy.append(qMatrix, w2vModel[word])
+                        qMatrix = numpy.concatenate((qMatrix, w2vModel[word]), axis=0)
                     except KeyError:
                         qSkip = True
-                        qMatrix = numpy.append(qMatrix,zeroFilledVector)
-                for i in range (1, 100):
-                    zeroFilledVector = numpy.append(zeroFilledVector,0)
+                        qMatrix = numpy.concatenate((qMatrix,zeroFilledVector), axis= 0)
+
                 for i in range (qCounter, 36):
                     qCounter = qCounter + 1
-                    qMatrix = numpy.append(qMatrix, zeroFilledVector)
+                    qMatrix = numpy.concatenate((qMatrix, zeroFilledVector), axis=0)
 
                 aSkip = False
                 for word in sentenceWoSc[:36]:
@@ -177,14 +179,14 @@ if __name__ == '__main__':
 #                    wvLength = len(w2vModel[word])
                     if qSkip: aSkip = True
                     try:
-                        aMatrix = numpy.append(aMatrix, w2vModel[word])
+                        aMatrix = numpy.concatenate((aMatrix, w2vModel[word]), axis=0)
                     except KeyError:
                         aSkip = True
-                        aMatrix = numpy.append(aMatrix,zeroFilledVector)
+                        aMatrix = numpy.concatenate((aMatrix,zeroFilledVector), axis=0)
                 for i in range (aCounter, 36):
                     aCounter = aCounter + 1
 #                    print("acounter in 2nd loop %s/n"%aCounter)
-                    aMatrix = numpy.append(aMatrix, zeroFilledVector)
+                    aMatrix = numpy.concatenate((aMatrix, zeroFilledVector), axis=0)
 
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
@@ -192,10 +194,14 @@ if __name__ == '__main__':
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if aSkip==False:
+                    a3dArray = numpy.concatenate((a3dArray,[aMatrix]), axis=0)
+                    q3dArray = numpy.concatenate((q3dArray,[qMatrix]), axis=0)
                     if answerFoundFlag:
                         labels = numpy.append(labels,1)
                     else:
                         labels = numpy.append(labels,0)
+
+
 
 
    numpy.save(qFile,qMatrix)
