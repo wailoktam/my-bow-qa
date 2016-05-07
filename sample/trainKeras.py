@@ -96,7 +96,7 @@ def make_network():
 
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
-   mergedKerasModel.add(Merge([leftKerasModel, rightKerasModel], mode=lambda x, y: x - y))
+   mergedKerasModel.add(Merge(leftKerasModel, rightKerasModel, mode=lambda x, y: x - y))
    mergedKerasModel.add(Dense(10),activation='softmax')
    return mergedKerasModel
 
