@@ -138,7 +138,7 @@ if __name__ == '__main__':
 
 
    zeroFilledVector = numpy.array([])
-   for i in range (1, 100):
+   for i in range (0, 100):
                     zeroFilledVector = numpy.append(zeroFilledVector,0)
    for question in questions:
         questionText = question.find(".//text").text
@@ -163,11 +163,11 @@ if __name__ == '__main__':
 #                    print("w2vModel type %s/n"%w2vModel[word])
                     print('qMatrix shape: %s/n', qMatrix.shape)
                     print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
-                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
+#                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
                     print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
                     try:
                         if qMatrix.shape == (1,0):
-                            qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])))
+                            qMatrix = numpy.array([w2vModel[word]])
                         else:
 #                        qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
                             qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
