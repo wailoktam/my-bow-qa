@@ -158,8 +158,11 @@ if __name__ == '__main__':
 #max question length is 33. Loop thru each word. If lenght less than 36, add all-zeroes vectors to the result matrix
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
+
 #                    wvLength = len(w2vModel[word])
-                    print("w2vModel type %s/n"%w2vModel[word])
+#                    print("w2vModel type %s/n"%w2vModel[word])
+                    print('qMatrix shape: %s/n', qMatrix.shape)
+                    print('word vector shape: %s/n', [w2vModel[word]].shape)
                     try:
                         qMatrix = numpy.concatenate((qMatrix, [w2vModel[word]]), axis=0)
                     except KeyError:
