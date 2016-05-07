@@ -165,7 +165,8 @@ if __name__ == '__main__':
                     print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
                     print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
                     try:
-                        qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
+#                        qMatrix = numpy.concatenate((qMatrix, numpy.array([w2vModel[word]])), axis=0)
+                        qMatrix = numpy.concatenate((qMatrix, numpy.array([[1,2,3,4,5]])), axis=0)
                     except KeyError:
                         qSkip = True
                         qMatrix = numpy.concatenate((qMatrix,numpy.array([zeroFilledVector])), axis= 0)
