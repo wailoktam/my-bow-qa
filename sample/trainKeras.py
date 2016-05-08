@@ -144,7 +144,7 @@ if __name__ == '__main__':
         questionText = question.find(".//text").text
         qCounter = 0
         aCounter = 0
-        qMatrixInit = False
+#        qMatrixInit = False
         qSkip = False
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
@@ -152,6 +152,7 @@ if __name__ == '__main__':
 
             for sent in doc.findall(".//stext"):
                 aMatrixInit = False
+                qMatrixInit = False
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
                 sentenceWoSc = rmvSpecChar(normalizedSentence)
