@@ -164,7 +164,7 @@ if __name__ == '__main__':
 #                    print('qMatrix shape: %s/n', qMatrix.shape)
 #                    print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
 #                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
-                    print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
+#                    print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
                     try:
                         if qMatrixInit == False:
                             qMatrix = numpy.array([w2vModel[word]])
@@ -211,12 +211,12 @@ if __name__ == '__main__':
                         q3dArray = numpy.array([qMatrix])
                         q3dInit = True
                     else:
-                        q3dArray = numpy.concatenate((q3dArray,[qMatrix]), axis=0)
+                        q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                     if a3dInit == False:
                         a3dArray = numpy.array([aMatrix])
                         a3dInit = True
                     else:
-                        a3dArray = numpy.concatenate((a3dArray,[aMatrix]), axis=0)
+                        a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                     if answerFoundFlag:
                         labels = numpy.append(labels,1)
                     else:
