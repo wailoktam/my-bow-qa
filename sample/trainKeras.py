@@ -208,19 +208,20 @@ if __name__ == '__main__':
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if aSkip==False:
-                    if q3dInit == False:
-                        q3dArray = numpy.array([qMatrix])
-                        print('\nnot init q3dArray shape:', q3dArray.shape)
-                        q3dInit = True
-                    else:
+                    if q3dInit == True:
                         print('\nq3dArray shape:', q3dArray.shape)
                         print('\nqMatrix shape:', numpy.array([qMatrix]).shape)
                         q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
-                    if a3dInit == False:
+                    else:
+                        q3dArray = numpy.array([qMatrix])
+                        print('\nnot init q3dArray shape:', q3dArray.shape)
+                        q3dInit = True
+                    if a3dInit == True:
+                        a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
+                    else:
                         a3dArray = numpy.array([aMatrix])
                         a3dInit = True
-                    else:
-                        a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
+
                     if answerFoundFlag:
                         labels = numpy.append(labels,1)
                     else:
