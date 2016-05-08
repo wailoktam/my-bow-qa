@@ -211,6 +211,8 @@ if __name__ == '__main__':
                         q3dArray = numpy.array([qMatrix])
                         q3dInit = True
                     else:
+                        print('\nq3dArray shape:', q3dArray.shape)
+                        print('\nqMatrix shape:', numpy.array([qMatrix]).shape)
                         q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                     if a3dInit == False:
                         a3dArray = numpy.array([aMatrix])
