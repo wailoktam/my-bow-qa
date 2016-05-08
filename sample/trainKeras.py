@@ -131,7 +131,7 @@ if __name__ == '__main__':
    questions = xml.findall(".//question")
    labels = numpy.array([])
    q3dInit = False
-   a3dInit = True
+   a3dInit = False
    qFile = open('qFile', 'w')
    aFile = open('aFile', 'w')
    lFile = open('lFile', 'w')
