@@ -142,7 +142,7 @@ if __name__ == '__main__':
                     zeroFilledVector = numpy.append(zeroFilledVector,0)
    for question in questions:
         questionText = question.find(".//text").text
-        qCounter = 0
+#        qCounter = 0
         aCounter = 0
 #        qMatrixInit = False
         qSkip = False
@@ -153,6 +153,7 @@ if __name__ == '__main__':
             for sent in doc.findall(".//stext"):
                 aMatrixInit = False
                 qMatrixInit = False
+                qCounter = 0
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
                 sentenceWoSc = rmvSpecChar(normalizedSentence)
