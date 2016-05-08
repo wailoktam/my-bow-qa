@@ -210,6 +210,7 @@ if __name__ == '__main__':
                 if aSkip==False:
                     if q3dInit == False:
                         q3dArray = numpy.array([qMatrix])
+                        print('\nnot init q3dArray shape:', q3dArray.shape)
                         q3dInit = True
                     else:
                         print('\nq3dArray shape:', q3dArray.shape)
