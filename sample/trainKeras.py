@@ -109,7 +109,7 @@ def train_model(model, leftData, rightData, labels):
    print('\nright shape:', rightData.shape)
    print('\nlabels shape:', labels.shape)
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-   model.compile(loss='custom_objectivity', optimizer=sgd)
+   model.compile(loss='custom_objective', optimizer=sgd)
    model.fit([rightData, leftData], labels, nb_epoch=10, batch_size=32)
 
 #   print('Testing...')
