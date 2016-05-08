@@ -179,6 +179,7 @@ if __name__ == '__main__':
                 for i in range (qCounter, 100):
                     qCounter = qCounter + 1
                     qMatrix = numpy.concatenate((qMatrix, numpy.array([zeroFilledVector])), axis=0)
+                    print('\nearly qMatrix shape:', numpy.array([qMatrix]).shape)
                 aSkip = False
                 for word in sentenceWoSc[:36]:
 #                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
