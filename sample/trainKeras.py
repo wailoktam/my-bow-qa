@@ -155,6 +155,7 @@ if __name__ == '__main__':
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
                 sentenceWoSc = rmvSpecChar(normalizedSentence)
+                print ("loop adv")
 #max question length is 33. Loop thru each word. If lenght less than 36, add all-zeroes vectors to the result matrix
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
@@ -179,7 +180,7 @@ if __name__ == '__main__':
                 for i in range (qCounter, 100):
                     qCounter = qCounter + 1
                     qMatrix = numpy.concatenate((qMatrix, numpy.array([zeroFilledVector])), axis=0)
-                    print('\nearly qMatrix shape:', numpy.array([qMatrix]).shape)
+                    print('early qMatrix shape:', numpy.array([qMatrix]).shape)
                 aSkip = False
                 for word in sentenceWoSc[:36]:
 #                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
