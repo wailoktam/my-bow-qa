@@ -130,8 +130,8 @@ if __name__ == '__main__':
    xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
    questions = xml.findall(".//question")
    labels = numpy.array([])
-   q3dArray = numpy.array([[[]]])
-   a3dArray = numpy.array([[[]]])
+   q3dInit = False
+   a3dInit = True
    qFile = open('qFile', 'w')
    aFile = open('aFile', 'w')
    lFile = open('lFile', 'w')
@@ -207,8 +207,16 @@ if __name__ == '__main__':
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if aSkip==False:
-                    a3dArray = numpy.concatenate((a3dArray,[aMatrix]), axis=0)
-                    q3dArray = numpy.concatenate((q3dArray,[qMatrix]), axis=0)
+                    if q3dInit == False:
+                        q3dArray = numpy.array([qMatrix])
+                        q3dInit = True
+                    else:
+                        q3dArray = numpy.concatenate((q3dArray,[qMatrix]), axis=0)
+                    if a3dInit == False:
+                        a3dArray = numpy.array([aMatrix])
+                        a3dInit = True
+                    else:
+                        a3dArray = numpy.concatenate((a3dArray,[aMatrix]), axis=0)
                     if answerFoundFlag:
                         labels = numpy.append(labels,1)
                     else:
