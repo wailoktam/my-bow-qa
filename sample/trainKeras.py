@@ -176,9 +176,9 @@ if __name__ == '__main__':
                         qSkip = True
                         qMatrix = numpy.concatenate((qMatrix,numpy.array([zeroFilledVector])), axis= 0)
 
-                for i in range (qCounter, 36):
+                for i in range (qCounter, 100):
                     qCounter = qCounter + 1
-                    qMatrix = numpy.concatenate((qMatrix, [zeroFilledVector]), axis=0)
+                    qMatrix = numpy.concatenate((qMatrix, numpy.array([zeroFilledVector])), axis=0)
                 aSkip = False
                 for word in sentenceWoSc[:36]:
 #                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
@@ -196,10 +196,10 @@ if __name__ == '__main__':
                     except KeyError:
                         aSkip = True
                         aMatrix = numpy.concatenate((aMatrix,[zeroFilledVector]), axis=0)
-                for i in range (aCounter, 36):
+                for i in range (aCounter, 100):
                     aCounter = aCounter + 1
 #                    print("acounter in 2nd loop %s/n"%aCounter)
-                    aMatrix = numpy.concatenate((aMatrix, [zeroFilledVector]), axis=0)
+                    aMatrix = numpy.concatenate((aMatrix, numpy.array([zeroFilledVector])), axis=0)
 
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
