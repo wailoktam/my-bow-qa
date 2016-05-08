@@ -220,9 +220,12 @@ if __name__ == '__main__':
                         print('\nnot init q3dArray shape:', q3dArray.shape)
                         q3dInit = True
                     if a3dInit == True:
+                        print('\na3dArray shape:', a3dArray.shape)
+                        print('\naMatrix shape:', numpy.array([aMatrix]).shape)
                         a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                     else:
                         a3dArray = numpy.array([aMatrix])
+                        print('\nnot init a3dArray shape:', a3dArray.shape)
                         a3dInit = True
 
                     if answerFoundFlag:
