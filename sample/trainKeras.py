@@ -95,7 +95,7 @@ def make_network():
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]*x[1]/linalg.norm(x[0]).linalg.norm(x[1]))
-   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]-x[1], output_shape=(10, 100,100))
+   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]-x[1])
    #  merge([a, b], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
    mergedKerasModel.add(merged)
 #   mergedKerasModel.add(Activation('softmax'))
@@ -109,7 +109,7 @@ def train_model(model, leftData, rightData, labels):
 #   print('\nlabels shape:', labels.shape)
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='custom_objective', optimizer=sgd)
-   model.fit([rightData, leftData], labels, nb_epoch=10, batch_size=32)
+   model.fit([leftData, rightData], labels, nb_epoch=10, batch_size=32)
 
 #   print('Testing...')
 #   res = model.evaluate(X_test, Y_test,
