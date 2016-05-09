@@ -75,12 +75,7 @@ def compile_cos_sim_theano():
 
 cos_sim_theano_fn = compile_cos_sim_theano()
 
-def custom_objective(y_true, y_pred):
-    if (y_true == 1):
-        result = T.maximum(0.09 - y_pred, 0.)
-    else:
-        result = T.maximum(0.09 + y_pred, 0.)
-    return result
+
 
 
 def make_network():
@@ -107,7 +102,7 @@ def make_network():
 def train_model(model, leftData, rightData, labels):
    print('\nleft shape:', leftData.shape)
    print('\nright shape:', rightData.shape)
-   print('\nlabels shape:', labels.shape)
+   print('\nlabels type:', labels)
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='custom_objective', optimizer=sgd)
    model.fit([rightData, leftData], labels, nb_epoch=10, batch_size=32)
@@ -233,6 +228,7 @@ if __name__ == '__main__':
                         labels = numpy.append(labels,1)
                     else:
                         labels = numpy.append(labels,0)
+
 
 
 
