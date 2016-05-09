@@ -82,19 +82,19 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 def make_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', dim_ordering ="tf",
-                           input_shape=(127, 100, 100)))
+                           input_shape=(127, 100, 100, 1)))
    leftKerasModel.add(Activation('relu'))
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    rightKerasModel = Sequential()
    rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', dim_ordering ="tf",
-                           input_shape=(127, 100, 100)))
+                           input_shape=(127, 100, 100, 1)))
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
-   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: dot(x[0],x[1].T)/linalg.norm(x[0]).linalg.norm(x[1]), output_shape=(127,10,100,100))
+   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: dot(x[0],x[1].T)/linalg.norm(x[0]).linalg.norm(x[1]), dim_ordering ="tf", output_shape=(127,100,100,10))
 #  merge([a, b], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
    mergedKerasModel.add(merged)
 #   mergedKerasModel.add(Activation('softmax'))
