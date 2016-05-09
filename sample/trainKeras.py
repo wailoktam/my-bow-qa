@@ -247,11 +247,11 @@ if __name__ == '__main__':
 
 
 
-   numpy.save(qFile,qMatrix)
-   numpy.save(aFile,aMatrix)
+   numpy.save(qFile,q3dArray)
+   numpy.save(aFile,a3dArray)
    numpy.save(lFile,labels)
    km = make_network()
-   train_model(km,qMatrix, aMatrix,labels)
+   train_model(km,q3dArray, a3dArray,labels)
    save_model(km)
    qFile.close()
    aFile.close()
