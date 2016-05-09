@@ -81,20 +81,20 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 
 def make_network():
    leftKerasModel = Sequential()
-   leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same',
-                           input_shape=(100, 100,8)))
+   leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', dim_ordering ="tf",
+                           input_shape=(127, 100, 100, 1)))
    leftKerasModel.add(Activation('relu'))
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    rightKerasModel = Sequential()
-   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same',
-                           input_shape=(100, 100,8)))
+   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', dim_ordering ="tf",
+                           input_shape=(127, 100, 100, 1)))
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
-   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
+   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: dot(x[0],x[1].T)/linalg.norm(x[0]).linalg.norm(x[1]), output_shape=(10,100,100))
 #  merge([a, b], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
    mergedKerasModel.add(merged)
 #   mergedKerasModel.add(Activation('softmax'))
@@ -213,9 +213,10 @@ if __name__ == '__main__':
                 if aSkip==False:
                     if q3dInit == True:
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
+
+                        q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                         print('\nq3dArray shape:', q3dArray.shape)
                         print('\nqMatrix shape:', numpy.array([qMatrix]).shape)
-                        q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                     else:
                         q3dArray = numpy.array([qMatrix])
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
@@ -223,9 +224,10 @@ if __name__ == '__main__':
                         q3dInit = True
                     if a3dInit == True:
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
+
+                        a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                         print('\na3dArray shape:', a3dArray.shape)
                         print('\naMatrix shape:', numpy.array([aMatrix]).shape)
-                        a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                     else:
                         a3dArray = numpy.array([aMatrix])
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
