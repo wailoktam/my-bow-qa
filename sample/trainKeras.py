@@ -5,7 +5,7 @@ from keras.utils import np_utils
 from keras.models import model_from_json
 from keras.layers import Merge
 from scipy import linalg, mat, dot
-from keras.layers.core import Dense, Dropout, Activation, Flatten
+from keras.layers.core import Dense, Dropout, Activation, Flatten, Reshape
 from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D
 from keras.optimizers import SGD
 import numpy as np
@@ -81,13 +81,13 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 
 def make_network():
    leftKerasModel = Sequential()
-
-#   leftKerasModel.add(Convolution2D(10, 1, 3, 3))
+   leftKerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(1, 100, 100)))
    leftKerasModel.add(Activation('relu'))
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    rightKerasModel = Sequential()
+   rightKerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
 #   rightKerasModel.add(Convolution2D(10,1,3,3))
    rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(1, 100, 100)))
    rightKerasModel.add(Activation('relu'))
