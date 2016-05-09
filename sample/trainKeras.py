@@ -81,6 +81,7 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 
 def make_network():
    leftKerasModel = Sequential()
+
 #   leftKerasModel.add(Convolution2D(10, 1, 3, 3))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(1, 100, 100)))
    leftKerasModel.add(Activation('relu'))
@@ -110,6 +111,9 @@ def train_model(model, leftData, rightData, labels):
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='custom_objective', optimizer=sgd)
    model.fit([leftData, rightData], labels, nb_epoch=10, batch_size=32)
+
+#get error: Error when checking model input: expected convolution2d_input_2 to have 4 dimensions, but got array with shape (127, 100, 100)
+
 
 #   print('Testing...')
 #   res = model.evaluate(X_test, Y_test,
