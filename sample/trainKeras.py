@@ -13,6 +13,7 @@ import scipy.misc
 import numpy
 import theano
 import theano.tensor as T
+import codecs
 import kanjinums
 import re
 import gensim
@@ -100,6 +101,9 @@ def make_network():
    return mergedKerasModel
 
 def train_model(model, leftData, rightData, labels):
+   bugcheck.write("left shape:%s\n" % ("question text", "answer", "found in sentence #", "found after what percentage", "sentence including answer", "doc including answer"))
+
+
    print('\nleft shape:', leftData.shape)
    print('\nright shape:', rightData.shape)
    print('\nlabels type:', labels)
@@ -122,6 +126,7 @@ def save_model(model):
 
 
 if __name__ == '__main__':
+   bugcheck  = codecs.open('bug.csv', 'w', 'utf-8')
    w2vModel= Word2Vec.load('/home/ubuntu/model')
    xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
    questions = xml.findall(".//question")
@@ -209,26 +214,32 @@ if __name__ == '__main__':
                         answerFoundFlag = True
                 if aSkip==False:
                     if q3dInit == True:
+                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
                         print('\nq3dArray shape:', q3dArray.shape)
                         print('\nqMatrix shape:', numpy.array([qMatrix]).shape)
                         q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                     else:
                         q3dArray = numpy.array([qMatrix])
+                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
                         print('\nnot init q3dArray shape:', q3dArray.shape)
                         q3dInit = True
                     if a3dInit == True:
+                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
                         print('\na3dArray shape:', a3dArray.shape)
                         print('\naMatrix shape:', numpy.array([aMatrix]).shape)
                         a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                     else:
                         a3dArray = numpy.array([aMatrix])
+                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
                         print('\nnot init a3dArray shape:', a3dArray.shape)
                         a3dInit = True
 
                     if answerFoundFlag:
                         labels = numpy.append(labels,1)
+                        bugcheck.write("labels shape %s\n" % (labels.shape))
                     else:
                         labels = numpy.append(labels,0)
+                        bugcheck.write("labels shape %s\n" % (labels.shape))
                     print('\nlabels shape:', labels.shape)
 
 
@@ -244,6 +255,7 @@ if __name__ == '__main__':
    qFile.close()
    aFile.close()
    lFile.close()
+   bugcheck.close()
    os.system('sudo shutdown now -P')
 
 
