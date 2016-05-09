@@ -229,6 +229,7 @@ if __name__ == '__main__':
                         labels = numpy.append(labels,1)
                     else:
                         labels = numpy.append(labels,0)
+                    print('\nlabels shape:', labels.shape)
 
 
 
