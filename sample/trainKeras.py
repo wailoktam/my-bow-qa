@@ -82,14 +82,14 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 def make_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
-   leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(1, 100, 100)))
+   leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(127, 1, 100, 100)))
    leftKerasModel.add(Activation('relu'))
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    rightKerasModel = Sequential()
    rightKerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
 #   rightKerasModel.add(Convolution2D(10,1,3,3))
-   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(1, 100, 100)))
+   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(127, 1, 100, 100)))
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
