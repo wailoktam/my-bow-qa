@@ -5,7 +5,7 @@ from keras.utils import np_utils
 from keras.models import model_from_json
 from keras.layers import Merge
 from scipy import linalg, mat, dot
-from keras.layers.core import Dense, Dropout, Activation, Flatten, Reshape
+from keras.layers.core import Dense, Dropout, Activation, Flatten, Reshape, Lambda
 from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D
 from keras.optimizers import SGD
 import numpy as np
@@ -96,9 +96,10 @@ def make_network():
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]*x[1]/linalg.norm(x[0]).linalg.norm(x[1]))
-   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]-x[1], output_shape=(10, 100,100))
+   merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(10, 50,50))
    #  merge([a, b], mode=lambda x: x[0] - x[1], output_shape=lambda x: x[0])
    mergedKerasModel.add(merged)
+   mergedKerasModel.add(Lambda(lambda x: 1 - x))
    mergedKerasModel.add(Activation('softmax'))
    return mergedKerasModel
 
