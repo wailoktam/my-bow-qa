@@ -113,6 +113,14 @@ def make_network():
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
 
+def train_test_model(model, testData, labels):
+
+
+   sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+   model.compile(loss='custom_objective', optimizer=sgd)
+   model.fit(testData, labels, nb_epoch=1, batch_size=32)
+
+
 def train_model(model, leftData, rightData, labels):
 
    print('\nleft shape:', leftData.shape)
