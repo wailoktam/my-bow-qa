@@ -77,7 +77,15 @@ def compile_cos_sim_theano():
 cos_sim_theano_fn = compile_cos_sim_theano()
 
 
+def make_test_network():
 
+   kerasModel = Sequential()
+   kerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
+   kerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(127, 1, 100, 100)))
+   kerasModel.add(Activation('tanh'))
+   print ("make network input shape")
+   print (kerasModel.input_shape)
+   return kerasModel
 
 def make_network():
    leftKerasModel = Sequential()
@@ -257,14 +265,16 @@ if __name__ == '__main__':
    numpy.save(qFile,q3dArray)
    numpy.save(aFile,a3dArray)
    numpy.save(lFile,labels)
-   km = make_network()
-   train_model(km,q3dArray, a3dArray,labels)
+   km = make_test_network()
+#   mkm = make_network()
+#   train_model(km,q3dArray, a3dArray,labels)
+   train_test_model(km,q3dArray, labels)
    save_model(km)
    qFile.close()
    aFile.close()
    lFile.close()
 #   bugcheck.close()
-   os.system('sudo shutdown now -P')
+#   os.system('sudo shutdown now -P')
 
 
 
