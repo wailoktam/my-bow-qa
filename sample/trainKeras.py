@@ -107,8 +107,8 @@ def make_network():
 
 def train_model(model, leftData, rightData, labels):
 
-#   print('\nleft shape:', leftData.shape)
-#   print('\nright shape:', rightData.shape)
+   print('\nleft shape:', leftData.shape)
+   print('\nright shape:', rightData.shape)
 #   print('\nlabels type:', labels)
 #   print('\nlabels shape:', labels.shape)
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
