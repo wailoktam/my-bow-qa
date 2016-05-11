@@ -101,7 +101,8 @@ def make_network():
    mergedKerasModel.add(merged)
    mergedKerasModel.add(Lambda(lambda x: 1 - x))
    mergedKerasModel.add(Activation('tanh'))
-   print ("make network input shape"+mergedKerasModel.input_shape)
+   print ("make network input shape")
+   print (mergedKerasModel.input_shape)
    return mergedKerasModel
 
 def train_model(model, leftData, rightData, labels):
