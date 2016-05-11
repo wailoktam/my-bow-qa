@@ -120,7 +120,7 @@ def train_test_model(km, testData, labels):
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    print ("train input shape")
    print km.input_shape
-   km.compile(loss='custom_objective', optimizer=sgd)
+   km.compile(loss='hinge', optimizer=sgd)
    km.fit(testData, labels, nb_epoch=1, batch_size=32)
 
 
