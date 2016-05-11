@@ -97,7 +97,7 @@ def train_model(model, X_train, Y_train, X_test, Y_test):
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='categorical_crossentropy', optimizer=sgd)
    print('X_train in train model:',X_train.shape)
-   model.fit(X_train, Y_train, nb_epoch=5, batch_size=32,
+   model.fit(X_train, Y_train, nb_epoch=1, batch_size=32,
              validation_split=0.1, show_accuracy=True, verbose=1)
 
 
