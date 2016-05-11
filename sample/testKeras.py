@@ -47,14 +47,13 @@ nb_classes = 10
 def load_dataset():
    # the data, shuffled and split between train and test sets
    (X_train, y_train), (X_test, y_test) = cifar10.load_data()
-   print('X_train shape:', X_train.shape)
-   print(X_train.shape[0], 'train samples')
-   print(X_test.shape[0], 'test samples')
+
+   print(X_train.shape, 'train data when load')
+   print(y_train.shape, 'labels when load')
 
    # convert class vectors to binary class matrices
    Y_train = np_utils.to_categorical(y_train, nb_classes)
    Y_test = np_utils.to_categorical(y_test, nb_classes)
-   print ('Y test', Y_test)
    X_train = X_train.astype('float32')
    X_test = X_test.astype('float32')
    X_train /= 255
@@ -86,6 +85,7 @@ def make_network():
    model.add(Dropout(0.5))
    model.add(Dense(nb_classes))
    model.add(Activation('softmax'))
+   print model.input_shape
 
    return model
 
@@ -93,14 +93,14 @@ def train_model(model, X_train, Y_train, X_test, Y_test):
 
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    model.compile(loss='categorical_crossentropy', optimizer=sgd)
-
+   print('X_train in train model:',X_train.shape)
    model.fit(X_train, Y_train, nb_epoch=5, batch_size=32,
              validation_split=0.1, show_accuracy=True, verbose=1)
 
-   print('Testing...')
-   res = model.evaluate(X_test, Y_test,
-                        batch_size=32, verbose=1, show_accuracy=True)
-   print('Test accuracy: {0}'.format(res[1]))
+
+#   res = model.evaluate(X_test, Y_test,
+#                        batch_size=32, verbose=1, show_accuracy=True)
+#   print('Test accuracy: {0}'.format(res[1]))
 
 def save_model(model):
 
@@ -123,9 +123,9 @@ def load_and_scale_imgs():
 
 if __name__ == '__main__':
    train_model(make_network(),load_dataset()[0],load_dataset()[1],load_dataset()[2],load_dataset()[3])
-   imgs = load_and_scale_imgs()
-   model = load_model('cifar10_architecture.json', 'cifar10_weights.h5')
-   predictions = model.predict_classes(imgs)
-   print(predictions)
+#   imgs = load_and_scale_imgs()
+#   model = load_model('cifar10_architecture.json', 'cifar10_weights.h5')
+#   predictions = model.predict_classes(imgs)
+#   print(predictions)
 
 
