@@ -47,10 +47,12 @@ nb_classes = 10
 def load_dataset():
    # the data, shuffled and split between train and test sets
    (X_train, y_train), (X_test, y_test) = cifar10.load_data()
-
+   xFile = open('xFile', 'w')
+   yFile = open('yFile', 'w')
    print(X_train.shape, 'train data when load')
    print(y_train.shape, 'labels when load')
-
+   np.save(xFile, X_train)
+   np.save(yFile, y_train)
    # convert class vectors to binary class matrices
    Y_train = np_utils.to_categorical(y_train, nb_classes)
    Y_test = np_utils.to_categorical(y_test, nb_classes)
@@ -58,7 +60,8 @@ def load_dataset():
    X_test = X_test.astype('float32')
    X_train /= 255
    X_test /= 255
-
+   xFile.close()
+   yFile.close()
    return X_train, Y_train, X_test, Y_test
 
 def make_network():
