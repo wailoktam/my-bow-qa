@@ -81,8 +81,8 @@ def make_test_network():
 
    sequential = Sequential()
 #    sequential.add(Embedding(max_features, embedding_size))
-   sequential.add(Reshape(100, 100))
-   sequential.add(Convolution2D(10, 1, 3, 100))
+   sequential.add(Reshape(1,100, 100))
+   sequential.add(Convolution2D(10, 3, 3))
    sequential.add(Activation("relu"))
 
    print ("make network io shape1")
