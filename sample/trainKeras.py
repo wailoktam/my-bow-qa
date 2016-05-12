@@ -81,7 +81,7 @@ def make_test_network():
 
    kerasModel = Sequential()
    kerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
-   kerasModel.add(Convolution2D(10, 3, 3, border_mode='same', input_shape=(1, 100, 100)))
+   kerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
    kerasModel.add(Activation('tanh'))
    print ("make network input shape")
    print (kerasModel.input_shape)
