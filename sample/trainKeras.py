@@ -116,7 +116,7 @@ def make_network():
 def train_test_model(km, testData, labels):
 
 
-   numpy.reshape(testData, (127,1,100,100)).astype(theano.config.floatX)
+   testData = numpy.reshape(testData, (127,1,100,100)).astype(theano.config.floatX)
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    print ("train input shape")
    print km.input_shape
