@@ -80,11 +80,11 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 def make_test_network():
 
    kerasModel = Sequential()
-   kerasModel.add(Reshape((1,100,100), input_shape=(32,100,100)))
+   kerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
    print ("make network io shape 1")
    print (kerasModel.input_shape)
    print (kerasModel.output_shape)
-   kerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
+#   kerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
    kerasModel.add(Activation('tanh'))
    print ("make network io shape2")
    print (kerasModel.input_shape)
