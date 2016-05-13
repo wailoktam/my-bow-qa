@@ -285,7 +285,7 @@ if __name__ == '__main__':
 #   mkm = make_network()
 #   train_model(km,q3dArray, a3dArray,labels)
    test3dArray = numpy.random.random((127, 100,100))
-   testLabels = numpy.ndom.randint(2, size=127)
+   testLabels = numpy.random.randint(2, size=127)
    train_test_model(km,test3dArray, testLabels)
    save_model(km)
    qFile.close()
