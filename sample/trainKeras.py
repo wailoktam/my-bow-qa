@@ -89,7 +89,7 @@ def make_test_network():
    sequential.add(Activation('softmax'))
 
    print ("make network info")
-   print (sequential.summary)
+   sequential.summary
    print (sequential.input_shape)
    print (sequential.output_shape)
    return sequential
