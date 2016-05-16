@@ -98,7 +98,7 @@ def make_test_network():
 #   mergedKerasModel.add(Lambda(lambda x: 1 - x))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
-   mergedKerasModel.add(Activation('softmax'))
+   mergedKerasModel.add(Activation('sigmoid'))
    print ("make network input shape")
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
