@@ -291,7 +291,7 @@ if __name__ == '__main__':
    labels = np_utils.to_categorical(labels, 2)
    km = make_test_network()
 #   km = make_network()
-   train_model(km,q3dArray, a3dArray,labels)
+   train_model(km,q3dArray, labels)
 #   test3dArray = numpy.random.random((127, 100,100))
 #   testLabels = numpy.random.randint(2, size=127)
 #   testLabels = np_utils.to_categorical(testLabels, 2)
