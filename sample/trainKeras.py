@@ -77,6 +77,8 @@ def compile_cos_sim_theano():
 cos_sim_theano_fn = compile_cos_sim_theano()
 
 
+
+
 def make_test_network():
 
    sequential = Sequential()
@@ -287,8 +289,8 @@ if __name__ == '__main__':
    numpy.save(aFile,a3dArray)
    numpy.save(lFile,labels)
    labels = np_utils.to_categorical(labels, 2)
-#   km = make_test_network()
-   km = make_network()
+   km = make_test_network()
+#   km = make_network()
    train_model(km,q3dArray, a3dArray,labels)
 #   test3dArray = numpy.random.random((127, 100,100))
 #   testLabels = numpy.random.randint(2, size=127)
