@@ -84,8 +84,12 @@ def make_test_network():
    sequential.add(Reshape((1, 100, 100), input_shape=(100, 100)))
    sequential.add(Convolution2D(10, 3, 3, border_mode='same'))
    sequential.add(Activation("relu"))
+   sequential.add(Flatten())
+   sequential.add(Dense(2))
+   sequential.add(Activation('softmax'))
 
-   print ("make network io shape1")
+   print ("make network info")
+   print (sequential.summary)
    print (sequential.input_shape)
    print (sequential.output_shape)
    return sequential
@@ -286,6 +290,7 @@ if __name__ == '__main__':
 #   train_model(km,q3dArray, a3dArray,labels)
    test3dArray = numpy.random.random((127, 100,100))
    testLabels = numpy.random.randint(2, size=127)
+   testLabels = np_utils.to_categorical(testLabels, 2)
    train_test_model(km,test3dArray, testLabels)
    save_model(km)
    qFile.close()
