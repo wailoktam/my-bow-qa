@@ -139,8 +139,9 @@ def make_network():
    mergedKerasModel.add(Lambda(lambda x: 1-x))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
-   mergedKerasModel.add(Activation('sigmoid'))
+#   mergedKerasModel.add(Activation('sigmoid'))
    print ("make network input shape")
+   mergedKerasModel.summary()
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
 
@@ -313,11 +314,12 @@ if __name__ == '__main__':
 
    km = make_test_network()
 #   km = make_network()
-   train_test_model(km,q3dArray, a3dArray, labels)
-#   test3dArray = numpy.random.random((127, 100,100))
-#   testLabels = numpy.random.randint(2, size=127)
-#   testLabels = np_utils.to_categorical(testLabels, 2)
-#   train_test_model(km,test3dArray, testLabels)
+#   train_test_model(km,q3dArray, a3dArray, labels)
+   test3dLArray = numpy.random.random((127, 100,100))
+   test3dRArray = numpy.random.random((127, 100,100))
+   testLabels = numpy.random.randint(2, size=127)
+   testLabels = np_utils.to_categorical(testLabels, 2)
+   train_test_model(km,test3dLArray, test3dRArray, testLabels)
    save_model(km)
    qFile.close()
    aFile.close()
