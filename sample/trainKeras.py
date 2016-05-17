@@ -125,18 +125,18 @@ def make_test_network():
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    mergedKerasModel = Sequential()
-#   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
+   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]*x[1]/linalg.norm(x[0]).linalg.norm(x[1]))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(10, 50,50))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0] - x[1], output_shape=(10,50,50))
-
-   cos_distance = Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1) # magic dot_axes works here!
-   cos_distance = Reshape((1,))(cos_distance)
-   cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
-   mergedKerasModel.add(cos_similarity)
+   mergedKerasModel.add(Reshape((1,)))
+#   cos_distance = Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1) # magic dot_axes works here!
+#   cos_distance = Reshape((1,))(cos_distance)
+#   cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
+#   mergedKerasModel.add(cos_similarity)
 #   mergedKerasModel = Model([leftKerasModel, rightKerasModel], [cos_similarity])
 #   mergedKerasModel.add(merged)
-#   mergedKerasModel.add(Lambda(lambda x: 1 - x))
+   mergedKerasModel.add(Lambda(lambda x: 1-x))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
 #   mergedKerasModel.add(Activation('softmax'))
