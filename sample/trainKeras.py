@@ -1,6 +1,5 @@
 __author__ = 'wailoktam'
-from keras.models import Sequential
-from keras.datasets import cifar10
+from keras.models import Sequential,Model
 from keras.utils import np_utils
 from keras.models import model_from_json
 from keras.layers import Merge
@@ -78,7 +77,7 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 
 
 
-def make_test_network():
+def make_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Reshape((1,100,100),  input_shape=(100, 100)))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
@@ -111,7 +110,7 @@ def make_test_network():
 
 
 
-def make_network():
+def make_test_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Reshape((1,100,100),  input_shape=(100, 100)))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
@@ -125,16 +124,22 @@ def make_network():
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
-   mergedKerasModel = Sequential()
+#   mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode= lambda l, r: dot(l,r.T)/linalg.norm(l).linalg.norm(r)))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]*x[1]/linalg.norm(x[0]).linalg.norm(x[1]))
    merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(10, 50,50))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0] - x[1], output_shape=(10,50,50))
-   mergedKerasModel.add(merged)
-   mergedKerasModel.add(Lambda(lambda x: 1 - x))
-   mergedKerasModel.add(Flatten())
-   mergedKerasModel.add(Dense(2))
-   mergedKerasModel.add(Activation('softmax'))
+
+   cos_distance = Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1) # magic dot_axes works here!
+   cos_distance = Reshape((1,))(cos_distance)
+   cos_similarity = Lambda(lambda x: 1-x)(cos_distance)
+
+   mergedKerasModel = Model([leftKerasModel, rightKerasModel], [cos_similarity])
+#   mergedKerasModel.add(merged)
+#   mergedKerasModel.add(Lambda(lambda x: 1 - x))
+#   mergedKerasModel.add(Flatten())
+#   mergedKerasModel.add(Dense(2))
+#   mergedKerasModel.add(Activation('softmax'))
    print ("make network input shape")
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
@@ -305,6 +310,7 @@ if __name__ == '__main__':
    numpy.save(aFile,a3dArray)
    numpy.save(lFile,labels)
    labels = np_utils.to_categorical(labels, 2)
+
    km = make_test_network()
 #   km = make_network()
    train_test_model(km,q3dArray, a3dArray, labels)
