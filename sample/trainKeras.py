@@ -100,7 +100,8 @@ def make_test_network():
 #   mergedKerasModel.add(Dense(2))
    mergedKerasModel.add(Activation('sigmoid'))
    print ("make network input shape")
-   print (mergedKerasModel.summary)
+   mergedKerasModel.summary()
+   print mergedKerasModel.get_config()
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
 
