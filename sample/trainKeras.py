@@ -94,7 +94,7 @@ def make_test_network():
 
    mergedKerasModel = Sequential()
    merged = Merge([leftKerasModel, rightKerasModel], mode='concat')
-#   merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(1,))
+   merged = Merge([leftKerasModel, rightKerasModel], mode='cos')
    mergedKerasModel.add(merged)
 #   mergedKerasModel.add(Lambda(lambda x: 1 - x))
    mergedKerasModel.add(Flatten())
