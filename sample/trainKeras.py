@@ -77,7 +77,7 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 
 
 
-def make_network():
+def make_test_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Reshape((1,100,100),  input_shape=(100, 100)))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
@@ -110,7 +110,7 @@ def make_network():
 
 
 
-def make_test_network():
+def make_network():
    leftKerasModel = Sequential()
    leftKerasModel.add(Reshape((1,100,100),  input_shape=(100, 100)))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
@@ -139,7 +139,7 @@ def make_test_network():
    mergedKerasModel.add(Lambda(lambda x: 1-x))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
-#   mergedKerasModel.add(Activation('softmax'))
+   mergedKerasModel.add(Activation('sigmoid'))
    print ("make network input shape")
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
