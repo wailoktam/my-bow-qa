@@ -126,9 +126,10 @@ def make_test_network():
 
    mergedKerasModel = Sequential()
 #   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
-#   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0]*x[1]/linalg.norm(x[0]).linalg.norm(x[1]))
+   merged = Merge([leftKerasModel, rightKerasModel], mode='concat')
 #   merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(10, 50,50))
 #   merged = Merge([leftKerasModel, rightKerasModel], mode=lambda x: x[0] - x[1], output_shape=(10,50,50))
+   mergedKerasModel.add(merged)
 #   mergedKerasModel.add(Reshape((1,)))
 #   cos_distance = Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1) # magic dot_axes works here!
 #   cos_distance = Reshape((1,))(cos_distance)
