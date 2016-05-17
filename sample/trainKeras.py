@@ -96,7 +96,7 @@ def make_test_network():
    merged = Merge([leftKerasModel, rightKerasModel], mode='concat')
    merged = Merge([leftKerasModel, rightKerasModel], mode='cos')
    mergedKerasModel.add(merged)
-   mergedKerasModel.add(Lambda(lambda x: 1 - x))
+#   mergedKerasModel.add(Lambda(lambda x: 1 - x))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
 #   mergedKerasModel.add(Activation('sigmoid'))
