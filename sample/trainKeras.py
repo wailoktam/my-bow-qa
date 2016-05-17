@@ -93,7 +93,7 @@ def make_test_network():
    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
 
    mergedKerasModel = Sequential()
-   merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(1))
+   merged = Merge([leftKerasModel, rightKerasModel], mode='cos', output_shape=(1,))
    mergedKerasModel.add(merged)
 #   mergedKerasModel.add(Lambda(lambda x: 1 - x))
 #   mergedKerasModel.add(Flatten())
