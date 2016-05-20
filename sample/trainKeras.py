@@ -5,7 +5,7 @@ from keras.models import model_from_json
 from keras.layers import Merge
 from scipy import linalg, mat, dot
 from keras.layers.core import Dense, Dropout, Activation, Flatten, Reshape, Lambda
-from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D
+from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D,MaxPooling1D
 from keras.optimizers import SGD
 import numpy as np
 import scipy.misc
@@ -79,6 +79,7 @@ cos_sim_theano_fn = compile_cos_sim_theano()
 
 def make_network():
    leftKerasModel = Sequential()
+   leftKerasModel.add(Dense((1, 100, 100), input_shape=(100, 100)))
    leftKerasModel.add(Reshape((1,100,100),  input_shape=(100, 100)))
    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
    leftKerasModel.add(Activation('relu'))
@@ -110,18 +111,18 @@ def make_network():
 
 
 
-def make_test_network():
+def make_arch1_network():
    leftKerasModel = Sequential()
-   leftKerasModel.add(Reshape((1,100,100),  input_shape=(100, 100)))
-   leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
+   leftKerasModel.add(Dense((1, 200), input_shape=(100, 100)))
+   leftKerasModel.add(Convolution1D(10, 3, border_mode='same'))
    leftKerasModel.add(Activation('relu'))
-   leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
+   leftKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
    leftKerasModel.add(Flatten())
    rightKerasModel = Sequential()
-   rightKerasModel.add(Reshape((1,100,100), input_shape=(100,100)))
-   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
+   rightKerasModel.add(Reshape((1,200), input_shape=(100,100)))
+   rightKerasModel.add(Convolution1D(10, 3, 3, border_mode='same'))
    rightKerasModel.add(Activation('relu'))
-   rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
+   rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
    rightKerasModel.add(Flatten())
    mergedKerasModel = Sequential()
    mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
@@ -145,7 +146,7 @@ def make_test_network():
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
 
-def train_test_model(km, leftData, rightData, labels):
+def train_arch1_model(km, leftData, rightData, labels):
 #   print ("testData shape during training b4reshaping")
 #   print testData.shape
 #   testData = numpy.reshape(testData, (127,1,100,100)).astype(theano.config.floatX)
@@ -154,8 +155,8 @@ def train_test_model(km, leftData, rightData, labels):
 #   print testData.shape
 #   print ("model input shape during training")
 #   print km.input_shape
-   km.compile(loss='hinge', optimizer=sgd)
-   km.fit([leftData, rightData], labels, nb_epoch=1, batch_size=32)
+   km.compile(loss='custom_objective', optimizer=sgd)
+   km.fit([leftData, rightData], labels, nb_epoch=10, batch_size=32)
 
 
 def train_model(model, leftData, rightData, labels):
@@ -312,14 +313,14 @@ if __name__ == '__main__':
    numpy.save(lFile,labels)
    labels = np_utils.to_categorical(labels, 2)
 
-   km = make_test_network()
+   km = make_arch1_network()
 #   km = make_network()
 #   train_test_model(km,q3dArray, a3dArray, labels)
-   test3dLArray = numpy.random.random((127, 100,100))
-   test3dRArray = numpy.random.random((127, 100,100))
-   testLabels = numpy.random.randint(2, size=127)
-   testLabels = np_utils.to_categorical(testLabels, 2)
-   train_test_model(km,test3dLArray, test3dRArray, testLabels)
+#   test3dLArray = numpy.random.random((127, 100,100))
+#   test3dRArray = numpy.random.random((127, 100,100))
+#   testLabels = numpy.random.randint(2, size=127)
+#   testLabels = np_utils.to_categorical(testLabels, 2)
+   train_arch1_model(km,q3dArray, a3dArray, labels)
    save_model(km)
    qFile.close()
    aFile.close()
