@@ -130,7 +130,7 @@ def make_arch1_network():
    rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
 #   rightKerasModel.add(Flatten())
    mergedKerasModel = Sequential()
-   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos'))
+   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=-1))
    mergedKerasModel.add(Lambda(lambda x: 1-x))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
