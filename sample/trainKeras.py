@@ -113,7 +113,7 @@ def make_network():
 
 def make_arch1_network():
    leftKerasModel = Sequential()
-   leftKerasModel.add(Dense(200, activation='tanh', input_dim=100))
+   leftKerasModel.add(Dense(200, activation='tanh', input_dim=10000))
 #   leftKerasModel.add(Flatten())
    leftKerasModel.add(Reshape((1,200)))
    leftKerasModel.add(Convolution1D(10, 3, border_mode='same'))
@@ -121,7 +121,7 @@ def make_arch1_network():
    leftKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
 #   leftKerasModel.add(Flatten())
    rightKerasModel = Sequential()
-   rightKerasModel.add(Dense(200, activation= 'tanh', input_dim=100))
+   rightKerasModel.add(Dense(200, activation= 'tanh', input_dim=10000))
 #   rightKerasModel.add(Flatten())
 #   leftKerasModel.add(Dense((200)))
    rightKerasModel.add(Reshape((1,200)))
