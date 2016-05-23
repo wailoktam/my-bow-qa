@@ -118,7 +118,7 @@ def make_arch1_network():
    print ("d1 output shape")
    print dense_1.output_shape
    #   leftKerasModel.add(Flatten())
-   leftKerasModel.add(Reshape((200,1)))
+   leftKerasModel.add(Reshape((1,200)))
    convolution1d_1 = Convolution1D(10, 3, border_mode='same')
    leftKerasModel.add(convolution1d_1)
    print ("c1d1 output shape")
@@ -131,7 +131,7 @@ def make_arch1_network():
    rightKerasModel.add(Dense(200, activation= 'tanh', input_dim=10000))
 #   rightKerasModel.add(Flatten())
 #   leftKerasModel.add(Dense((200)))
-   rightKerasModel.add(Reshape((200,1)))
+   rightKerasModel.add(Reshape((1,200)))
    rightKerasModel.add(Convolution1D(10, 3, border_mode='same'))
 #   rightKerasModel.add(Activation('relu'))
 #   rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
