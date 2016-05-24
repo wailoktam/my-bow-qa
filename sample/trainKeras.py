@@ -125,7 +125,7 @@ def make_arch1g_network():
 #   rightKerasModel.add(Flatten())
 #   leftKerasModel.add(Dense((200)))
    rightKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
-   rightKerasModel.add(Convolution1D(10, 3, 3, border_mode='same'))
+   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
    rightKerasModel.add(Activation('relu'))
    rightKerasModel.add(MaxPooling1D(pool_size=(2, 2)))
    rightKerasModel.add(Flatten())
