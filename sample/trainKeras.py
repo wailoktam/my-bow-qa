@@ -108,6 +108,37 @@ def make_network():
    return mergedKerasModel
 
 
+def make_arch1g_network():
+   leftKerasModel = Sequential()
+   #   leftKerasModel.add(Flatten())
+   leftKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
+   convolution1d_1 = Convolution2D(10, 3, 3, border_mode='same')
+   leftKerasModel.add(convolution1d_1)
+   print ("c1d1 output shape")
+   print convolution1d_1.output_shape
+
+   leftKerasModel.add(Activation('relu'))
+   leftKerasModel.add(MaxPooling1D(pool_size=(2, 2)))
+   leftKerasModel.add(Flatten())
+   rightKerasModel = Sequential()
+   rightKerasModel.add(Dense(200, activation= 'tanh', input_dim=10000))
+#   rightKerasModel.add(Flatten())
+#   leftKerasModel.add(Dense((200)))
+   rightKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
+   rightKerasModel.add(Convolution1D(10, 3, 3, border_mode='same'))
+   rightKerasModel.add(Activation('relu'))
+   rightKerasModel.add(MaxPooling1D(pool_size=(2, 2)))
+   rightKerasModel.add(Flatten())
+   mergedKerasModel = Sequential()
+   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
+   mergedKerasModel.add(Lambda(lambda x: 1-x))
+#   mergedKerasModel.add(Flatten())
+#   mergedKerasModel.add(Dense(2))
+#   mergedKerasModel.add(Activation('softmax'))
+   print ("make network input shape")
+   mergedKerasModel.summary()
+   print (mergedKerasModel.input_shape)
+   return mergedKerasModel
 
 
 
@@ -146,6 +177,18 @@ def make_arch1_network():
    mergedKerasModel.summary()
    print (mergedKerasModel.input_shape)
    return mergedKerasModel
+
+def train_arch1g_model(km, leftData, rightData, labels):
+#   print ("testData shape during training b4reshaping")
+#   print testData.shape
+#   testData = numpy.reshape(testData, (127,1,100,100)).astype(theano.config.floatX)
+   sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+#   print ("testData shape during training after reshaping")
+#   print testData.shape
+#   print ("model input shape during training")
+#   print km.input_shape
+   km.compile(loss='custom_objective', optimizer=sgd)
+   km.fit([leftData, rightData], labels, nb_epoch=10, batch_size=32)
 
 def train_arch1_model(km, leftData, rightData, labels):
 #   print ("testData shape during training b4reshaping")
@@ -314,16 +357,16 @@ if __name__ == '__main__':
    numpy.save(lFile,labels)
    labels = np_utils.to_categorical(labels, 2)
 
-   km = make_arch1_network()
+   km = make_arch1g_network()
 #   km = make_network()
 #   train_test_model(km,q3dArray, a3dArray, labels)
 #   test2dLArray = numpy.random.random((127, 10000))
 #   test2dRArray = numpy.random.random((127, 10000))
 #   testLabels = numpy.random.randint(2, size=127)
 #   testLabels = np_utils.to_categorical(testLabels, 2)
-   q2dArray = numpy.reshape(q3dArray, (127,10000))
-   a2dArray = numpy.reshape(a3dArray, (127,10000))
-   train_arch1_model(km,q2dArray, a2dArray, labels)
+#   q2dArray = numpy.reshape(q3dArray, (127,10000))
+#   a2dArray = numpy.reshape(a3dArray, (127,10000))
+   train_arch1g_model(km,q3dArray, a3dArray, labels)
    save_model(km)
    qFile.close()
    aFile.close()
