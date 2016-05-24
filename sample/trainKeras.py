@@ -118,7 +118,7 @@ def make_arch1g_network():
    print convolution1d_1.output_shape
 
    leftKerasModel.add(Activation('relu'))
-   leftKerasModel.add(MaxPooling1D(pool_size=(2, 2)))
+   leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
    leftKerasModel.add(Flatten())
    rightKerasModel = Sequential()
    rightKerasModel.add(Dense(200, activation= 'tanh', input_dim=10000))
@@ -127,7 +127,7 @@ def make_arch1g_network():
    rightKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
    rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
    rightKerasModel.add(Activation('relu'))
-   rightKerasModel.add(MaxPooling1D(pool_size=(2, 2)))
+   rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
    rightKerasModel.add(Flatten())
    mergedKerasModel = Sequential()
    mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
