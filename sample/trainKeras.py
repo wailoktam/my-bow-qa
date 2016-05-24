@@ -121,7 +121,6 @@ def make_arch1g_network():
    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
    leftKerasModel.add(Flatten())
    rightKerasModel = Sequential()
-   rightKerasModel.add(Dense(200, activation= 'tanh', input_dim=10000))
 #   rightKerasModel.add(Flatten())
 #   leftKerasModel.add(Dense((200)))
    rightKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
