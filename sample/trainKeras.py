@@ -130,7 +130,7 @@ def make_arch1g_network():
    rightKerasModel.add(Flatten())
    mergedKerasModel = Sequential()
    mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
-   mergedKerasModel.add(Lambda(lambda x: 1-x[0]))
+#   mergedKerasModel.add(Lambda(lambda x: 1-x[0]))
 #   mergedKerasModel.add(Flatten())
 #   mergedKerasModel.add(Dense(2))
 #   mergedKerasModel.add(Activation('softmax'))
