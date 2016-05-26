@@ -371,14 +371,14 @@ if __name__ == '__main__':
 
    leftKerasModel.add(Reshape((1000,), input_shape=(10,100)))
 
-   leftKerasModel.add(Dense(200))
+   leftKerasModel.add(Dense(2))
 
 
    rightKerasModel = Sequential()
 
    rightKerasModel.add(Reshape((1000,), input_shape=(10,100)))
 
-   rightKerasModel.add(Dense(200))
+   rightKerasModel.add(Dense(2))
 
 
    mergeLayer = Sequential()
