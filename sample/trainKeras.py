@@ -382,7 +382,7 @@ if __name__ == '__main__':
    mergeLayer = Sequential()
 
    mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
-
+   sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    mergeLayer.compile(loss='custom_objective', optimizer='sgd')
 
    result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
