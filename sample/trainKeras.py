@@ -379,8 +379,8 @@ if __name__ == '__main__':
    rightKerasModel.add(Dense(200))
    rightKerasModel.add(Reshape((1, 200)))
    rightKerasModel.add(Convolution1D(10, 3, border_mode='same'))
-   rightKerasModel.add(Activation('softmax'))
-   rightKerasModel.add(Dense(2))
+   rightKerasModel.add(Activation('relu'))
+#   rightKerasModel.add(Dense(2))
 #   mergeLayer = Sequential()
 
 #   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
