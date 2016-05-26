@@ -378,7 +378,7 @@ if __name__ == '__main__':
    leftKerasModel.add(convolution1d_1)
    leftKerasModel.add(Activation('relu'))
  #  leftKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
- #  leftKerasModel.add(Flatten())
+   leftKerasModel.add(Flatten())
 
 
    rightKerasModel = Sequential()
@@ -392,7 +392,7 @@ if __name__ == '__main__':
    rightKerasModel.add(convolution1d_2)
    rightKerasModel.add(Activation('relu'))
  #  rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
- #  rightKerasModel.add(Flatten())
+   rightKerasModel.add(Flatten())
 
 
    mergeLayer = Sequential()
