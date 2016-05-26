@@ -2,7 +2,7 @@ __author__ = 'wailoktam'
 from keras.models import Sequential,Model
 from keras.utils import np_utils
 from keras.models import model_from_json
-from keras.layers import Merge
+from keras.layers import Merge, Input, LSTM, Embedding
 from scipy import linalg, mat, dot
 from keras.layers.core import Dense, Dropout, Activation, Flatten, Reshape, Lambda
 from keras.layers.convolutional import Convolution2D, Convolution1D,MaxPooling2D,MaxPooling1D
@@ -365,33 +365,31 @@ if __name__ == '__main__':
    testLabels = numpy.random.randint(2, size=1)
 
    testLabels = np_utils.to_categorical(testLabels, 2)
- #  leftKerasModel = Sequential()
 
- #  leftKerasModel.add(Reshape((1000,), input_shape=(10,100)))
 
-#  leftKerasModel.add(Dense(200))
-#   leftKerasModel.add(Reshape((1, 200)))
-#   leftKerasModel.add(Convolution1D(10, 3, border_mode='same'))
+   leftKerasModel = Sequential()
+
+   leftKerasModel.add(Reshape((1000,), input_shape=(10,100)))
+
+   leftKerasModel.add(Dense(200))
+
+
    rightKerasModel = Sequential()
 
    rightKerasModel.add(Reshape((1000,), input_shape=(10,100)))
 
    rightKerasModel.add(Dense(200))
-   rightKerasModel.add(Reshape((1, 200)))
-   rightKerasModel.add(Convolution1D(10, 3, border_mode='same'))
-   rightKerasModel.add(Activation('softmax'))
-#   rightKerasModel.add(Dense(2))
-#   mergeLayer = Sequential()
 
-#   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
-   sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-   rightKerasModel.compile(loss='custom_objective', optimizer='sgd')
 
-   rightKerasModel.fit(test3dRArray, testLabels, nb_epoch=10, batch_size=32)
-   result = rightKerasModel.predict(test3dRArray, verbose=1)
+   mergeLayer = Sequential()
 
-#   mergedKerasModel.add(Activation('softmax'))
-   print result
+   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
+   mergeLayer.fit([test3dLArray, test3dRArray], testLabels, nb_epoch=10, batch_size=32)
+   mergeLayer.compile(loss='mse', optimizer='sgd')
+
+   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
+
+
 
 #   bugcheck.close()
 #   os.system('sudo shutdown now -P')
