@@ -109,35 +109,23 @@ def make_network():
 
 
 def make_arch1g_network():
-   leftKerasModel = Sequential()
-   #   leftKerasModel.add(Flatten())
-   leftKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
-   convolution1d_1 = Convolution2D(10, 3, 3, border_mode='same')
-   leftKerasModel.add(convolution1d_1)
-   print ("c1d1 output shape")
-   print convolution1d_1.output_shape
-   leftKerasModel.add(Activation('relu'))
-   leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
-#   leftKerasModel.add(Flatten())
-   rightKerasModel = Sequential()
-#   rightKerasModel.add(Flatten())
-#   leftKerasModel.add(Dense((200)))
-   rightKerasModel.add(Reshape((1,100,100), input_shape=(100, 100)))
-   rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
-   rightKerasModel.add(Activation('relu'))
-   rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
-#   rightKerasModel.add(Flatten())
-   mergedKerasModel = Sequential()
-#   mergedKerasModel.add(Merge([leftKerasModel, rightKerasModel], mode='concat'))
-   mergedKerasModel.add(Merge([leftKerasModel,rightKerasModel], mode='cos', dot_axes=1))
-#   mergedKerasModel.add(Lambda(lambda x: 1-x))
-#   mergedKerasModel.add(Flatten())
-#   mergedKerasModel.add(Dense(2))
-   mergedKerasModel.add(Activation('relu'))
-   print ("make network input shape")
-   mergedKerasModel.summary()
-   print (mergedKerasModel.input_shape)
-   return mergedKerasModel
+    leftKerasModel = Sequential()
+    leftKerasModel.add(Reshape((1, 100, 100), input_shape=(100, 100)))
+    leftKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
+    leftKerasModel.add(Activation('relu'))
+    leftKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
+
+    rightKerasModel = Sequential()
+    rightKerasModel.add(Reshape((1, 100, 100), input_shape=(100, 100)))
+    rightKerasModel.add(Convolution2D(10, 3, 3, border_mode='same'))
+    rightKerasModel.add(Activation('relu'))
+    rightKerasModel.add(MaxPooling2D(pool_size=(2, 2)))
+
+    mergedKerasModel = Sequential()
+    merged = Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1)  # dot_axes
+    mergedKerasModel.add(merged)
+    mergedKerasModel.add(Activation('relu'))  # add this line won't give me any error
+    return mergedKerasModel
 
 
 
