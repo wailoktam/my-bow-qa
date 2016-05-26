@@ -384,7 +384,7 @@ if __name__ == '__main__':
    mergeLayer = Sequential()
 
    mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
-   mergeLayer.compile(loss='mse', optimizer='sgd')
+   mergeLayer.compile(loss='custom_objective', optimizer='sgd')
    mergeLayer.fit([test3dLArray, test3dRArray], testLabels, nb_epoch=10, batch_size=32)
 #   mergeLayer.compile(loss='mse', optimizer='sgd')
 
