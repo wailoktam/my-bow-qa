@@ -379,14 +379,18 @@ if __name__ == '__main__':
    rightKerasModel.add(Dense(200))
    rightKerasModel.add(Reshape((1, 200)))
    rightKerasModel.add(Convolution1D(10, 3, border_mode='same'))
+   rightKerasModel.add(Activation('softmax'))
+   rightKerasModel.add(Dense(2))
 #   mergeLayer = Sequential()
 
 #   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    rightKerasModel.compile(loss='custom_objective', optimizer='sgd')
+
    rightKerasModel.fit(test3dRArray, testLabels, nb_epoch=10, batch_size=32)
    result = rightKerasModel.predict(test3dRArray, verbose=1)
 
+#   mergedKerasModel.add(Activation('softmax'))
    print result
 
 #   bugcheck.close()
