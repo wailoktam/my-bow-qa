@@ -389,7 +389,7 @@ if __name__ == '__main__':
 
    rightKerasModel.add(Reshape((1, 200)))
    convolution1d_2 = Convolution1D(10, 3, border_mode='same')
-   rightKerasModel.add(convolution1d_1)
+   rightKerasModel.add(convolution1d_2)
    rightKerasModel.add(Activation('relu'))
  #  rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
  #  rightKerasModel.add(Flatten())
