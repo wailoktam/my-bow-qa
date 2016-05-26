@@ -365,13 +365,13 @@ if __name__ == '__main__':
    testLabels = numpy.random.randint(2, size=1)
 
    testLabels = np_utils.to_categorical(testLabels, 2)
-   leftKerasModel = Sequential()
+ #  leftKerasModel = Sequential()
 
-   leftKerasModel.add(Reshape((1000,), input_shape=(10,100)))
+ #  leftKerasModel.add(Reshape((1000,), input_shape=(10,100)))
 
-   leftKerasModel.add(Dense(200))
-   leftKerasModel.add(Reshape((1, 200)))
-   leftKerasModel.add(Convolution1D(10, 3, border_mode='same'))
+#  leftKerasModel.add(Dense(200))
+#   leftKerasModel.add(Reshape((1, 200)))
+#   leftKerasModel.add(Convolution1D(10, 3, border_mode='same'))
    rightKerasModel = Sequential()
 
    rightKerasModel.add(Reshape((1000,), input_shape=(10,100)))
@@ -379,13 +379,13 @@ if __name__ == '__main__':
    rightKerasModel.add(Dense(200))
    rightKerasModel.add(Reshape((1, 200)))
    rightKerasModel.add(Convolution1D(10, 3, border_mode='same'))
-   mergeLayer = Sequential()
+#   mergeLayer = Sequential()
 
-   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
+#   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-   mergeLayer.compile(loss='custom_objective', optimizer='sgd')
-   mergeLayer.fit([test3dLArray, test3dRArray], testLabels, nb_epoch=10, batch_size=32)
-   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
+   rightKerasModel.compile(loss='custom_objective', optimizer='sgd')
+   rightKerasModel.fit(test3dRArray, testLabels, nb_epoch=10, batch_size=32)
+   result = rightKerasModel.predict(test3dRArray, verbose=1)
 
    print result
 
