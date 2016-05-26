@@ -383,7 +383,7 @@ if __name__ == '__main__':
 
    mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
 
-   mergeLayer.compile(loss='mse', optimizer='sgd')
+   mergeLayer.compile(loss='custom_objective', optimizer='sgd')
 
    result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
 
