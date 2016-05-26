@@ -385,7 +385,7 @@ if __name__ == '__main__':
    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
    mergeLayer.compile(loss='custom_objective', optimizer='sgd')
    mergeLayer.fit([test3dLArray, test3dRArray], labels, nb_epoch=10, batch_size=32)
-#   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
+   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
 
    print result
 
