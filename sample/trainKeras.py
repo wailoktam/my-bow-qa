@@ -358,6 +358,33 @@ if __name__ == '__main__':
    qFile.close()
    aFile.close()
    lFile.close()
+   test3dLArray = numpy.random.random((1, 10,100))
+
+   test3dRArray = numpy.random.random((1, 10,100))
+
+   testLabels = numpy.random.randint(2, size=1)
+
+   testLabels = np_utils.to_categorical(testLabels, 2)
+   leftKerasModel = Sequential()
+
+   leftKerasModel.add(Reshape((1000,), input_shape=(10,100)))
+
+   leftKerasModel.add(Dense(200))
+   rightKerasModel = Sequential()
+
+   rightKerasModel.add(Reshape((1000,), input_shape=(10,100)))
+
+   rightKerasModel.add(Dense(200))
+   mergeLayer = Sequential()
+
+   mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
+
+   mergeLayer.compile(loss='mse', optimizer='sgd')
+
+   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
+
+   print result
+
 #   bugcheck.close()
 #   os.system('sudo shutdown now -P')
 
