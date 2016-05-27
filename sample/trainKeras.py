@@ -384,20 +384,13 @@ if __name__ == '__main__':
    rightKerasModel = Sequential()
 
    rightKerasModel.add(Reshape((1000,), input_shape=(10,100)))
-   print rightKerasModel.ouput_shape
    rightKerasModel.add(Dense(200))
-   print rightKerasModel.ouput_shape
    rightKerasModel.add(Reshape((200,1)))
-   print rightKerasModel.ouput_shape
    convolution1d_2 = Convolution1D(10, 3, border_mode='same')
    rightKerasModel.add(convolution1d_2)
-   print rightKerasModel.ouput_shape
    rightKerasModel.add(Activation('relu'))
-   print rightKerasModel.ouput_shape
    rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
-   print rightKerasModel.ouput_shape
    rightKerasModel.add(Flatten())
-   print rightKerasModel.ouput_shape
 
    mergeLayer = Sequential()
 
