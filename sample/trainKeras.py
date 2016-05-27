@@ -377,29 +377,35 @@ if __name__ == '__main__':
    convolution1d_1 = Convolution1D(10, 3, border_mode='same')
    leftKerasModel.add(convolution1d_1)
    leftKerasModel.add(Activation('relu'))
-#   leftKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
+   leftKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
    leftKerasModel.add(Flatten())
 
 
    rightKerasModel = Sequential()
 
    rightKerasModel.add(Reshape((1000,), input_shape=(10,100)))
-
+   print rightKerasModel.ouput_shape
    rightKerasModel.add(Dense(200))
-
+   print rightKerasModel.ouput_shape
    rightKerasModel.add(Reshape((1, 200)))
+   print rightKerasModel.ouput_shape
    convolution1d_2 = Convolution1D(10, 3, border_mode='same')
    rightKerasModel.add(convolution1d_2)
+   print rightKerasModel.ouput_shape
    rightKerasModel.add(Activation('relu'))
- #  rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
+   print rightKerasModel.ouput_shape
+   rightKerasModel.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
+   print rightKerasModel.ouput_shape
    rightKerasModel.add(Flatten())
-
+   print rightKerasModel.ouput_shape
 
    mergeLayer = Sequential()
 
    mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
+   print mergeLayer.ouput_shape
    mergeLayer.add(Lambda(lambda x: 1-x))
    mergeLayer.compile(loss='mse', optimizer='sgd')
+   mergeLayer.summary()
    mergeLayer.fit([test3dLArray, test3dRArray], testLabels, nb_epoch=10, batch_size=32)
 #   mergeLayer.compile(loss='mse', optimizer='sgd')
 
