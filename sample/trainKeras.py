@@ -373,7 +373,7 @@ if __name__ == '__main__':
 
    leftKerasModel.add(Dense(200))
 
-   leftKerasModel.add(Reshape((1, 200)))
+   leftKerasModel.add(Reshape((200,1)))
    convolution1d_1 = Convolution1D(10, 3, border_mode='same')
    leftKerasModel.add(convolution1d_1)
    leftKerasModel.add(Activation('relu'))
@@ -387,7 +387,7 @@ if __name__ == '__main__':
    print rightKerasModel.ouput_shape
    rightKerasModel.add(Dense(200))
    print rightKerasModel.ouput_shape
-   rightKerasModel.add(Reshape((1, 200)))
+   rightKerasModel.add(Reshape((200,1)))
    print rightKerasModel.ouput_shape
    convolution1d_2 = Convolution1D(10, 3, border_mode='same')
    rightKerasModel.add(convolution1d_2)
