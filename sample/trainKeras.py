@@ -395,7 +395,6 @@ if __name__ == '__main__':
    mergeLayer = Sequential()
 
    mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
-   print mergeLayer.ouput_shape
    mergeLayer.add(Lambda(lambda x: 1-x))
    mergeLayer.compile(loss='mse', optimizer='sgd')
    mergeLayer.summary()
