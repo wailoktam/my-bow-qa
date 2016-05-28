@@ -358,9 +358,9 @@ if __name__ == '__main__':
    qFile.close()
    aFile.close()
    lFile.close()
-   test3dLArray = numpy.random.random((1, 10,100))
+   test3dLArray = numpy.random.random((127, 100,100))
 
-   test3dRArray = numpy.random.random((1, 10,100))
+   test3dRArray = numpy.random.random((127, 100,100))
 
    testLabels = numpy.random.randint(2, size=1)
 
