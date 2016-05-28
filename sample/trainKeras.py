@@ -362,7 +362,7 @@ if __name__ == '__main__':
 
    test3dRArray = numpy.random.random((127, 100,100))
 
-   testLabels = numpy.random.randint(2, size=1)
+   testLabels = numpy.random.randint(2, size=127)
 
    testLabels = np_utils.to_categorical(testLabels, 2)
 
