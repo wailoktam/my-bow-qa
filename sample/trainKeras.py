@@ -229,6 +229,7 @@ if __name__ == '__main__':
    aFile = open('aFile', 'w')
    lFile = open('lFile', 'w')
    trainSetCounter = 0
+   trainTestSplit = 2
 
    zeroFilledVector = numpy.array([])
    for i in range (0, 100):
@@ -307,44 +308,54 @@ if __name__ == '__main__':
                 if aSkip==False:
                     if q3dInit == True:
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
-                        if trainSetCounter <= 7:
+                        if trainSetCounter <= trainTestSplit:
                             q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                         else:
                             q3dTestArray = numpy.concatenate((q3dTestArray,numpy.array([qMatrix])), axis=0)
                         print('q3dArray shape:', q3dArray.shape)
                         print('q3dArray shape:', q3dTestArray.shape)
                         print('qMatrix shape:', numpy.array([qMatrix]).shape)
+                        if trainSetCounter == trainTestSplit:
+                            q3dInit = False
                     else:
                         q3dArray = numpy.array([qMatrix])
-                        q3dTestArray = numpy.array([qMatrix])
+                        if trainSetCounter > trainTestSplit:
+                            q3dTestArray = numpy.array([qMatrix])
+                        else:
+                            q3dTestArray = numpy.array([])
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
                         print('\nnot init q3dArray shape:', q3dArray.shape)
                         print('\nnot init q3dTestArray shape:', q3dTestArray.shape)
                         q3dInit = True
                     if a3dInit == True:
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
-                        if trainSetCounter <= 7:
+                        if trainSetCounter <= trainTestSplit:
                             a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                         else:
                             a3dTestArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
                         print('\na3dArray shape:', a3dArray.shape)
                         print('\naMatrix shape:', numpy.array([aMatrix]).shape)
+                        if trainSetCounter == trainTestSplit:
+                            a3dInit = False
                     else:
                         a3dArray = numpy.array([aMatrix])
-                        a3dTestArray = numpy.array([aMatrix])
+                        if trainSetCounter > trainTestSplit:
+                            a3dTestArray = numpy.array([aMatrix])
+                        else:
+                            a3dTestArray = numpy.array([])
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
-                        print('\nnot init a3dArray shape:', a3dArray.shape)
-                        print('\nnot init a3dTestArray shape:', a3dTestArray.shape)
+                        print('not init a3dArray shape:', a3dArray.shape)
+                        print('not init a3dTestArray shape:', a3dTestArray.shape)
                         a3dInit = True
 
                     if answerFoundFlag:
-                        if trainSetCounter <= 7:
+                        if trainSetCounter <= trainTestSplit:
                             trainLabels = numpy.append(trainLabels,1)
                         else:
                             testLabels = numpy.append(testLabels, 1)
 #                        bugcheck.write("labels shape %s\n" % (labels.shape))
                     else:
-                        if trainSetCounter <= 7:
+                        if trainSetCounter <= trainTestSplit:
                             trainLabels = numpy.append(trainLabels,0)
                         else:
                             testLabels = numpy.append(testLabels, 0)
