@@ -221,20 +221,21 @@ if __name__ == '__main__':
    w2vModel= Word2Vec.load('/home/ubuntu/model')
    xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
    questions = xml.findall(".//question")
-   labels = numpy.array([])
+   trainLabels = numpy.array([])
+   testLabels = numpy.array([])
    q3dInit = False
    a3dInit = False
    qFile = open('qFile', 'w')
    aFile = open('aFile', 'w')
    lFile = open('lFile', 'w')
-
+   trainSetCounter = 0
 
    zeroFilledVector = numpy.array([])
    for i in range (0, 100):
                     zeroFilledVector = numpy.append(zeroFilledVector,0)
    for question in questions:
         questionText = question.find(".//text").text
-#        qCounter = 0
+        trainSetCounter=trainSetCounter+1
 
 #        qMatrixInit = False
         qSkip = False
@@ -257,7 +258,7 @@ if __name__ == '__main__':
 
 #                    wvLength = len(w2vModel[word])
 #                    print("w2vModel type %s/n"%w2vModel[word])
-#                    print('qMatrix shape: %s/n', qMatrix.shape)
+                    print('qTrainMatrix shape: %s/n', qMatrix.shape)
 #                    print('word vector shape: %s/n', numpy.array([w2vModel[word]]).shape)
 #                    print('concated 1 time qMatrix shae: %s/n', numpy.concatenate((qMatrix, numpy.array([w2vModel[word]]))))
 #                    print('zero vector shape: %s/n', numpy.array([zeroFilledVector]).shape)
@@ -306,34 +307,50 @@ if __name__ == '__main__':
                 if aSkip==False:
                     if q3dInit == True:
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
-
-                        q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
+                        if trainSetCounter <= 72:
+                            q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
+                        else:
+                            q3dTestArray = numpy.concatenate((q3dTestArray,numpy.array([qMatrix])), axis=0)
                         print('\nq3dArray shape:', q3dArray.shape)
+                        print('\nq3dArray shape:', q3dTestArray.shape)
                         print('\nqMatrix shape:', numpy.array([qMatrix]).shape)
                     else:
                         q3dArray = numpy.array([qMatrix])
+                        q3dTestArray = numpy.array([qMatrix])
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
                         print('\nnot init q3dArray shape:', q3dArray.shape)
+                        print('\nnot init q3dTestArray shape:', q3dTestArray.shape)
                         q3dInit = True
                     if a3dInit == True:
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
-
-                        a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
+                        if trainSetCounter <= 72:
+                            a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
+                        else:
+                            a3dTestArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
                         print('\na3dArray shape:', a3dArray.shape)
                         print('\naMatrix shape:', numpy.array([aMatrix]).shape)
                     else:
                         a3dArray = numpy.array([aMatrix])
+                        a3dTestArray = numpy.array([aMatrix])
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
                         print('\nnot init a3dArray shape:', a3dArray.shape)
+                        print('\nnot init a3dTestArray shape:', a3dTestArray.shape)
                         a3dInit = True
 
                     if answerFoundFlag:
-                        labels = numpy.append(labels,1)
+                        if trainSetCounter <= 72:
+                            trainLabels = numpy.append(trainLabels,1)
+                        else:
+                            testLabels = numpy.append(testLabels, 1)
 #                        bugcheck.write("labels shape %s\n" % (labels.shape))
                     else:
-                        labels = numpy.append(labels,0)
+                        if trainSetCounter <= 72:
+                            trainLabels = numpy.append(trainLabels,0)
+                        else:
+                            testLabels = numpy.append(testLabels, 0)
 #                        bugcheck.write("labels shape %s\n" % (labels.shape))
-                    print('\nlabels shape:', labels.shape)
+                    print('\nlabels shape:', trainLabels.shape)
+                    print('\nlabels shape:', testLabels.shape)
 
 
 
@@ -341,9 +358,9 @@ if __name__ == '__main__':
 
    numpy.save(qFile,q3dArray)
    numpy.save(aFile,a3dArray)
-   numpy.save(lFile,labels)
-   labels = np_utils.to_categorical(labels, 2)
-
+   numpy.save(lFile,trainLabels)
+   trainLabels = np_utils.to_categorical(trainLabels, 2)
+   testLabels = np_utils.to_categorical(testLabels, 2)
 #   km = make_arch1g_network()
 #   km = make_network()
 #   train_test_model(km,q3dArray, a3dArray, labels)
@@ -358,13 +375,13 @@ if __name__ == '__main__':
    qFile.close()
    aFile.close()
    lFile.close()
-   test3dLArray = numpy.random.random((127, 100,100))
+#   test3dLArray = numpy.random.random((127, 100,100))
 
-   test3dRArray = numpy.random.random((127, 100,100))
+#   test3dRArray = numpy.random.random((127, 100,100))
 
-   testLabels = numpy.random.randint(2, size=127)
+#   testLabels = numpy.random.randint(2, size=127)
 
-   testLabels = np_utils.to_categorical(testLabels, 2)
+#   testLabels = np_utils.to_categorical(testLabels, 2)
 
 
    leftKerasModel = Sequential()
@@ -398,11 +415,11 @@ if __name__ == '__main__':
    mergeLayer.add(Lambda(lambda x: 1-x))
    mergeLayer.compile(loss='hinge', optimizer='sgd')
    mergeLayer.summary()
-   mergeLayer.fit([test3dLArray, test3dRArray], testLabels, nb_epoch=10, batch_size=32)
-#   mergeLayer.compile(loss='mse', optimizer='sgd')
+   mergeLayer.fit([q3dArray, a3dArray], trainLabels, nb_epoch=10, batch_size=32)
+   mergeLayer.evaluate([q3dTestArray, a3dTestArray], testLabels)
 
-   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
-   print result
+#   result = mergeLayer.predict([test3dLArray, test3dRArray], verbose=1)
+#   print result
 
 
 #   bugcheck.close()
