@@ -415,7 +415,7 @@ if __name__ == '__main__':
 
    mergeLayer.add(Merge([leftKerasModel, rightKerasModel], mode='cos', dot_axes=1))
    mergeLayer.add(Lambda(lambda x: 1-x))
-   mergeLayer.compile(loss='hinge', optimizer='sgd')
+   mergeLayer.compile(loss='hinge', optimizer='sgd', metrics=['accuracy'])
    mergeLayer.summary()
    mergeLayer.fit([q3dArray, a3dArray], trainLabels, nb_epoch=10, batch_size=32)
    mergeLayer.evaluate([q3dTestArray, a3dTestArray], testLabels)
