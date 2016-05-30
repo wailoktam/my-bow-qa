@@ -307,7 +307,7 @@ if __name__ == '__main__':
                 if aSkip==False:
                     if q3dInit == True:
 #                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
-                        if trainSetCounter <= 70:
+                        if trainSetCounter <= 7:
                             q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                         else:
                             q3dTestArray = numpy.concatenate((q3dTestArray,numpy.array([qMatrix])), axis=0)
@@ -323,7 +323,7 @@ if __name__ == '__main__':
                         q3dInit = True
                     if a3dInit == True:
 #                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
-                        if trainSetCounter <= 70:
+                        if trainSetCounter <= 7:
                             a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
                         else:
                             a3dTestArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
@@ -338,13 +338,13 @@ if __name__ == '__main__':
                         a3dInit = True
 
                     if answerFoundFlag:
-                        if trainSetCounter <= 70:
+                        if trainSetCounter <= 7:
                             trainLabels = numpy.append(trainLabels,1)
                         else:
                             testLabels = numpy.append(testLabels, 1)
 #                        bugcheck.write("labels shape %s\n" % (labels.shape))
                     else:
-                        if trainSetCounter <= 70:
+                        if trainSetCounter <= 7:
                             trainLabels = numpy.append(trainLabels,0)
                         else:
                             testLabels = numpy.append(testLabels, 0)
