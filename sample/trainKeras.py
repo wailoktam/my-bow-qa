@@ -236,8 +236,8 @@ if __name__ == '__main__':
    for question in questions:
         questionText = question.find(".//text").text
         trainSetCounter=trainSetCounter+1
-
-#        qMatrixInit = False
+        print('trainSetCOunter:', trainSetCounter)
+        #        qMatrixInit = False
         qSkip = False
         answers = map(lambda a: a.text, question.findall(".//answer"))
         answers = filter(partial(is_not, None), answers)
@@ -311,9 +311,9 @@ if __name__ == '__main__':
                             q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                         else:
                             q3dTestArray = numpy.concatenate((q3dTestArray,numpy.array([qMatrix])), axis=0)
-                        print('\nq3dArray shape:', q3dArray.shape)
-                        print('\nq3dArray shape:', q3dTestArray.shape)
-                        print('\nqMatrix shape:', numpy.array([qMatrix]).shape)
+                        print('q3dArray shape:', q3dArray.shape)
+                        print('q3dArray shape:', q3dTestArray.shape)
+                        print('qMatrix shape:', numpy.array([qMatrix]).shape)
                     else:
                         q3dArray = numpy.array([qMatrix])
                         q3dTestArray = numpy.array([qMatrix])
