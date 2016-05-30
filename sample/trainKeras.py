@@ -224,6 +224,8 @@ if __name__ == '__main__':
    trainLabels = numpy.array([])
    testLabels = numpy.array([])
    q3dInit = False
+   a3dTestInit = False
+   q3dTestInit = False
    a3dInit = False
    qFile = open('qFile', 'w')
    aFile = open('aFile', 'w')
@@ -306,62 +308,52 @@ if __name__ == '__main__':
                     if joinedAnswer in joinedSentence:
                         answerFoundFlag = True
                 if aSkip==False:
-                    if q3dInit == True:
-#                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
-                        if trainSetCounter <= trainTestSplit:
+                    if trainSetCounter <= trainTestSplit:
+                        if q3dInit == True:
                             q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
+                            print('q3dArray shape:', q3dArray.shape)
+                            print('qMatrix shape:', numpy.array([qMatrix]).shape)
                         else:
-                            q3dTestArray = numpy.concatenate((q3dTestArray,numpy.array([qMatrix])), axis=0)
-                        print('q3dArray shape:', q3dArray.shape)
-                        print('q3dArray shape:', q3dTestArray.shape)
-                        print('qMatrix shape:', numpy.array([qMatrix]).shape)
-                        if trainSetCounter == trainTestSplit:
-                            q3dInit = False
+                            q3dArray = numpy.array([qMatrix])
+                            print('not init q3dArray shape:', q3dArray.shape)
+                            q3dInit = True
+                        if a3dInit == True:
+                            a3dArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
+                            print('\na3dArray shape:', a3dArray.shape)
+                            print('\naMatrix shape:', numpy.array([aMatrix]).shape)
+                        else:
+                            a3dArray = numpy.array([aMatrix])
+                            print('not init a3dArray shape:', a3dArray.shape)
+                            print('not init a3dTestArray shape:', a3dTestArray.shape)
+                            a3dInit = True
+                        if answerFoundFlag:
+                            trainLabels = numpy.append(trainLabels, 1)
+                        else:
+                            trainLabels = numpy.append(trainLabels, 0)
                     else:
-                        q3dArray = numpy.array([qMatrix])
-                        if trainSetCounter <= trainTestSplit:
+                        if q3dTestInit == True:
+                            q3dTestArray = numpy.concatenate((q3dTestArray, numpy.array([qMatrix])), axis=0)
+                            print('q3dTestArray shape:', q3dArray.shape)
+                            print('qMatrix shape:', numpy.array([qMatrix]).shape)
+                        else:
                             q3dTestArray = numpy.array([qMatrix])
+                            print('not init q3dArray shape:', q3dTestArray.shape)
+                            q3dTestInit = True
+                        if a3dTestInit == True:
+                            a3dTestArray = numpy.concatenate((a3dTestArray,numpy.array([aMatrix])), axis=0)
+                            print('a3dArray shape:', a3dTestArray.shape)
                         else:
-                            q3dTestArray = numpy.array([])
-#                        bugcheck.write("q3dArray shape:%s\n" % (q3dArray.shape))
-                        print('\nnot init q3dArray shape:', q3dArray.shape)
-                        print('\nnot init q3dTestArray shape:', q3dTestArray.shape)
-                        q3dInit = True
-                    if a3dInit == True:
-#                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
-                        if trainSetCounter <= trainTestSplit:
-                            a3dArray = numpy.concatenate((a3dArray,numpy.array([aMatrix])), axis=0)
-                        else:
-                            a3dTestArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
-                        print('\na3dArray shape:', a3dArray.shape)
-                        print('\naMatrix shape:', numpy.array([aMatrix]).shape)
-                        if trainSetCounter == trainTestSplit:
-                            a3dInit = False
-                    else:
-                        a3dArray = numpy.array([aMatrix])
-                        if trainSetCounter <= trainTestSplit:
                             a3dTestArray = numpy.array([aMatrix])
-                        else:
-                            a3dTestArray = numpy.array([])
-#                        bugcheck.write("a3dArray shape:%s\n" % (a3dArray.shape))
-                        print('not init a3dArray shape:', a3dArray.shape)
-                        print('not init a3dTestArray shape:', a3dTestArray.shape)
-                        a3dInit = True
-
-                    if answerFoundFlag:
-                        if trainSetCounter <= trainTestSplit:
-                            trainLabels = numpy.append(trainLabels,1)
-                        else:
+                            print('not init a3dTestArray shape:', a3dTestArray.shape)
+                            a3dTestInit = True
+                        if answerFoundFlag:
                             testLabels = numpy.append(testLabels, 1)
-#                        bugcheck.write("labels shape %s\n" % (labels.shape))
-                    else:
-                        if trainSetCounter <= trainTestSplit:
-                            trainLabels = numpy.append(trainLabels,0)
                         else:
                             testLabels = numpy.append(testLabels, 0)
-#                        bugcheck.write("labels shape %s\n" % (labels.shape))
-                    print('\nlabels shape:', trainLabels.shape)
-                    print('\nlabels shape:', testLabels.shape)
+                    print('\ntrainLabels shape:', trainLabels.shape)
+                    print('\ntestLabels shape:', testLabels.shape)
+
+
 
 
 
