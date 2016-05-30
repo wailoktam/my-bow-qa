@@ -319,7 +319,7 @@ if __name__ == '__main__':
                             q3dInit = False
                     else:
                         q3dArray = numpy.array([qMatrix])
-                        if trainSetCounter > trainTestSplit:
+                        if trainSetCounter <= trainTestSplit:
                             q3dTestArray = numpy.array([qMatrix])
                         else:
                             q3dTestArray = numpy.array([])
@@ -339,7 +339,7 @@ if __name__ == '__main__':
                             a3dInit = False
                     else:
                         a3dArray = numpy.array([aMatrix])
-                        if trainSetCounter > trainTestSplit:
+                        if trainSetCounter <= trainTestSplit:
                             a3dTestArray = numpy.array([aMatrix])
                         else:
                             a3dTestArray = numpy.array([])
