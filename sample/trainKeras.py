@@ -324,7 +324,6 @@ if __name__ == '__main__':
                         else:
                             a3dArray = numpy.array([aMatrix])
                             print('not init a3dArray shape:', a3dArray.shape)
-                            print('not init a3dTestArray shape:', a3dTestArray.shape)
                             a3dInit = True
                         if answerFoundFlag:
                             trainLabels = numpy.append(trainLabels, 1)
