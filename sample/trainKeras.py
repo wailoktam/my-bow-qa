@@ -286,7 +286,7 @@ if __name__ == '__main__':
                     print ("word in normalizedSentence %s\n"%(word))
                     aCounter = aCounter + 1
                     print("acounter in 1st loop %s/n"%aCounter)
-                    wvLength = len(w2vModel[word])
+#                    wvLength = len(w2vModel[word])
                     if qSkip: aSkip = True
                     try:
                         if aMatrixInit == False:
