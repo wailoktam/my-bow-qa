@@ -254,7 +254,7 @@ if __name__ == '__main__':
                 answerFoundFlag = False
                 normalizedSentence = myNormalize(sent.text.strip())
                 sentenceWoSc = rmvSpecChar(normalizedSentence)
-#                print ("loop adv")
+                print ("sentenceWoSc %s\n"%(sentenceWoSc))
 #max question length is 33. Loop thru each word. If lenght less than 36, add all-zeroes vectors to the result matrix
                 for word in myNormalize(questionText.strip()):
                     qCounter = qCounter + 1
