@@ -282,11 +282,11 @@ if __name__ == '__main__':
 #                    print('early qMatrix shape:', numpy.array([qMatrix]).shape)
                 aSkip = False
                 for word in sentenceWoSc[:36]:
-#                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
-#                    print ("word in normalizedSentence %s\n"%(word))
+                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
+                    print ("word in normalizedSentence %s\n"%(word))
                     aCounter = aCounter + 1
-#                    print("acounter in 1st loop %s/n"%aCounter)
-#                    wvLength = len(w2vModel[word])
+                    print("acounter in 1st loop %s/n"%aCounter)
+                    wvLength = len(w2vModel[word])
                     if qSkip: aSkip = True
                     try:
                         if aMatrixInit == False:
@@ -299,7 +299,7 @@ if __name__ == '__main__':
                         aMatrix = numpy.concatenate((aMatrix,[zeroFilledVector]), axis=0)
                 for i in range (aCounter, 100):
                     aCounter = aCounter + 1
-#                    print("acounter in 2nd loop %s/n"%aCounter)
+                    print("acounter in 2nd loop %s/n"%aCounter)
                     aMatrix = numpy.concatenate((aMatrix, numpy.array([zeroFilledVector])), axis=0)
 
                 for answer in map(lambda a: myNormalize(a), answers):
@@ -319,8 +319,8 @@ if __name__ == '__main__':
                             print('not init q3dArray shape:', q3dArray.shape)
                             q3dInit = True
                         if a3dInit == True:
-                            print('\na3dArray shape:', a3dArray.shape)
-                            print('\naMatrix shape:', numpy.array([aMatrix]).shape)
+                            print('a3dArray shape:', a3dArray.shape)
+                            print('aMatrix shape:', numpy.array([aMatrix]).shape)
                             a3dArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
 
                         else:
