@@ -310,17 +310,19 @@ if __name__ == '__main__':
                 if aSkip==False:
                     if trainSetCounter <= trainTestSplit:
                         if q3dInit == True:
-                            q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
                             print('q3dArray shape:', q3dArray.shape)
                             print('qMatrix shape:', numpy.array([qMatrix]).shape)
+                            q3dArray = numpy.concatenate((q3dArray,numpy.array([qMatrix])), axis=0)
+
                         else:
                             q3dArray = numpy.array([qMatrix])
                             print('not init q3dArray shape:', q3dArray.shape)
                             q3dInit = True
                         if a3dInit == True:
-                            a3dArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
                             print('\na3dArray shape:', a3dArray.shape)
                             print('\naMatrix shape:', numpy.array([aMatrix]).shape)
+                            a3dArray = numpy.concatenate((a3dArray, numpy.array([aMatrix])), axis=0)
+
                         else:
                             a3dArray = numpy.array([aMatrix])
                             print('not init a3dArray shape:', a3dArray.shape)
