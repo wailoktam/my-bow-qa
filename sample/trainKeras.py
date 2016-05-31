@@ -219,7 +219,7 @@ def save_model(model):
 if __name__ == '__main__':
 #   bugcheck  = codecs.open('bug.csv', 'w', 'utf-8')
    w2vModel= Word2Vec.load('/home/ubuntu/model')
-   xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySectAnswerBySectTitle.xml")
+   xml = etree.parse("/home/ubuntu/qa/mylab/input/questions/qa-sampleDocRetrievedBySect.xml")
    questions = xml.findall(".//question")
    trainLabels = numpy.array([])
    testLabels = numpy.array([])
