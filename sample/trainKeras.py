@@ -276,32 +276,37 @@ if __name__ == '__main__':
                     except KeyError:
                         qSkip = True
                         qMatrix = numpy.concatenate((qMatrix,numpy.array([zeroFilledVector])), axis= 0)
-
-                for i in range (qCounter, 100):
-                    qCounter = qCounter + 1
-                    qMatrix = numpy.concatenate((qMatrix, numpy.array([zeroFilledVector])), axis=0)
+                if qSkip == False:
+                    for i in range (qCounter, 100):
+                        qCounter = qCounter + 1
+                        qMatrix = numpy.concatenate((qMatrix, numpy.array([zeroFilledVector])), axis=0)
 #                    print('early qMatrix shape:', numpy.array([qMatrix]).shape)
                 aSkip = False
-                for word in sentenceWoSc[:36]:
-                    print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
-                    print ("word in normalizedSentence %s\n"%(word))
-                    aCounter = aCounter + 1
-                    print("acounter in 1st loop %s/n"%aCounter)
+                if len(sentenceWoSc) == 0:
+                    aSkip = True
+                    aMatrix = numpy.concatenate((aMatrix, [zeroFilledVector]), axis=0)
+                else:
+                    for word in sentenceWoSc[:36]:
+                        print ("normalizedSentence %s\n"%("/".join(normalizedSentence)))
+                        print ("word in normalizedSentence %s\n"%(word))
+                        aCounter = aCounter + 1
+                        print("acounter in 1st loop %s/n"%aCounter)
 #                    wvLength = len(w2vModel[word])
-                    if qSkip: aSkip = True
-                    try:
-                        if aMatrixInit == False:
-                            aMatrix = numpy.array([w2vModel[word]])
-                            aMatrixInit = True
-                        else:
-                            aMatrix = numpy.concatenate((aMatrix, numpy.array([w2vModel[word]])), axis=0)
-                    except KeyError:
-                        aSkip = True
-                        aMatrix = numpy.concatenate((aMatrix,[zeroFilledVector]), axis=0)
-                for i in range (aCounter, 100):
-                    aCounter = aCounter + 1
-                    print("acounter in 2nd loop %s/n"%aCounter)
-                    aMatrix = numpy.concatenate((aMatrix, numpy.array([zeroFilledVector])), axis=0)
+                        if qSkip: aSkip = True
+                        try:
+                            if aMatrixInit == False:
+                                aMatrix = numpy.array([w2vModel[word]])
+                                aMatrixInit = True
+                            else:
+                                aMatrix = numpy.concatenate((aMatrix, numpy.array([w2vModel[word]])), axis=0)
+                        except KeyError:
+                            aSkip = True
+                            aMatrix = numpy.concatenate((aMatrix,[zeroFilledVector]), axis=0)
+                if aSkip == False:
+                    for i in range (aCounter, 100):
+                        aCounter = aCounter + 1
+                        print("acounter in 2nd loop %s/n"%aCounter)
+                        aMatrix = numpy.concatenate((aMatrix, numpy.array([zeroFilledVector])), axis=0)
 
                 for answer in map(lambda a: myNormalize(a), answers):
                     joinedAnswer = "".join(answer).strip()
