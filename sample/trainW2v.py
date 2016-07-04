@@ -30,10 +30,10 @@ def myNormalize(inputStr):
 #    for token in result:
 #        print "token"+token.getSurfaceForm()
 #    inds = []
-    print ("inputStr")
-    print inputStr
-    print ("result")
-    print result
+#    print ("inputStr")
+#    print inputStr
+#    print ("result")
+#    print result
     for token in result:
         try:
             normalizedToken = kanjinums.kanji2num(token.getBaseForm())
@@ -77,8 +77,8 @@ if __name__ == '__main__':
                 for sent in paraText.strip().split("。"):
 #                    print ("sent",sent+"\n")
                     corpusFile.write(myNormalize(sent))
-                    print ("mynormalize output")
-                    print (myNormalize(sent))
+#                    print ("mynormalize output")
+#                    print (myNormalize(sent))
     corpusFile.close()
 
 
