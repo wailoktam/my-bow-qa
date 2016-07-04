@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 paraText = para.find(".//text").text
 #                print ("para:"+para.text+"\n")
                 for sent in paraText.strip().split("。"):
-#                    print ("sent",sent+"\n")
+                    print ("sent",sent+"\n")
                     corpusFile.write(myNormalize(sent))
 #                    print ("mynormalize output")
 #                    print (myNormalize(sent))
