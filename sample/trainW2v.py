@@ -30,6 +30,9 @@ def myNormalize(inputStr):
 #    for token in result:
 #        print "token"+token.getSurfaceForm()
 #    inds = []
+    print ("inputStr")
+    print inputStr
+    print ("result")
     print result
     for token in result:
         try:
