@@ -23,7 +23,7 @@ from xml.etree import ElementTree as etree
 
 from gensim.models import word2vec
 
-def myNormalize(inputStr,jVocabDict,jVocabRevDict):
+def myNormalize(inputStr):
     KuroTokenizer = gateway.jvm.org.atilika.kuromoji.Tokenizer
     tokenizer = KuroTokenizer.builder().build();
     result = tokenizer.tokenize(inputStr)
