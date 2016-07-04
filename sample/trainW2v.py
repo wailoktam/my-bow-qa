@@ -29,7 +29,8 @@ def myNormalize(inputStr):
     result = tokenizer.tokenize(inputStr)
 #    for token in result:
 #        print "token"+token.getSurfaceForm()
-    inds = []
+#    inds = []
+    print result
     for token in result:
         try:
             normalizedToken = kanjinums.kanji2num(token.getBaseForm())
