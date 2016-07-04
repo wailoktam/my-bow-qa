@@ -34,6 +34,7 @@ def myNormalize(inputStr):
     print inputStr
     print ("result")
     print result
+    normalizedTokens = []
     for token in result:
         try:
             normalizedToken = kanjinums.kanji2num(token.getBaseForm())
@@ -41,8 +42,8 @@ def myNormalize(inputStr):
             normalizedToken = token.getBaseForm()
         except TypeError:
             normalizedToken = token.getSurfaceForm()
-        normalizedToken = unicodedata.normalize('NFKC', unicode(normalizedToken))
-    return(normalizedToken)
+        normalizedTokens.append(unicodedata.normalize('NFKC', unicode(normalizedToken)))
+    return(" ".join(normalizedTokens))
 
 
 
