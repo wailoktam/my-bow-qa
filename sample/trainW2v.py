@@ -72,7 +72,7 @@ if __name__ == '__main__':
 #                print ("para:"+para.text+"\n")
                 for sent in paraText.strip().split("。"):
 #                    print ("sent",sent+"\n")
-                    corpusFile.writeln(myNormalize(sent))
+                    corpusFile.write(myNormalize(sent))
                     print (myNormalize(sent))
     corpusFile.close()
 
