@@ -25,7 +25,7 @@ from gensim.models import word2vec
 
 def myNormalize(inputStr):
     KuroTokenizer = gateway.jvm.org.atilika.kuromoji.Tokenizer
-    tokenizer = KuroTokenizer.builder().build();
+    tokenizer = KuroTokenizer.builder().build()
     result = tokenizer.tokenize(inputStr)
 #    for token in result:
 #        print "token"+token.getSurfaceForm()
@@ -77,6 +77,7 @@ if __name__ == '__main__':
                 for sent in paraText.strip().split("。"):
 #                    print ("sent",sent+"\n")
                     corpusFile.write(myNormalize(sent))
+                    print ("mynormalize output")
                     print (myNormalize(sent))
     corpusFile.close()
 
