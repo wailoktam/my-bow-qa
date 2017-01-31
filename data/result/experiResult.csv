@@ -1,0 +1,19 @@
+data,code,embeddings,question type,methodology,term,map,mrr
+wikiQA,pairwise,GloVe,who,original,who,0.7138,0.7084
+wikiQA,pairwise,GloVe,when,original,when,0.6183,0.6157
+wikiQA,pairwise,GloVe,where,original,where,0.6027,0.6126
+wikiQA,pairwise,wikiQA,who,2,jason,0.7486,0.7431
+wikiQA,pairwise,wikiQA,when,2,1994,0.5765,0.5738
+wikiQA,pairwise,wikiQA,where,2,gettysburg,0.6269,0.6216
+wikiQA,pairwise,GloVe,who,2,william,0.7074,0.7017
+wikiQA,pairwise,GloVe,when,2,1923,0.6679,0.6641
+wikiQA,pairwise,GloVe,where,2,florida,0.6083,0.6156
+wikiQA,pairwise,GloVe,who,1,david,0.7069,0.7013
+wikiQA,pairwise,GloVe,when,1,1975,0.5930,0.5893
+wikiQA,pairwise,GloVe,where,1,jamaica,0.5928,0.6001
+trecQA,pairwise,GloVe,who,original,who,0.7071,0.7750
+trecQA,pairwise,GloVe,when,original,when,0.8050,0.8947
+trecQA,pairwise,GloVe,where,original,where,0.8692,0.8939
+trecQA,pairwise,GloVe,who,2,stenn,0.7086,0.7812
+trecQA,pairwise,GloVe,when,2,1947-1956,0.8382,0.9211
+trecQA,pairwise,GloVe,where,2,fussen,0.8659,0.8636
