@@ -20,9 +20,16 @@ wikiQA,pairwise,dependency,where,original,where,0.6172,0.6172
 wikiQA,pairwise,dependency,who,2,sumner,0.7627,0.7706
 wikiQA,pairwise,dependency,when,2,1147,0.6356,0.6387
 wikiQA,pairwise,dependency,where,2,schaumburg,0.7027,0.7027
+wikiQA,pairwise,dependency,who,1,feldstein,now-running,now-running
+wikiQA,pairwise,dependency,when,1,first-quarter,now-running,now-running
+wikiQA,pairwise,dependency,where,1,neartown,now-running,now-running
 trecQA,pairwise,dependency,who,original,who,0.4633,0.5115
 trecQA,pairwise,dependency,when,original,when,0.8194,0.9211
 trecQA,pairwise,dependency,where,original,where,0.8303,0.8485
 trecQA,pairwise,dependency,who,2,logsdon,0.4433,0.5129
 trecQA,pairwise,dependency,when,2,2010,0.7793,0.8684
 trecQA,pairwise,dependency,where,2,russia,0.7835,0.8030
+wikiQA,pairwise,dependency,all,original,-(who/when/where) in test,now-running,now-running
+wikiQA,pairwise,GloVe,all,original,-(who/when/where) in test,now-running,now-running
+trecQA,pairwise,dependency,all,original,-(who/when/where) in test,now-running,now-running
+trecQA,pairwise,GloVe,all,original,-(who/when/where) in test,now-running,now-running
