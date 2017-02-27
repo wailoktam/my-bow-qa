@@ -1,5 +1,7 @@
-package qa.main.ja
+//first step for the whole BOW-based qa system 
+//convert docs in a knowledge base directory to index file used in Lucene
 
+package qa.main.ja
 import java.io.{ FileWriter, BufferedWriter, File }
 import java.util.regex._
 import org.apache.commons.lang3.StringEscapeUtils
@@ -18,6 +20,8 @@ import org.atilika.kuromoji.Tokenizer
 import org.atilika.kuromoji.Token
 import com.ibm.icu.text.Normalizer2
 
+
+
 //case class Doc(id: String, title: String, text: String, score: Double)
 
 /**
@@ -30,7 +34,7 @@ import com.ibm.icu.text.Normalizer2
  * case _ => attrs.map((m: MetaData) => " " + m.key + "='" + StringEscapeUtils.escapeXml11(m.value.toString) + "'").reduceLeft(_ + _)
  * }
  * }
- * */
+ * 
  *
  * def attrsToString(attrs: MetaData) = {
  * val nonDocTagRe = """<(?!\/?doc(?=>|\s.*>))\/?.*?>""".r
@@ -186,8 +190,9 @@ import com.ibm.icu.text.Normalizer2
  */
 
 /**
- * tf を常に1にするクラス
- * lucene で使われる
+ * set tf to 1
+ * used by lucene
+ *
  */
 class SimilarityWithConstantTF extends DefaultSimilarity {
   override def tf(freq: Float): Float = 1
@@ -203,6 +208,8 @@ class SimilarityWithConstantNOM extends DefaultSimilarity {
   override def lengthNorm(state: FieldInvertState): Float = 1
   //override def lengthNorm(state: FieldInvertState): Float = 1
 }
+
+//retrieve cleaned text by pattern matching and add to docs passed to lucene for indexing
 
 class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, sentWriter: IndexWriter, ssw:BufferedWriter) {
   val pageRe = """\[\[(.*?)\]\](?!\'\'\')""".r
@@ -224,7 +231,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         tableText.mkString("\n") + etcCollect(tableRemoveRe.replaceAllIn(pageText, "").mkString)
       }
     }
-
+//treat para as doc
   def addParaNSentToDoc(paraWriter: IndexWriter, sentWriter: IndexWriter, textWoTable: String, id: String, file: BufferedWriter, ssw: BufferedWriter) = {
     val paraNumStream = Stream.iterate(1)(_ + 1).iterator
     file.write("<" + "text" + ">" + "\n")
@@ -253,7 +260,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     file.write("</" + "text" + ">" + "\n")
 
   }
-
+//add sentences as doc
   def addSentToDoc(sentWriter: IndexWriter, paraTextWoTable: String, id: String, ssw: BufferedWriter) = {
     val sentNumStream = Stream.iterate(1)(_ + 1).iterator
     paraTextWoTable.split("。").map(s => {
@@ -277,7 +284,8 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     }
     )
   }
-
+  //add main text in a page to a doc
+  //also add sections of diffierent levels to a doc
   def addPageNSectToDoc(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWriter: IndexWriter, buf: ArrayBuffer[String], pageID: String, ssw: BufferedWriter): Unit = {
     val file1 = new File("bugInIndexing1")
     val bw1 = new BufferedWriter(new FileWriter(file1))
@@ -508,32 +516,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
 
     XML.loadFile(file2)
   }
-  /**
-   * val paras = text.split("\n")
-   * //    System.err.println(s"text: ${text}")
-   * for ((p,paraCounter)<- paras.zipWithIndex) {
-   * System.err.println(s"paracounter: ${paraCounter}")
-   * if ((p == "") == false) {
-   * if (paraCounter == 1) {
-   *
-   * val titleAsDocument = new  Document()
-   * val pid = id + "-" + paraCounter
-   * System.err.println(s"pid: ${pid}")
-   * System.err.println(s"text: ${p}")
-   * titleAsDocument.add(new StringField("id", pid, Store.YES))
-   * titleAsDocument.add(new TextField("text", title, Store.YES))
-   * titleAsDocument.add(new IntField("isDoc", 0, Store.YES))
-   * writer.addDocument(titleAsDocument)
-   * } else {
-   * val document = new Document()
-   * val pid = id + "-" + paraCounter
-   * System.err.println(s"pid: ${pid}")
-   * System.err.println(s"text: ${p}")
-   * document.add(new StringField("id", pid, Store.YES))
-   * document.add(new IntField("isDoc", 0, Store.YES))
-   * document.add(new TextField("text", p, Store.YES))
-   * writer.addDocument(document)
-   */
+
 
   def apply(fileName: String, fileID: String) = {
 
@@ -667,36 +650,7 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
         case _ =>
           {
             buf += StringEscapeUtils.escapeXml11(line)
-            /**
-             * if (i == (lines.size-1)) {
-             * if (sect5Found == 1 ) {
-             * buf += "</" + "section5"+  ">"
-             * sect5Found = 0
-             * }
-             * if (sect4Found == 1 ) {
-             * buf += "</" + "section4"+  ">"
-             * sect4Found = 0
-             * }
-             * if (sect3Found == 1 ) {
-             * buf += "</" + "section3"+  ">"
-             * sect3Found = 0
-             * }
-             * if (sect2Found == 1 ) {
-             * buf += "</" + "section2"+  ">"
-             * sect2Found = 0
-             * }
-             * if (sect1Found == 1 ) {
-             * buf += "</" + "section1"+  ">"
-             * sect1Found = 0
-             * }
-             * if (pageFound == 1) {
-             * val pageID = pageNumStream.next
-             * buf += "</" + "page"+">"
-             * addPageToDoc(pageWriter, paraWriter, buf, pageID)
-             * buf = ArrayBuffer[String]()
-             * }
-             * }
-             */
+          
           }
       }
     }
@@ -723,31 +677,21 @@ class PullFrTxtAndAdd(pageWriter: IndexWriter, sectWriter: IndexWriter, paraWrit
     if (pageFound == 1) {
       val pageID = pageNumStream.next
       buf += "</" + "page" + ">"
-      //      bw4.write(pageID+"\n")
-//      System.err.println(s"fileID And pageID final: ${fileID + "f" + pageID.toString()}")
       addPageNSectToDoc(pageWriter, sectWriter, paraWriter, buf, fileID + "f" + pageID.toString, ssw)
       buf = ArrayBuffer[String]()
     }
-    //    val titleIdxs = (0 until wholeFile.size).filter {
-    //      i =>
-    //      wholeFile(i) match titleRe && (i > 0 && wholeFile(i-1)=="" )
-    //    }
-
-    //    val wholeFile = bufferedSource.getLines.mkString("\n")
-    //    val pages = wholeFile.split("\n\\[\\[.*\\]\\]\n")
-    //    for (page <- titles) bw.write("page start\n" + page+"page end\n")
-    //    for (page <- pages) bw.write("page start\n" + page+"page end\n")
-    //    bw.close()
-    bufferedSource.close
+     bufferedSource.close
 
   }
 
 }
 
+
+
 class Indexing {
 
   /**
-   * 特殊文字などを取り除いて、文書をきれいにする
+   * clean text
    * @param str
    * @return
    */
@@ -850,7 +794,9 @@ class Indexing {
     outLines
   }
 
-  //  private def makeIndexMain(knowledgeFiles: Array[String], indexDir: Directory): Array[(String, Elem)] = {
+  //create separate index directories depending on the definition of a doc
+  //e.g. if a page is treated as a doc, the result of indexing each page as a doc is kept in a specific index directory
+  //if a para is treated as a doc, the result of indexing each page as a doc is kept in a specific index directory
   def makeIndexMain(knowledgeFiles: Array[String], indexDirName: String): Unit = {
     val pageIndexDir = FSDirectory.open(new File(indexDirName + "/page"))
     val sectIndexDir = FSDirectory.open(new File(indexDirName + "/sect"))
