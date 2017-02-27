@@ -1,3 +1,8 @@
+//this is the 4th step in the QA pipline
+//it creates search functions customized for a specific index folder
+//e.g. there will be a search fct for an index treating a page as a doc
+//and there will be a search fct for an index treating a para as a doc
+
 package qa.main.ja
 
 import java.io.File
@@ -17,6 +22,7 @@ import scala.collection.mutable.Set
 import scala.xml._
 import util.matching._
 
+//the search fct that treats a page as a doc
 class SearchPage(indexDir: Directory, sentIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(indexDir, maxSearchResults) {
 
   override def annotateWDocs(maxHits: Int, oldQAndA: QuestionAndAnnotation, mustOrShould: Int, boostTopic: java.lang.Float, boostHv: java.lang.Float): QuestionAndAnnotation = {
@@ -114,7 +120,7 @@ class SearchPage(indexDir: Directory, sentIndexDir: Directory, maxSearchResults:
   }
 
 }
-
+//the search fct that treats a sect as a doc
 class SearchSect(indexDir: Directory, sentIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(indexDir, maxSearchResults) {
 
   def searchPageTitleOfSect(id: String): String = {
@@ -224,6 +230,7 @@ class SearchSect(indexDir: Directory, sentIndexDir: Directory, maxSearchResults:
 
 }
 
+//the search fct that treats a para as a doc
 class SearchPara(indexDir: Directory, sectIndexDir: Directory, sentIndexDir: Directory, maxSearchResults: Int = 100) extends SearchDocument(indexDir, maxSearchResults) {
 
   def searchSectTitleOfPara(id: String): String = {
@@ -366,7 +373,7 @@ abstract class SearchDocument(val indexDir: Directory, val maxSearchResults: Int
   }
 
 
-
+//return score of a secntence when searching the index directory of sentences with the sentence 
   def searchScoreOfSent(sentText: String, realQuery: Query, sentIndexDir: Directory): Float = {
     val sentIndexReader = DirectoryReader.open(sentIndexDir)
     val sentIndexSearcher = new IndexSearcher(sentIndexReader)
@@ -378,7 +385,7 @@ abstract class SearchDocument(val indexDir: Directory, val maxSearchResults: Int
       else 0
     } else 0
   }
-
+//create an ordered list with only unique items 
   def orderedUnique[A](ls: List[A]) = {
     def loop(set: Set[A], ls: List[A]): List[A] = ls match {
       case hd :: tail if set contains hd => loop(set, tail)
