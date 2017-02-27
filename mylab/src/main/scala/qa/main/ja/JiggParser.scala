@@ -1,3 +1,5 @@
+//this is the second step in the QA pipeline
+//it parses the text in a doc and add the output to an annotation file.
 package qa.main.ja
 
 import scala.sys.process._
@@ -14,6 +16,7 @@ object XMLLoaderIgnoringDTD extends XMLLoader[Elem] {
   }
 }
 
+//question type specific for the Q1000 Japanese dataset
 object QuestionTypeQ1000 extends Enumeration {
   val how_many, // choose a true statement
   when, // choose a false statement
@@ -22,8 +25,8 @@ object QuestionTypeQ1000 extends Enumeration {
   = Value
 }
 
-case class Question(id: String, // 回答欄ID
-                    questionType: QuestionTypeQ1000.Value, // 問題文のタイプ
+case class Question(id: String, 
+                    questionType: QuestionTypeQ1000.Value, 
                     parses: Array[Elem],
                     //                    arraryOfClues: Array[Clue],
                     questionText: NodeSeq,
@@ -33,7 +36,7 @@ case class Question(id: String, // 回答欄ID
 
 object ExtractQuestionsQ1000 {
   /**
-   * using metadata for determining question type
+   * using metadata to determine question type
    */
   def determineQuestionTypeQ1000(questionXML: Node) = {
     val whereRe = """(どこ)""".r
@@ -87,6 +90,7 @@ object ExtractQuestionsQ1000 {
     parses
   }
 
+  //create an instance of the case class Question with the output of the Jigg parser
   def makeQuestionQ1000(questionXML: Node, parserPath: String, jumanPath: String, knpPath: String) = {
     val parses = parseQuestion(questionXML, parserPath, jumanPath, knpPath)
     Question((questionXML \ "@id").text,
