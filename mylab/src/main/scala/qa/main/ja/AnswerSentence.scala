@@ -1,3 +1,7 @@
+//this is the last step of the BOW QA baseline
+//answer by top ranked sentences, instead of title
+
+
 package qa.main.ja
 
 import java.io.File
@@ -7,6 +11,7 @@ import PrepareTrainNTestMain._
 import org.apache.lucene.store.FSDirectory
 import scala.xml._
 
+//put the top ranked sentence in the annotation file
 object RealAnswering {
 
   def annotateWSentences(oldQAndA: QuestionAndAnnotation, indexDir: FSDirectory): QuestionAndAnnotation = {
