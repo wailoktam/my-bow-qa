@@ -1,3 +1,6 @@
+//this is part of the last step of the QA pipeline
+//train a svm with feature-value pairs supplied
+
 package qa.main.ja
 
 import org.apache.spark.SparkContext
