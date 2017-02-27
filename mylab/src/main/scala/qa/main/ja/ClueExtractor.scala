@@ -1,3 +1,5 @@
+//This is the 3rd step in the QA pipeline
+//It extracts clues from the output of parsed text in docs
 package qa.main.ja
 
 import scala.util.matching.Regex
@@ -26,11 +28,13 @@ case class QuestionAndAnnotation(id: String,
  */
 object ExtractClues {
 
+//determine if the predicate is the head or not  
   def predIsHead(parseXML: Node, headId: String): Boolean = {
     if ((parseXML \\ "@predicate").text == headId) true
     else false
   }
 
+  //determine if the argument is the head or not
   def argIsHead(parseXML: Node, altHeadIds: Seq[String]): Boolean = {
     val altHeadIdsRe = altHeadIds.mkString("|").r
     (parseXML \\ "@argument").text match {
@@ -39,6 +43,7 @@ object ExtractClues {
     }
   }
 
+  //find id of the head 
   def findIdOfGivenHead(node: Node, givenHead: String): Boolean = {
     val lexemeExtractorRe = """.*?<正規化代表表記:(.+?)/.+>.*""".r
     System.err.println(s"givenHead: ${givenHead}")
@@ -47,7 +52,7 @@ object ExtractClues {
       case _ => false
     }
   }
-
+  //find id of the topic
   def findIdOfTopic(node: Node): Boolean = {
     val topicIdentifierRe = """.*?(?<!準)主題表現.*""".r
     (node \\ "@features").text match {
@@ -56,11 +61,12 @@ object ExtractClues {
     }
   }
 
+  //true if either the pred or the arg in a  pred-arg structure is the head
   def predOrArgIsHead(parseXML: Node, headId: String, altHeadIds: Seq[String]): Boolean = {
     if ((predIsHead(parseXML, headId) == true) || (argIsHead(parseXML, altHeadIds) == true)) true
     else false
   }
-
+ //find a lexeme by its own id
   def findLexemebyId(id: String, parseXML: Node): String = {
     val lexemeExtractorRe = """.*?<正規化代表表記:(.+?)/.+>.*""".r
     ((parseXML \\ "basicPhrase").find(n => (n \ "@id").text == id).getOrElse(<dummy></dummy>) \\ "@features").text match {
@@ -75,13 +81,14 @@ object ExtractClues {
       }
     }
   }
-
+ // find a lexeme by the id of its coreference
   def findLexemebyAltId(altId: String, parseXML: Node): String = {
     val lexemes = (parseXML \\ "coreference") filter { n => (n \\ "@id").text == altId } map (n => (n \\ "@basicPhrases").text) map (s => findLexemebyId(s, parseXML))
     if (lexemes.length == 1) lexemes.head
     else ""
   }
 
+  // create instances of the Clue case class with clues found by matching parse result 
   def makeClue(semRels: Seq[Node], parseXML: Node, altTopicIDs: Seq[String], bw: BufferedWriter): Array[Clue] = {
     var clueMap = collection.mutable.Map[String, List[String]]()
     bw.write("semRels:" + semRels.mkString + "\n")
@@ -104,6 +111,7 @@ object ExtractClues {
     clueMap.map(t => Clue(findLexemebyId(t._1, parseXML), t._2.map(s => findLexemebyAltId(s, parseXML)), (parseXML \\ "sentence").text.split('\n').map(_.trim.filter(_ >= ' ')).mkString)).toArray
   }
 
+  //extract from old annotations
   def extractQuestionAndAnnotation(questionXML: Node): QuestionAndAnnotation = {
     QuestionAndAnnotation((questionXML \ "@id").text,
       questionXML \\ "text",
@@ -125,6 +133,7 @@ object ExtractClues {
     }
   }
 
+  //add new annotations to old annotations
   def annotateWClues(oldQAndA: QuestionAndAnnotation, bw: BufferedWriter): QuestionAndAnnotation = {
     oldQAndA match {
       case QuestionAndAnnotation(id, questionText, meta, answers, oldAnnotations) => {
@@ -195,9 +204,7 @@ object ExtractClues {
     }
   }
 
-  /**
-   * using meta data to determine clues
-   */
+
 
   def apply(questionXML: Node): Seq[Elem] = {
     val file = new File("bugInClueExtractor")
