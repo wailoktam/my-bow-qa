@@ -1,5 +1,5 @@
 //this is part of the last step of the QA pipeline
-//train a svm with feature-value pairs supplied
+//train a svm with feature-value pairs supplied by PrepareTrainNTest
 
 package qa.main.ja
 
@@ -33,6 +33,9 @@ object TrainSpark {
     //    maxScoreRow.getInt(7)
   }
 
+//ceiling =  correct answers found in the docs  
+//notice that some answers cannot not be found in the wiki docs 
+  
   def getCeiling(df: org.apache.spark.sql.DataFrame) = {
 //    for paraAsDoc
     val foundOrNot = df.collect().exists(r => r.getInt(9) == 1)
@@ -45,6 +48,8 @@ object TrainSpark {
     qIds.map(s => getCeiling(df.filter(s"""qId = "$s""""))).sum
   }
 
+
+//return best 1 sentence
   def best1(model: SVMModel, qIds: Array[String], df: org.apache.spark.sql.DataFrame) = {
     //    import sqlContext.implicits._
     //    val needQId = "NIILC-ECQA2015-00903-01"
