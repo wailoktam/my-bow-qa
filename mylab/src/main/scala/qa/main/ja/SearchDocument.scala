@@ -61,45 +61,7 @@ class SearchPage(indexDir: Directory, sentIndexDir: Directory, maxSearchResults:
           "\"" + answer.text + "\""
         }
 
-        //        System.err.println(s"query ${query.toString}")
-        /*o
-        val bQueries = new org.apache.lucene.search.BooleanQuery()
-        val topicQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", topic.getOrElse("")))
-        topicQuery.setBoost(boostTopic)o
-        val hvQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", hv.getOrElse("")))
-        hvQuery.setBoost(boostHv)
-        bQueries.add(query, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-        bQueries.add(topicQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-        bQueries.add(hvQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-*/
 
-        //        var setTerm: java.util.Set[org.apache.lucene.index.Term] =  scala.collection.mutable.Set[org.apache.lucene.index.Term]().asJava
-        //        val rQueries = index_searcher.rewrite(queries)
-        //        rQueries.extractTerms(setTerm)
-        //        println(setTerm.asScala.head)
-
-        /**
-         * old code for ref
-         * val searchResult = index_searcher.search(query, maxHits)
-         *
-         * val docs =
-         * for (scoreWDoc <- searchResult.scoreDocs) yield {
-         * val doc = index_searcher.doc(scoreWDoc.doc)
-         * val id = doc.get("id")
-         * val xml = document_map.get(id).get
-         * //print(xml)
-         * val title = (xml \ "title").text
-         * val text = (xml \ "text").text
-         * //println(title)
-         * //println(index_searcher.explain(query, score_doc.doc))
-         * Doc(id, title, text, scoreWDoc.score)
-         * }
-         *
-         * }
-         */
-
-        //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "text").text}
-        //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "title").text}
         val newAnnotations =
           <annotations>
             {
@@ -207,45 +169,7 @@ class SearchSect(indexDir: Directory, sentIndexDir: Directory, maxSearchResults:
           "\"" + answer.text + "\""
         }
 
-        //        System.err.println(s"query ${query.toString}")
-        /*o
-        val bQueries = new org.apache.lucene.search.BooleanQuery()
-        val topicQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", topic.getOrElse("")))
-        topicQuery.setBoost(boostTopic)o
-        val hvQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", hv.getOrElse("")))
-        hvQuery.setBoost(boostHv)
-        bQueries.add(query, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-        bQueries.add(topicQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-        bQueries.add(hvQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-*/
-
-        //        var setTerm: java.util.Set[org.apache.lucene.index.Term] =  scala.collection.mutable.Set[org.apache.lucene.index.Term]().asJava
-        //        val rQueries = index_searcher.rewrite(queries)
-        //        rQueries.extractTerms(setTerm)
-        //        println(setTerm.asScala.head)
-
-        /**
-         * old code for ref
-         * val searchResult = index_searcher.search(query, maxHits)
-         *
-         * val docs =
-         * for (scoreWDoc <- searchResult.scoreDocs) yield {
-         * val doc = index_searcher.doc(scoreWDoc.doc)
-         * val id = doc.get("id")
-         * val xml = document_map.get(id).get
-         * //print(xml)
-         * val title = (xml \ "title").text
-         * val text = (xml \ "text").text
-         * //println(title)
-         * //println(index_searcher.explain(query, score_doc.doc))
-         * Doc(id, title, text, scoreWDoc.score)
-         * }
-         *
-         * }
-         */
-
-        //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "text").text}
-        //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "title").text}
+ 
         val newAnnotations =
           <annotations>
             {
@@ -366,52 +290,7 @@ class SearchPara(indexDir: Directory, sectIndexDir: Directory, sentIndexDir: Dir
         val answerToPhraseQueriesText = for (answer <- answers \\ "answer") yield {
           "\"" + answer.text + "\""
         }
-        //        System.err.println(s"query ${query.toString}")
-        /*
-        val bQueries = new org.apache.lucene.search.BooleanQuery()
-        val topicQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", topic.getOrElse("")))
-        topicQuery.setBoost(boostTopic)
-        val hvQuery = new org.apache.lucene.search.TermQuery(new org.apache.lucene.index.Term("text", hv.getOrElse("")))
-        hvQuery.setBoost(boostHv)
-        bQueries.add(query, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-        bQueries.add(topicQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-        bQueries.add(hvQuery, org.apache.lucene.search.BooleanClause.Occur.SHOULD)
-*/
-
-        //        var setTerm: java.util.Set[org.apache.lucene.index.Term] =  scala.collection.mutable.Set[org.apache.lucene.index.Term]().asJava
-        //        val rQueries = index_searcher.rewrite(queries)
-        //        rQueries.extractTerms(setTerm)
-        //        println(setTerm.asScala.head)
-
-        /**
-         * old code for ref
-         * val searchResult = index_searcher.search(query, maxHits)
-         *
-         * val docs =
-         * for (scoreWDoc <- searchResult.scoreDocs) yield {
-         * val doc = index_searcher.doc(scoreWDoc.doc)
-         * val id = doc.get("id")
-         * val xml = document_map.get(id).get
-         * //print(xml)
-         * val title = (xml \ "title").text
-         * val text = (xml \ "text").text
-         * //println(title)
-         * //println(index_searcher.explain(query, score_doc.doc))
-         * Doc(id, title, text, scoreWDoc.score)
-         * }
-         *
-         * }
-         * val sentNumStream = Stream.iterate(1)(_ + 1).iterator
-         * val noEmptySents = (indexSearcher.doc(scoreWDoc.doc).get("text").split("。")).filter(s => (PrepareTrainMain.myNormalize(s.trim()) == "") == 0)
-         * for (noEmptySent <-  noEmptySents) yield {
-         * <check>hello</check>
-         * <sent>
-         * <stext>{noEmptySent}</stext>
-         * <sscore>{searchScoreOfSent(noEmptySent, query, sentIndexDir)}</sscore>
-         * <scount>{sentNumStream.next}</scount>
-         * </sent>
-         */
-
+ 
         //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "text").text}
         //                  {(document_map.get(index_searcher.doc(scoreWDoc.doc).get("id")).get \ "title").text}
         val newAnnotations =
@@ -476,7 +355,7 @@ abstract class SearchDocument(val indexDir: Directory, val maxSearchResults: Int
   val indexSearcher = new IndexSearcher(indexReader)
 
   // set the similarity function to return tf=1
-  //  index_searcher.setSimilarity(new SimilarityWithConstantNOM) // NOM を常に1にする
+  //  index_searcher.setSimilarity(new SimilarityWithConstantNOM) // 
   indexSearcher.setSimilarity(new DefaultSimilarity)
   def extractQuestionAndAnnotation(questionXML: Node): QuestionAndAnnotation = {
     QuestionAndAnnotation((questionXML \ "@id").text,
